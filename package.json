@@ -1,14 +1,14 @@
 {
-  "name": "template-vite-react",
+  "name": "@sbolel/website",
   "private": true,
   "version": "0.0.0-semantic-release",
   "license": "UNLICENSED",
-  "description": "Boilerplate for React + Vite project",
-  "homepage": "https://github.com/aquia-inc/template-vite-react#readme",
+  "description": "Sinan Bolel's personal website",
+  "homepage": "https://github.com/sbolel/website",
   "bugs": {
-    "url": "https://github.com/aquia-inc/template-vite-react/issues"
+    "url": "https://github.com/sbolel/website/issues"
   },
-  "author": "Aquia, Inc.",
+  "author": "Sinan Bolel (https://sinanbolel.com)",
   "contributors": [
     "Sinan Bolel"
   ],
