@@ -9,7 +9,7 @@ import authLoader from '@/router/authLoader'
 import { RouteIds, Routes } from '@/router/constants'
 import configureCognito from '@/utils/configureCognito'
 import AppLayout from '@/layouts/AppLayout/AppLayout'
-import SignIn from '@/views/SignIn/SignIn'
+import Home from '@/views/Home/Home'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
@@ -26,7 +26,7 @@ import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 const router = createBrowserRouter([
   {
     index: true,
-    element: <NavigateToLogin />,
+    element: <Home />,
   },
   {
     id: RouteIds.ROOT,
