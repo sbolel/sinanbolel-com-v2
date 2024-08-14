@@ -49,3 +49,6 @@ stats.*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# aider
+.aider*
