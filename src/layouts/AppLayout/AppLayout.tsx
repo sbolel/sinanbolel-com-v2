@@ -26,7 +26,6 @@ import AppDrawer from '@/components/AppDrawer'
 import AuthButton from '@/components/HeaderAuthButton'
 import MenuListItems from '@/layouts/AppLayout/AppDrawerButtonList'
 import Chat from '@/components/Chat/Chat'
-import { Suspense } from 'react'
 import { DASHBOARD_TITLE } from '@/locales/en'
 import { Routes } from '@/router/constants'
 
