@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import {
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-} from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 import { db, auth } from '@/firebase/config'
+import { createChat, addMessageToChat } from '@/firebase/firestore'
 import {
   Box,
   TextField,
@@ -18,19 +13,30 @@ import {
   Typography,
 } from '@mui/material'
 
+interface Message {
+  body: string
+  createdAt: {
+    toDate: () => Date
+  }
+}
+
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
+  const [chatId, setChatId] = useState<string | null>(null)
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
-    const q = query(collection(db, 'messages'), orderBy('createdAt'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
-    })
+    if (chatId) {
+      const unsubscribe = onSnapshot(doc(db, 'chats', chatId), (doc) => {
+        if (doc.exists()) {
+          setMessages(doc.data().messages)
+        }
+      })
 
-    return () => unsubscribe()
-  }, [])
+      return () => unsubscribe()
+    }
+  }, [chatId])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -40,11 +46,12 @@ const Chat: React.FC = () => {
     e.preventDefault()
     if (newMessage.trim() === '') return
 
-    await addDoc(collection(db, 'messages'), {
-      text: newMessage,
-      createdAt: new Date(),
-      uid: auth.currentUser?.uid,
-    })
+    if (!chatId) {
+      const newChatId = await createChat(newMessage)
+      if (newChatId) setChatId(newChatId)
+    } else {
+      await addMessageToChat(chatId, newMessage)
+    }
 
     setNewMessage('')
   }
@@ -60,10 +67,10 @@ const Chat: React.FC = () => {
       </Typography>
       <Paper sx={{ flex: 1, overflow: 'auto', mb: 2 }}>
         <List>
-          {messages.map((msg) => (
-            <ListItem key={msg.id}>
+          {messages.map((msg, index) => (
+            <ListItem key={index}>
               <ListItemText
-                primary={msg.text}
+                primary={msg.body}
                 secondary={new Date(msg.createdAt.toDate()).toLocaleString()}
               />
             </ListItem>

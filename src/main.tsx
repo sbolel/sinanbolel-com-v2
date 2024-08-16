@@ -12,6 +12,7 @@ import { SIGN_IN_GREETING } from '@/locales/en'
 import '@/sass/style.scss'
 import { auth } from '@/firebase/config'
 import { signInAnonymously } from 'firebase/auth'
+import { createSession } from '@/firebase/firestore'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {
@@ -19,8 +20,10 @@ import { signInAnonymously } from 'firebase/auth'
   try {
     await signInAnonymously(auth)
     console.log('Signed in anonymously')
+    await createSession()
+    console.log('Session created')
   } catch (error) {
-    console.error('Error signing in anonymously:', error)
+    console.error('Error signing in anonymously or creating session:', error)
   }
   // create the root element in the DOM
   const rootElement = document.getElementById('root') as HTMLElement
