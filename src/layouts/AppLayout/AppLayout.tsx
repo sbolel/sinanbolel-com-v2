@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChatIcon from '@mui/icons-material/Chat'
+import CloseIcon from '@mui/icons-material/Close'
 import Fab from '@mui/material/Fab'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
@@ -142,7 +143,7 @@ const AppLayout: React.FC = (): JSX.Element => {
             </Container>
             <Fab
               color="primary"
-              aria-label="chat"
+              aria-label={chatOpen ? "close chat" : "open chat"}
               sx={{
                 position: 'fixed',
                 bottom: 16,
@@ -150,7 +151,7 @@ const AppLayout: React.FC = (): JSX.Element => {
               }}
               onClick={toggleChat}
             >
-              <ChatIcon />
+              {chatOpen ? <CloseIcon /> : <ChatIcon />}
             </Fab>
             <Dialog
               open={chatOpen}
