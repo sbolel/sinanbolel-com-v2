@@ -25,7 +25,10 @@ import { createSession } from '@/firebase/firestore'
         await createSession()
         console.log('Session created')
       } catch (error) {
-        console.error('Error signing in anonymously or creating session:', error)
+        console.error(
+          'Error signing in anonymously or creating session:',
+          error
+        )
       }
     } else {
       console.log('User already signed in')

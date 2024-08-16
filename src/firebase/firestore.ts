@@ -17,10 +17,14 @@ import {
 export const createSession = async () => {
   if (auth.currentUser) {
     const sessionRef = doc(db, 'sessions', auth.currentUser.uid)
-    await setDoc(sessionRef, {
-      createdAt: serverTimestamp(),
-      lastActive: serverTimestamp(),
-    }, { merge: true })
+    await setDoc(
+      sessionRef,
+      {
+        createdAt: serverTimestamp(),
+        lastActive: serverTimestamp(),
+      },
+      { merge: true }
+    )
   }
 }
 
@@ -58,5 +62,5 @@ export const getUserChats = async (userId: string) => {
     limit(1)
   )
   const querySnapshot = await getDocs(chatsQuery)
-  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 }

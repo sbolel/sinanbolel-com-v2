@@ -1,7 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { doc, onSnapshot, query, collection, where, orderBy, limit } from 'firebase/firestore'
+import {
+  doc,
+  onSnapshot,
+  query,
+  collection,
+  where,
+  orderBy,
+  limit,
+} from 'firebase/firestore'
 import { db, auth } from '@/firebase/config'
-import { createChat, addMessageToChat, getUserChats } from '@/firebase/firestore'
+import {
+  createChat,
+  addMessageToChat,
+  getUserChats,
+} from '@/firebase/firestore'
 import {
   Box,
   TextField,
