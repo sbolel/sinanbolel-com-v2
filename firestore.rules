@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow anonymous users to read and write only to their own session document
+    match /sessions/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow anonymous users to read and write only to their own chat documents
+    match /chats/{chatId} {
+      allow read, write: if request.auth != null && resource.data.sessionId == request.auth.uid;
+    }
+    
+    // Deny access to all other documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
