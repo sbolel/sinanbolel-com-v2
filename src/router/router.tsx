@@ -83,7 +83,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <NavigateTo route={Routes.HOME} />,
+    element: <NavigateTo route={Routes.ROOT} />,
   },
 ])
 
