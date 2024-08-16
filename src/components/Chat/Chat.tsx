@@ -108,16 +108,19 @@ const Chat: React.FC = () => {
           <div ref={messagesEndRef} />
         </List>
       </Paper>
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex' }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', m: 2 }}>
         <TextField
           fullWidth
+          multiline
+          rows={2}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message"
           variant="outlined"
           size="small"
+          sx={{ mr: 1 }}
         />
-        <Button type="submit" variant="contained" sx={{ ml: 1 }}>
+        <Button type="submit" variant="contained" sx={{ alignSelf: 'flex-end' }}>
           Send
         </Button>
       </Box>
