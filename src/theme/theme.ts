@@ -134,6 +134,7 @@ theme = createTheme(theme, {
       primary: 'rgba(0, 0, 0, 1)',
       secondary: 'rgba(76, 78, 100, 0.68)',
       disabled: 'rgba(76, 78, 100, 0.38)',
+      contrastText: theme.palette.common.white,
     },
     background: {
       paper: theme.palette.common.white,

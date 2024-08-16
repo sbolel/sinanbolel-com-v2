@@ -10,11 +10,13 @@ import { RouteIds, Routes } from '@/router/constants'
 import configureCognito from '@/utils/configureCognito'
 import AppLayout from '@/layouts/AppLayout/AppLayout'
 import Home from '@/views/Home/Home'
+import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
 import RootProvider from '@/Root'
 import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
+import NavigateTo from '@/components/react-router/NavigateTo'
 
 /**
  * The hash router for the application that defines routes
@@ -25,16 +27,17 @@ import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
  */
 const router = createBrowserRouter([
   {
-    index: true,
-    element: <Home />,
-  },
-  {
     id: RouteIds.ROOT,
     path: '/',
     element: <RootProvider />,
     errorElement: <ErrorBoundary />,
     loader: configureCognito,
     children: [
+      {
+        element: <Home />,
+        id: RouteIds.HOME,
+        index: true,
+      },
       {
         id: RouteIds.AUTH,
         path: Routes.AUTH,
@@ -62,7 +65,6 @@ const router = createBrowserRouter([
         loader: authLoader,
         children: [
           {
-            index: true,
             id: RouteIds.DASHBOARD,
             element: <Dashboard />,
             errorElement: <ErrorBoundary />,
@@ -74,7 +76,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <NavigateToLogin />,
+    element: <NavigateTo route={Routes.HOME} />,
   },
 ])
 

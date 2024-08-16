@@ -1,5 +1,6 @@
 export enum RouteIds {
   ROOT = 'root',
+  HOME = 'home',
   PROTECTED = 'app',
   DASHBOARD = 'dashboard',
   AUTH = 'auth',
@@ -15,6 +16,7 @@ export enum RouteNames {
 
 export enum Routes {
   ROOT = '/',
+  HOME = `/${RouteIds.HOME}`,
   DASHBOARD = `/${RouteIds.PROTECTED}`,
   AUTH = `/${RouteIds.AUTH}/*`,
   AUTH_LOGIN = `/${RouteIds.AUTH}/${RouteIds.LOGIN}`,
