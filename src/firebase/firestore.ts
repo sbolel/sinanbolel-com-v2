@@ -1,5 +1,13 @@
 import { db, auth } from './config'
-import { collection, addDoc, doc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  serverTimestamp,
+} from 'firebase/firestore'
 
 export const createSession = async () => {
   if (auth.currentUser) {
@@ -16,10 +24,12 @@ export const createChat = async (message: string) => {
     const chatRef = await addDoc(collection(db, 'chats'), {
       sessionId: auth.currentUser.uid,
       createdAt: serverTimestamp(),
-      messages: [{
-        body: message,
-        createdAt: serverTimestamp(),
-      }],
+      messages: [
+        {
+          body: message,
+          createdAt: serverTimestamp(),
+        },
+      ],
     })
     return chatRef.id
   }
