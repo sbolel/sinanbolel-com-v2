@@ -16,6 +16,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChatIcon from '@mui/icons-material/Chat'
 import CloseIcon from '@mui/icons-material/Close'
+import CircularProgress from '@mui/material/CircularProgress'
 import Fab from '@mui/material/Fab'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
@@ -25,6 +26,7 @@ import AppDrawer from '@/components/AppDrawer'
 import AuthButton from '@/components/HeaderAuthButton'
 import MenuListItems from '@/layouts/AppLayout/AppDrawerButtonList'
 import Chat from '@/components/Chat/Chat'
+import { Suspense } from 'react'
 import { DASHBOARD_TITLE } from '@/locales/en'
 import { Routes } from '@/router/constants'
 
@@ -161,7 +163,9 @@ const AppLayout: React.FC = (): JSX.Element => {
               fullWidth
             >
               <DialogContent>
-                <Chat />
+                <Suspense fallback={<CircularProgress />}>
+                  <Chat />
+                </Suspense>
               </DialogContent>
             </Dialog>
           </Box>
