@@ -124,12 +124,19 @@ const Home: React.FC = () => {
         open={chatOpen}
         onClose={toggleChat}
         aria-labelledby="chat-dialog"
-        maxWidth="sm"
-        fullWidth
+        PaperProps={{
+          sx: {
+            position: 'fixed',
+            bottom: 80,
+            right: 16,
+            m: 0,
+            width: 350,
+            height: 'auto',
+            maxHeight: 'calc(100% - 96px)',
+          },
+        }}
       >
-        <DialogContent>
-          <Chat />
-        </DialogContent>
+        <Chat />
       </Dialog>
     </Container>
   )
