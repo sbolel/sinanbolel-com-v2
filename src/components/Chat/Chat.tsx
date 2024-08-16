@@ -108,7 +108,11 @@ const Chat: React.FC = () => {
           <div ref={messagesEndRef} />
         </List>
       </Paper>
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', m: 2 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: 'flex', m: 2 }}
+      >
         <TextField
           fullWidth
           multiline
@@ -120,7 +124,11 @@ const Chat: React.FC = () => {
           size="small"
           sx={{ mr: 1 }}
         />
-        <Button type="submit" variant="contained" sx={{ alignSelf: 'flex-end' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ alignSelf: 'flex-end' }}
+        >
           Send
         </Button>
       </Box>
