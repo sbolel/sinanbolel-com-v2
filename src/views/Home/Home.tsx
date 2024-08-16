@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { Container, Typography, Box, Fab, Dialog, DialogContent } from '@mui/material'
+import {
+  Container,
+  Typography,
+  Box,
+  Fab,
+  Dialog,
+  DialogContent,
+} from '@mui/material'
 import ChatIcon from '@mui/icons-material/Chat'
 import Image from '@/components/Image'
 import Chat from '@/components/Chat/Chat'
