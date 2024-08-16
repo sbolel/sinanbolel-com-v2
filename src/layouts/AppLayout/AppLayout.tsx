@@ -18,6 +18,7 @@ import ChatIcon from '@mui/icons-material/Chat'
 import CloseIcon from '@mui/icons-material/Close'
 import CircularProgress from '@mui/material/CircularProgress'
 import Fab from '@mui/material/Fab'
+import Tooltip from '@mui/material/Tooltip'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import AlertMessage from '@/components/AlertMessage'
@@ -39,11 +40,14 @@ const AppLayout: React.FC = (): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(true)
   const [chatOpen, setChatOpen] = useState(false)
 
+  const [chatClicked, setChatClicked] = useState(false)
+
   const toggleDrawer = useCallback(() => {
     setDrawerOpen(!drawerOpen)
   }, [drawerOpen])
 
   const toggleChat = useCallback(() => {
+    setChatClicked(true)
     setChatOpen(!chatOpen)
   }, [chatOpen])
 
@@ -142,18 +146,25 @@ const AppLayout: React.FC = (): JSX.Element => {
             >
               <Outlet />
             </Container>
-            <Fab
-              color="primary"
-              aria-label={chatOpen ? 'close chat' : 'open chat'}
-              sx={{
-                position: 'fixed',
-                bottom: 16,
-                right: 16,
-              }}
-              onClick={toggleChat}
+            <Tooltip
+              title="Let's chat"
+              open={!chatClicked}
+              disableHoverListener={chatClicked}
+              placement="left"
             >
-              {chatOpen ? <CloseIcon /> : <ChatIcon />}
-            </Fab>
+              <Fab
+                color="primary"
+                aria-label={chatOpen ? 'close chat' : 'open chat'}
+                sx={{
+                  position: 'fixed',
+                  bottom: 16,
+                  right: 16,
+                }}
+                onClick={toggleChat}
+              >
+                {chatOpen ? <CloseIcon /> : <ChatIcon />}
+              </Fab>
+            </Tooltip>
             <Dialog
               open={chatOpen}
               onClose={toggleChat}
