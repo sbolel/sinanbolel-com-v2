@@ -9,9 +9,11 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemAvatar,
   Paper,
   Typography,
 } from '@mui/material'
+import Avatar from '@/components/mui/Avatar'
 
 interface Message {
   body: string
@@ -66,7 +68,10 @@ const Chat: React.FC = () => {
       <Paper sx={{ flex: 1, overflow: 'auto', mb: 2 }}>
         <List>
           {messages.map((msg, index) => (
-            <ListItem key={index}>
+            <ListItem key={index} alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar>{msg.body[0].toUpperCase()}</Avatar>
+              </ListItemAvatar>
               <ListItemText
                 primary={msg.body}
                 secondary={new Date(msg.createdAt).toLocaleString()}
