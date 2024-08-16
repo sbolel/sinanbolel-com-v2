@@ -19,7 +19,7 @@ const Home: React.FC = () => {
         textAlign: 'center',
       }}
     >
-      <Image srcSet="sinan-bolel.jpg 3x" alt="Sinan Bolel" />
+      <Image src="" srcSet="sinan-bolel.jpg 3x" alt="Sinan Bolel" />
       <Typography
         variant="h1"
         component="h1"
