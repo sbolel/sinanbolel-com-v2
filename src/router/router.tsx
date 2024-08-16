@@ -71,12 +71,6 @@ const router = createBrowserRouter([
             errorElement: <ErrorBoundary />,
             loader: dashboardLoader,
           },
-          {
-            id: RouteIds.CHAT,
-            path: 'chat',
-            element: <Chat />,
-            errorElement: <ErrorBoundary />,
-          },
         ],
       },
     ],
