@@ -17,10 +17,10 @@ import { signInAnonymously } from 'firebase/auth'
 ;(async function () {
   // Sign in anonymously
   try {
-    await signInAnonymously(auth);
-    console.log('Signed in anonymously');
+    await signInAnonymously(auth)
+    console.log('Signed in anonymously')
   } catch (error) {
-    console.error('Error signing in anonymously:', error);
+    console.error('Error signing in anonymously:', error)
   }
   // create the root element in the DOM
   const rootElement = document.getElementById('root') as HTMLElement

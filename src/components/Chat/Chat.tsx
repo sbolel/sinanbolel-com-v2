@@ -1,37 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { db, auth } from '@/firebase/config';
+import React, { useState, useEffect } from 'react'
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+} from 'firebase/firestore'
+import { db, auth } from '@/firebase/config'
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState<any[]>([])
+  const [newMessage, setNewMessage] = useState('')
 
   useEffect(() => {
-    const q = query(collection(db, 'messages'), orderBy('createdAt'));
+    const q = query(collection(db, 'messages'), orderBy('createdAt'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
+      setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
+    })
 
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newMessage.trim() === '') return;
+    e.preventDefault()
+    if (newMessage.trim() === '') return
 
     await addDoc(collection(db, 'messages'), {
       text: newMessage,
       createdAt: new Date(),
       uid: auth.currentUser?.uid,
-    });
+    })
 
-    setNewMessage('');
-  };
+    setNewMessage('')
+  }
 
   return (
     <div>
       <div>
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <div key={msg.id}>{msg.text}</div>
         ))}
       </div>
@@ -44,7 +50,7 @@ const Chat: React.FC = () => {
         <button type="submit">Send</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Chat;
+export default Chat
