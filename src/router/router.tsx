@@ -17,6 +17,7 @@ import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
 import RootProvider from '@/Root'
 import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
 import NavigateTo from '@/components/react-router/NavigateTo'
+import Chat from '@/components/Chat/Chat'
 
 /**
  * The hash router for the application that defines routes
@@ -69,6 +70,12 @@ const router = createBrowserRouter([
             element: <Dashboard />,
             errorElement: <ErrorBoundary />,
             loader: dashboardLoader,
+          },
+          {
+            id: RouteIds.CHAT,
+            path: 'chat',
+            element: <Chat />,
+            errorElement: <ErrorBoundary />,
           },
         ],
       },

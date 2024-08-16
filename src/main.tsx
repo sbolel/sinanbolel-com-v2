@@ -10,9 +10,18 @@ import router from '@/router/router'
 import onPerfEntry from '@/utils/onPerfEntry'
 import { SIGN_IN_GREETING } from '@/locales/en'
 import '@/sass/style.scss'
+import { auth } from '@/firebase/config'
+import { signInAnonymously } from 'firebase/auth'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {
+  // Sign in anonymously
+  try {
+    await signInAnonymously(auth);
+    console.log('Signed in anonymously');
+  } catch (error) {
+    console.error('Error signing in anonymously:', error);
+  }
   // create the root element in the DOM
   const rootElement = document.getElementById('root') as HTMLElement
 
