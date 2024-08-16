@@ -51,14 +51,21 @@ const Chat: React.FC = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
-      <Typography variant="h6" component="div" sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
+      <Typography
+        variant="h6"
+        component="div"
+        sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}
+      >
         Chat
       </Typography>
       <Paper sx={{ flex: 1, overflow: 'auto', mb: 2 }}>
         <List>
           {messages.map((msg) => (
             <ListItem key={msg.id}>
-              <ListItemText primary={msg.text} secondary={new Date(msg.createdAt.toDate()).toLocaleString()} />
+              <ListItemText
+                primary={msg.text}
+                secondary={new Date(msg.createdAt.toDate()).toLocaleString()}
+              />
             </ListItem>
           ))}
           <div ref={messagesEndRef} />
