@@ -143,7 +143,7 @@ const AppLayout: React.FC = (): JSX.Element => {
             </Container>
             <Fab
               color="primary"
-              aria-label={chatOpen ? "close chat" : "open chat"}
+              aria-label={chatOpen ? 'close chat' : 'open chat'}
               sx={{
                 position: 'fixed',
                 bottom: 16,
