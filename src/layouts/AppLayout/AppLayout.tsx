@@ -14,11 +14,16 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
+import ChatIcon from '@mui/icons-material/Chat'
+import Fab from '@mui/material/Fab'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
 import AlertMessage from '@/components/AlertMessage'
 import AppBar from '@/components/AppBar'
 import AppDrawer from '@/components/AppDrawer'
 import AuthButton from '@/components/HeaderAuthButton'
 import MenuListItems from '@/layouts/AppLayout/AppDrawerButtonList'
+import Chat from '@/components/Chat/Chat'
 import { DASHBOARD_TITLE } from '@/locales/en'
 import { Routes } from '@/router/constants'
 
@@ -30,10 +35,15 @@ import { Routes } from '@/router/constants'
 const AppLayout: React.FC = (): JSX.Element => {
   const jwtToken = useLoaderData() as string
   const [drawerOpen, setDrawerOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false)
 
   const toggleDrawer = useCallback(() => {
     setDrawerOpen(!drawerOpen)
   }, [drawerOpen])
+
+  const toggleChat = useCallback(() => {
+    setChatOpen(!chatOpen)
+  }, [chatOpen])
 
   return (
     <>
@@ -130,6 +140,29 @@ const AppLayout: React.FC = (): JSX.Element => {
             >
               <Outlet />
             </Container>
+            <Fab
+              color="primary"
+              aria-label="chat"
+              sx={{
+                position: 'fixed',
+                bottom: 16,
+                right: 16,
+              }}
+              onClick={toggleChat}
+            >
+              <ChatIcon />
+            </Fab>
+            <Dialog
+              open={chatOpen}
+              onClose={toggleChat}
+              aria-labelledby="chat-dialog"
+              maxWidth="sm"
+              fullWidth
+            >
+              <DialogContent>
+                <Chat />
+              </DialogContent>
+            </Dialog>
           </Box>
         </Await>
       </Suspense>
