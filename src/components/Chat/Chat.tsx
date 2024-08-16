@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import Avatar from '@/components/mui/Avatar'
+import PersonIcon from '@mui/icons-material/Person'
 
 interface Message {
   body: string
@@ -70,7 +71,9 @@ const Chat: React.FC = () => {
           {messages.map((msg, index) => (
             <ListItem key={index} alignItems="flex-start">
               <ListItemAvatar>
-                <Avatar>{msg.body[0].toUpperCase()}</Avatar>
+                <Avatar>
+                  <PersonIcon />
+                </Avatar>
               </ListItemAvatar>
               <ListItemText
                 primary={msg.body}
