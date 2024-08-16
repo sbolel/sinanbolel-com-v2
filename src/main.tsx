@@ -11,20 +11,27 @@ import onPerfEntry from '@/utils/onPerfEntry'
 import { SIGN_IN_GREETING } from '@/locales/en'
 import '@/sass/style.scss'
 import { auth } from '@/firebase/config'
-import { signInAnonymously } from 'firebase/auth'
+import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'
 import { createSession } from '@/firebase/firestore'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {
-  // Sign in anonymously
-  try {
-    await signInAnonymously(auth)
-    console.log('Signed in anonymously')
-    await createSession()
-    console.log('Session created')
-  } catch (error) {
-    console.error('Error signing in anonymously or creating session:', error)
-  }
+  // Check if user is already signed in
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      try {
+        await signInAnonymously(auth)
+        console.log('Signed in anonymously')
+        await createSession()
+        console.log('Session created')
+      } catch (error) {
+        console.error('Error signing in anonymously or creating session:', error)
+      }
+    } else {
+      console.log('User already signed in')
+    }
+  })
+
   // create the root element in the DOM
   const rootElement = document.getElementById('root') as HTMLElement
 

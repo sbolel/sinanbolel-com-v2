@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot, query, collection, where, orderBy, limit } from 'firebase/firestore'
 import { db, auth } from '@/firebase/config'
-import { createChat, addMessageToChat } from '@/firebase/firestore'
+import { createChat, addMessageToChat, getUserChats } from '@/firebase/firestore'
 import {
   Box,
   TextField,
@@ -26,6 +26,18 @@ const Chat: React.FC = () => {
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState<string | null>(null)
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
+
+  useEffect(() => {
+    const fetchUserChats = async () => {
+      if (auth.currentUser) {
+        const userChats = await getUserChats(auth.currentUser.uid)
+        if (userChats.length > 0) {
+          setChatId(userChats[0].id)
+        }
+      }
+    }
+    fetchUserChats()
+  }, [])
 
   useEffect(() => {
     if (chatId) {
