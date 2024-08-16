@@ -4,24 +4,28 @@
   background-size: 60%;
 }
 
+.ion-logo svg {
+  stroke: white;
+}
+
 .ion-logo-stackoverflow {
   background-position: center 47%;
-  background-color: #f48023;
+  background-color: rgb(173, 91, 27);
   background-image: url('./assets/img/logo-stackoverflow.svg');
 }
 
 .ion-logo-linkedin {
-  background-color: rgba(0, 119, 181, .9);
+  background-color: rgba(19, 100, 142, 0.9);
   background-image: url('./assets/img/logo-linkedin.svg');
 }
 
 .ion-logo-github {
-  background-color: #e3e3e3;
+  background-color: rgb(54, 57, 59);
   background-image: url('./assets/img/logo-github.svg');
 }
 
 .ion-logo-resume {
-  background-color: #3a6c87;
+  background-color: rgb(58, 92, 111);
   background-size: 90%;
   background-image: url('./assets/img/candidate.svg');
 }
