@@ -65,8 +65,14 @@ export const getUserChats = async (userId: string) => {
     const querySnapshot = await getDocs(chatsQuery)
     return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   } catch (error) {
-    if (error instanceof Error && error.name === 'FirebaseError' && error.message.includes('The query requires an index')) {
-      console.error('Index creation required. Please visit the following URL to create the necessary index:')
+    if (
+      error instanceof Error &&
+      error.name === 'FirebaseError' &&
+      error.message.includes('The query requires an index')
+    ) {
+      console.error(
+        'Index creation required. Please visit the following URL to create the necessary index:'
+      )
       console.error((error as any).code)
     }
     throw error
