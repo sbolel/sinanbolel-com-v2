@@ -1,12 +1,20 @@
-import React from 'react'
-import { Container, Typography, Box } from '@mui/material'
+import React, { useState } from 'react'
+import { Container, Typography, Box, Fab, Dialog, DialogContent } from '@mui/material'
+import ChatIcon from '@mui/icons-material/Chat'
 import Image from '@/components/Image'
+import Chat from '@/components/Chat/Chat'
 import '@/styles/base.css'
 import '@/styles/buttons.css'
 import '@/styles/icons.css'
 import '@/styles/tooltip.css'
 
 const Home: React.FC = () => {
+  const [chatOpen, setChatOpen] = useState(false)
+
+  const toggleChat = () => {
+    setChatOpen(!chatOpen)
+  }
+
   return (
     <Container
       maxWidth="lg"
@@ -17,6 +25,7 @@ const Home: React.FC = () => {
         justifyContent: 'center',
         height: '100%',
         textAlign: 'center',
+        position: 'relative',
       }}
     >
       <Image src="" srcSet="sinan-bolel.jpg 3x" alt="Sinan Bolel" />
@@ -92,6 +101,29 @@ const Home: React.FC = () => {
           </a>
         </Box>
       </Box>
+      <Fab
+        color="primary"
+        aria-label="chat"
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+        onClick={toggleChat}
+      >
+        <ChatIcon />
+      </Fab>
+      <Dialog
+        open={chatOpen}
+        onClose={toggleChat}
+        aria-labelledby="chat-dialog"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogContent>
+          <Chat />
+        </DialogContent>
+      </Dialog>
     </Container>
   )
 }
