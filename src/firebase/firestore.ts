@@ -27,7 +27,7 @@ export const createChat = async (message: string) => {
       messages: [
         {
           body: message,
-          createdAt: serverTimestamp(),
+          createdAt: new Date().toISOString(),
         },
       ],
     })
@@ -40,7 +40,7 @@ export const addMessageToChat = async (chatId: string, message: string) => {
   await updateDoc(chatRef, {
     messages: arrayUnion({
       body: message,
-      createdAt: serverTimestamp(),
+      createdAt: new Date().toISOString(),
     }),
   })
 }

@@ -15,9 +15,7 @@ import {
 
 interface Message {
   body: string
-  createdAt: {
-    toDate: () => Date
-  }
+  createdAt: string
 }
 
 const Chat: React.FC = () => {
@@ -71,7 +69,7 @@ const Chat: React.FC = () => {
             <ListItem key={index}>
               <ListItemText
                 primary={msg.body}
-                secondary={new Date(msg.createdAt.toDate()).toLocaleString()}
+                secondary={new Date(msg.createdAt).toLocaleString()}
               />
             </ListItem>
           ))}
