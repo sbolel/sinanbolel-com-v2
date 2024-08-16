@@ -1,0 +1,32 @@
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.footer-links a {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  color: #000;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 600px) {
+  .footer-links {
+    flex-direction: column;
+  }
+
+  .footer-links a {
+    padding: 15px 0;
+  }
+}
