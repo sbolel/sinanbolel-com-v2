@@ -3,11 +3,12 @@
   background-repeat: no-repeat;
   background-size: 50%;
   color: #fff;
+  stroke: #fff;
 
   &.ion-logo-stackoverflow {
-    background-position: center 47%;
     background-color: rgb(173, 91, 27);
     background-image: url('./logo-stackoverflow.svg');
+    background-position: center 47%;
   }
 
   &.ion-logo-linkedin {
@@ -22,7 +23,7 @@
 
   &.ion-logo-resume {
     background-color: rgb(58, 92, 111);
-    background-size: 90%;
     background-image: url('./candidate.svg');
+    background-size: 90%;
   }
 }

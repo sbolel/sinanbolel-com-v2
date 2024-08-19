@@ -23,6 +23,17 @@ export type AppFeatureFlags = {
   IDP_ENABLED: boolean
 }
 
+export type FirebaseConfig = {
+  apiKey: string
+  appId: string
+  authDomain: string
+  databaseURL: string
+  measurementId: string
+  messagingSenderId: string
+  projectId: string
+  storageBucket: string
+}
+
 export type CognitoUserInfo = {
   attributes: {
     email: string

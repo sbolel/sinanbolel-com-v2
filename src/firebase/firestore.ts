@@ -1,50 +1,64 @@
-import { db, auth } from './config'
+import { type FirebaseError } from 'firebase/app'
 import {
-  collection,
   addDoc,
+  arrayUnion,
+  collection,
   doc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  serverTimestamp,
   setDoc,
   updateDoc,
-  arrayUnion,
-  serverTimestamp,
-  query,
   where,
-  getDocs,
-  orderBy,
-  limit,
 } from 'firebase/firestore'
+import {
+  db,
+  auth,
+  FIREBASE_INDEX_CREATE_REQUIRED,
+  FIREBASE_INDEX_ERROR_CONTENT,
+  FIREBASE_INDEX_ERROR_NAME,
+} from '@/firebase'
 
-export const createSession = async () => {
-  if (auth.currentUser) {
-    const sessionRef = doc(db, 'sessions', auth.currentUser.uid)
-    await setDoc(
-      sessionRef,
-      {
-        createdAt: serverTimestamp(),
-        lastActive: serverTimestamp(),
-      },
-      { merge: true }
-    )
+export const createSession = async (): Promise<void> => {
+  if (!auth?.currentUser) {
+    return
   }
-}
-
-export const createChat = async (message: string) => {
-  if (auth.currentUser) {
-    const chatRef = await addDoc(collection(db, 'chats'), {
-      userId: auth.currentUser.uid,
+  const sessionRef = doc(db, 'sessions', auth.currentUser.uid)
+  await setDoc(
+    sessionRef,
+    {
       createdAt: serverTimestamp(),
-      messages: [
-        {
-          body: message,
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    })
-    return chatRef.id
-  }
+      lastActive: serverTimestamp(),
+    },
+    { merge: true }
+  )
 }
 
-export const addMessageToChat = async (chatId: string, message: string) => {
+export const createChat = async (
+  message: string
+): Promise<string | undefined> => {
+  if (!auth?.currentUser) {
+    return
+  }
+  const chatRef = await addDoc(collection(db, 'chats'), {
+    userId: auth.currentUser.uid,
+    createdAt: serverTimestamp(),
+    messages: [
+      {
+        body: message,
+        createdAt: new Date().toISOString(),
+      },
+    ],
+  })
+  return chatRef.id
+}
+
+export const addMessageToChat = async (
+  chatId: string,
+  message: string
+): Promise<void> => {
   const chatRef = doc(db, 'chats', chatId)
   await updateDoc(chatRef, {
     messages: arrayUnion({
@@ -54,6 +68,7 @@ export const addMessageToChat = async (chatId: string, message: string) => {
   })
 }
 
+// TODO: add return type
 export const getUserChats = async (userId: string) => {
   try {
     const chatsQuery = query(
@@ -67,13 +82,12 @@ export const getUserChats = async (userId: string) => {
   } catch (error) {
     if (
       error instanceof Error &&
-      error.name === 'FirebaseError' &&
-      error.message.includes('The query requires an index')
+      error.name === FIREBASE_INDEX_ERROR_NAME &&
+      error.message.includes(FIREBASE_INDEX_ERROR_CONTENT)
     ) {
       console.error(
-        'Index creation required. Please visit the following URL to create the necessary index:'
+        `[${(error as FirebaseError).code}] ${FIREBASE_INDEX_CREATE_REQUIRED}`
       )
-      console.error((error as any).code)
     }
     throw error
   }

@@ -1,41 +1,3 @@
-body,
-html {
-  background-color: #131313;
-  color: #fff;
-  height: 100%;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-body {
-  font-family: --apple-system, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: center;
-  z-index: -1;
-}
-
-.separator {
-  line-height: 0;
-}
-
-.visible-s,
-.visible-xs {
-  display: none;
-}
-
-@media screen and (max-width: 360px) {
-  .visible-xs {
-    display: inherit;
-  }
-}
-
-@media screen and (min-width: 361px) and (max-width: 480px) {
-  .visible-s {
-    display: inherit;
-  }
-}
-
 :root {
   --hero-height: 30vh;
   --hero-half-height: calc(var(--hero-height) / 2);
@@ -141,4 +103,8 @@ body {
     width: 7rem;
     margin: 0 0 .25rem;
   }
+}
+
+.separator {
+  line-height: 0;
 }

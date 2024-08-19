@@ -8,7 +8,7 @@ import {
   orderBy,
   limit,
 } from 'firebase/firestore'
-import { db, auth } from '@/firebase/config'
+import { db, auth } from '@/firebase'
 import {
   createChat,
   addMessageToChat,

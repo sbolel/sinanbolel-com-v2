@@ -1,19 +1,9 @@
 import React, { useState } from 'react'
-import {
-  Container,
-  Typography,
-  Box,
-  Fab,
-  Dialog,
-  DialogContent,
-} from '@mui/material'
+import { Box, Container, Dialog, Fab, Typography } from '@mui/material'
 import ChatIcon from '@mui/icons-material/Chat'
-import Image from '@/components/Image'
 import Chat from '@/components/Chat/Chat'
-import '@/styles/base.css'
-import '@/styles/buttons.css'
-import '@/styles/icons.css'
-import '@/styles/tooltip.css'
+import Image from '@/components/Image'
+import styles from '@/views/Home/Home.module.scss'
 
 const Home: React.FC = () => {
   const [chatOpen, setChatOpen] = useState(false)
@@ -24,7 +14,8 @@ const Home: React.FC = () => {
 
   return (
     <Container
-      maxWidth="lg"
+      className={styles.container}
+      maxWidth={false}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -35,7 +26,12 @@ const Home: React.FC = () => {
         position: 'relative',
       }}
     >
-      <Image src="" srcSet="sinan-bolel.png 3x" alt="Sinan Bolel" />
+      <Image
+        src=""
+        srcSet="sinan-bolel.png 3x"
+        alt="Sinan Bolel"
+        sx={{ height: '240' }}
+      />
       <Typography
         variant="h1"
         component="h1"
@@ -61,7 +57,10 @@ const Home: React.FC = () => {
         Principal Software Engineer
       </Typography>
       <Box sx={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-        <Box className="connections" style={{ display: 'flex', gap: '1rem' }}>
+        <Box
+          className={styles.connections}
+          style={{ display: 'flex', gap: '1rem' }}
+        >
           <a
             id="a-resume"
             className="md-button md-fab md-raised md-button-shrink"
@@ -109,14 +108,16 @@ const Home: React.FC = () => {
         </Box>
       </Box>
       <Fab
-        color="primary"
-        aria-label="chat"
+        id="chat-button"
+        aria-label="chat-button"
+        color="info"
+        onClick={toggleChat}
+        size="large"
         sx={{
           position: 'fixed',
           bottom: 16,
           right: 16,
         }}
-        onClick={toggleChat}
       >
         <ChatIcon />
       </Fab>

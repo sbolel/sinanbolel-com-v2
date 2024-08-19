@@ -9,10 +9,10 @@ import CONFIG from '@/utils/config'
 import router from '@/router/router'
 import onPerfEntry from '@/utils/onPerfEntry'
 import { SIGN_IN_GREETING } from '@/locales/en'
-import '@/sass/style.scss'
-import { auth } from '@/firebase/config'
+import { auth } from '@/firebase'
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'
 import { createSession } from '@/firebase/firestore'
+import '@/sass/style.scss'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {

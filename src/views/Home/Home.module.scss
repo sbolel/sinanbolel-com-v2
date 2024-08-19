@@ -1,0 +1,63 @@
+.container {
+  background-color: #131313;
+  color: #fff;
+}
+
+.connections {
+  margin: 2.5rem 0 0 0;
+  position: relative;
+  z-index: 1;
+
+  a {
+    margin: .5rem 1rem;
+    overflow: visible;
+
+    :first-child {
+      margin-left: 0;
+    }
+
+    :last-child {
+      margin-right: 0;
+    }
+  }
+
+  @media screen and (max-width:375px) {
+    & a {
+      margin: .5rem .2rem;
+    }
+  }
+  @media screen and (min-width:376px) and (max-width:430px) {
+    & a {
+      margin: 0 .35rem;
+    }
+  }
+  @media screen and (min-width:431px) and (max-width:500px) {
+    & a {
+      margin: 0 .75rem;
+    }
+  }
+  @media screen and (min-width:501px) and (max-width:641px) {
+    & a {
+      margin: 0 .8rem;
+    }
+  }
+  @media screen and (min-width:640px) and (max-width:1024px) {
+    & a {
+      margin: 0 1rem;
+    }
+  }
+  @media screen and (min-width:1025px) {
+    & a {
+      margin: 0 1.5rem;
+    }
+  }
+  @media screen and (max-height:900px) and (min-height:601px){
+    margin-top: 1.5rem;
+  }
+  @media screen and (max-height:600px) and (min-height:421px){
+    margin-top: 1rem;
+  }
+  @media screen and (max-height:420px) {
+    margin-top: .5rem;
+  }
+}

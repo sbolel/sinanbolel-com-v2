@@ -152,7 +152,21 @@ button.md-button::-moz-focus-inner {
   }
 }
 
-@media screen and (min-width:360px) and (max-width:500px) {
+@media screen and (max-width:430px) {
+  .md-button.md-default-theme.md-fab,
+  .md-button.md-fab,
+  .md-font {
+    height: 4.125rem;
+    line-height: 4.125rem;
+    width: 4.125rem;
+  }
+
+  .connections a {
+    margin: 0 .5rem;
+  }
+}
+
+@media screen and (min-width:431px) and (max-width:500px) {
   .md-button.md-default-theme.md-fab,
   .md-button.md-fab,
   .md-font {
