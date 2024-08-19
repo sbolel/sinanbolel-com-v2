@@ -3,8 +3,11 @@
  * @module router/router
  * @see {@link dashboard/main} for usage.
  */
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Outlet } from 'react-router-dom'
+import { Box } from '@mui/material'
+import RootProvider from '@/Root'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import NavigateTo from '@/components/react-router/NavigateTo'
 import authLoader from '@/router/authLoader'
 import { RouteIds, Routes } from '@/router/constants'
 import configureCognito from '@/utils/configureCognito'
@@ -14,10 +17,6 @@ import SignIn from '@/views/SignIn/SignIn'
 import SignOut from '@/views/SignOut/SignOut'
 import Dashboard from '@/views/Dashboard/Dashboard'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
-import RootProvider from '@/Root'
-import NavigateToLogin from '@/components/react-router/NavigateToSignIn'
-import NavigateTo from '@/components/react-router/NavigateTo'
-import Chat from '@/components/Chat/Chat'
 
 /**
  * The hash router for the application that defines routes
@@ -26,6 +25,10 @@ import Chat from '@/components/Chat/Chat'
  * @see {@link https://reactrouter.com/web/api/BrowserRouter BrowserRouter}
  * @see {@link https://reactrouter.com/en/main/route/loader loader}
  */
+const styleOverrides = Object.freeze({
+  __html: 'body, html { background-color: #fff; }',
+}) as { __html: TrustedHTML }
+
 const router = createBrowserRouter([
   {
     id: RouteIds.ROOT,
@@ -42,6 +45,12 @@ const router = createBrowserRouter([
       {
         id: RouteIds.AUTH,
         path: Routes.AUTH,
+        element: (
+          <Box width="100%" height="100%">
+            <style dangerouslySetInnerHTML={styleOverrides}></style>
+            <Outlet />
+          </Box>
+        ),
         errorElement: <ErrorBoundary />,
         children: [
           {
