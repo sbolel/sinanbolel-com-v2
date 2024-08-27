@@ -113,7 +113,12 @@ const Chat: React.FC = () => {
                 mb: 2,
               }}
             >
-              <ListItemAvatar sx={{ minWidth: 'auto', m: isCurrentUser(msg.from) ? '0 0 0 8px' : '0 8px 0 0' }}>
+              <ListItemAvatar
+                sx={{
+                  minWidth: 'auto',
+                  m: isCurrentUser(msg.from) ? '0 0 0 8px' : '0 8px 0 0',
+                }}
+              >
                 <Avatar>
                   <PersonIcon />
                 </Avatar>
@@ -123,7 +128,9 @@ const Chat: React.FC = () => {
                   elevation={0}
                   sx={{
                     p: 1,
-                    bgcolor: isCurrentUser(msg.from) ? 'primary.light' : 'grey.100',
+                    bgcolor: isCurrentUser(msg.from)
+                      ? 'primary.light'
+                      : 'grey.100',
                     borderRadius: 2,
                   }}
                 >
