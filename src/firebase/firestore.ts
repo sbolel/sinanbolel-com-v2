@@ -36,9 +36,10 @@ export const createSession = async (): Promise<void> => {
   )
 }
 
-export const createChat = async (
-  messageData: { body: string; from: string }
-): Promise<string | undefined> => {
+export const createChat = async (messageData: {
+  body: string
+  from: string
+}): Promise<string | undefined> => {
   if (!auth?.currentUser) {
     return
   }
