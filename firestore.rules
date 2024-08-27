@@ -9,7 +9,10 @@ service cloud.firestore {
     // Allow authenticated users to read and write only to their own chat documents
     match /chats/{chatId} {
       allow create: if request.auth != null;
-      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid
+                    && validateMessageFrom();
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
     
     // Deny access to all other documents
@@ -17,4 +20,13 @@ service cloud.firestore {
       allow read, write: if false;
     }
   }
+}
+
+function validateMessageFrom() {
+  let incomingData = request.resource.data;
+  let existingData = resource.data;
+  
+  // Ensure new messages have the correct 'from' field
+  return incomingData.messages.size() == existingData.messages.size() + 1
+         && incomingData.messages[incomingData.messages.size() - 1].from == request.auth.uid;
 }
