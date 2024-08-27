@@ -39,6 +39,7 @@ const Chat: React.FC = () => {
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState<string | null>(null)
   const [showCaption, setShowCaption] = useState(false)
+  const [captionTimeout, setCaptionTimeout] = useState<NodeJS.Timeout | null>(null)
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
@@ -87,7 +88,11 @@ const Chat: React.FC = () => {
 
     setNewMessage('')
     setShowCaption(true)
-    setTimeout(() => setShowCaption(false), 5000)
+    if (captionTimeout) {
+      clearTimeout(captionTimeout)
+    }
+    const newTimeout = setTimeout(() => setShowCaption(false), 3000)
+    setCaptionTimeout(newTimeout)
   }
 
   const isCurrentUser = (userId: string) => userId === auth.currentUser?.uid
@@ -150,12 +155,25 @@ const Chat: React.FC = () => {
             </ListItem>
           ))}
           {showCaption && (
-            <Typography
-              variant="caption"
-              sx={{ display: 'block', textAlign: 'center', mt: 1 }}
+            <Paper
+              elevation={3}
+              sx={{
+                position: 'sticky',
+                bottom: 16,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: 'fit-content',
+                padding: '8px 16px',
+                backgroundColor: 'success.light',
+                color: 'success.contrastText',
+                borderRadius: 2,
+                zIndex: 1,
+              }}
             >
-              Your message has been sent to Sinan.
-            </Typography>
+              <Typography variant="body2">
+                Your message has been sent
+              </Typography>
+            </Paper>
           )}
           <div ref={messagesEndRef} />
         </List>
