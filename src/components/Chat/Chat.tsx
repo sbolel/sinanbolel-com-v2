@@ -101,39 +101,45 @@ const Chat: React.FC = () => {
       >
         Chat
       </Typography>
-      <Paper sx={{ flex: 1, overflow: 'auto', mb: 2 }}>
+      <Paper sx={{ flex: 1, overflow: 'auto', mb: 2, p: 2 }}>
         <List>
           {messages.map((msg, index) => (
             <ListItem
               key={index}
-              alignItems="flex-start"
               sx={{
+                display: 'flex',
                 flexDirection: isCurrentUser(msg.from) ? 'row-reverse' : 'row',
+                alignItems: 'flex-start',
+                mb: 2,
               }}
             >
-              <ListItemAvatar>
+              <ListItemAvatar sx={{ minWidth: 'auto', m: isCurrentUser(msg.from) ? '0 0 0 8px' : '0 8px 0 0' }}>
                 <Avatar>
                   <PersonIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 1,
-                      bgcolor: isCurrentUser(msg.from) ? 'grey.200' : 'white',
-                      borderRadius: 2,
-                    }}
-                  >
-                    {msg.body}
-                  </Paper>
-                }
-                secondary={new Date(msg.createdAt).toLocaleString()}
-                secondaryTypographyProps={{
-                  align: isCurrentUser(msg.from) ? 'right' : 'left',
-                }}
-              />
+              <Box sx={{ maxWidth: '70%' }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 1,
+                    bgcolor: isCurrentUser(msg.from) ? 'primary.light' : 'grey.100',
+                    borderRadius: 2,
+                  }}
+                >
+                  <Typography variant="body1">{msg.body}</Typography>
+                </Paper>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'block',
+                    mt: 0.5,
+                    textAlign: isCurrentUser(msg.from) ? 'right' : 'left',
+                  }}
+                >
+                  {new Date(msg.createdAt).toLocaleString()}
+                </Typography>
+              </Box>
             </ListItem>
           ))}
           {showCaption && (
