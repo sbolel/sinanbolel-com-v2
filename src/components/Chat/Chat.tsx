@@ -1,139 +1,113 @@
-import React, { useState, useEffect, useRef } from 'react'
-import {
-  doc,
-  onSnapshot,
-  query,
-  collection,
-  where,
-  orderBy,
-  limit,
-  Timestamp,
-} from 'firebase/firestore'
-import { db, auth } from '@/firebase'
-import {
-  createChat,
-  addMessageToChat,
-  getUserChats,
-} from '@/firebase/firestore'
+import React, { useState, useContext, useRef, useCallback } from 'react'
+import { createChat, addMessageToChat } from '@/firebase/firestore'
+import DOMPurify from 'dompurify'
 import {
   Box,
   TextField,
   List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
   Paper,
   Typography,
   IconButton,
-  InputAdornment,
+  Alert,
 } from '@mui/material'
-import Avatar from '@/components/mui/Avatar'
-import PersonIcon from '@mui/icons-material/Person'
-import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import SendIcon from '@mui/icons-material/Send'
 import CloseIcon from '@mui/icons-material/Close'
-import DOMPurify from 'dompurify'
-import { Message } from '@/types/chat'
+import { ChatContext } from '@/contexts/ChatContext'
+import MessageBubble from '@/components/Chat/MessageBubble'
+import useFirebaseAuth from '@/hooks/useFirebaseAuth'
+import useUserChats from '@/hooks/useUserChats'
+import useChatMessages from '@/hooks/useChatMessages'
+import useAutoScroll from '@/hooks/useAutoScroll'
 
 interface ChatProps {
   onClose?: () => void
 }
 
+const headerStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  p: 2,
+  bgcolor: 'primary.main',
+  color: 'white',
+  position: 'relative',
+}
+
+const messageListStyles = {
+  flexGrow: 1,
+  overflow: 'auto',
+  mb: 0.5,
+  p: 1,
+}
+
+const captionStyles = {
+  position: 'sticky',
+  bottom: 16,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: 'fit-content',
+  padding: '8px 16px',
+  backgroundColor: 'success.light',
+  color: 'success.contrastText',
+  borderRadius: 2,
+  zIndex: 1,
+}
+
 const Chat: React.FC<ChatProps> = ({ onClose }) => {
-  const [messages, setMessages] = useState<Message[]>([])
+  const { state, dispatch } = useContext(ChatContext)
   const [newMessage, setNewMessage] = useState('')
-  const [chatId, setChatId] = useState<string | null>(null)
-  const [showCaption, setShowCaption] = useState(false)
-  const captionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const messagesEndRef = useRef<null | HTMLDivElement>(null)
+  const [error, setError] = useState<string | null>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const currentUser = useFirebaseAuth()
 
-  useEffect(() => {
-    const fetchUserChats = async () => {
-      if (auth.currentUser) {
-        const userChats = await getUserChats(auth.currentUser.uid)
-        if (userChats.length > 0) {
-          setChatId(userChats[0].id)
-        }
-      }
-    }
-    fetchUserChats()
-  }, [])
+  useUserChats(dispatch)
+  useChatMessages(state.chatId, dispatch)
+  useAutoScroll(state.messages, messagesEndRef)
 
-  useEffect(() => {
-    if (chatId) {
-      const messagesQuery = query(
-        collection(db, 'chats', chatId, 'messages'),
-        orderBy('createdAt', 'asc')
-      )
-      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const messagesData = snapshot.docs.map((doc) => doc.data() as Message)
-        setMessages(messagesData)
-      })
-
-      return () => unsubscribe()
-    }
-  }, [chatId])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  const isCurrentUser = useCallback(
+    (userId: string) => (currentUser ? userId === currentUser.uid : false),
+    [currentUser]
+  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (newMessage.trim() === '') return
+    const trimmedMessage = newMessage.trim()
+    if (trimmedMessage === '') return
 
-    if (!auth.currentUser) {
-      console.error('User is not authenticated')
+    if (!currentUser) {
+      setError('User is not authenticated')
       return
     }
 
     try {
-      const sanitizedMessage = DOMPurify.sanitize(newMessage)
+      const sanitizedMessage = DOMPurify.sanitize(trimmedMessage)
 
       const messageData = {
         body: sanitizedMessage,
-        from: auth.currentUser.uid,
+        from: currentUser.uid,
       }
 
-      if (!chatId) {
+      if (!state.chatId) {
         const newChatId = await createChat()
         if (newChatId) {
-          setChatId(newChatId)
+          dispatch({ type: 'SET_CHAT_ID', payload: newChatId })
           await addMessageToChat(newChatId, messageData)
         }
       } else {
-        await addMessageToChat(chatId, messageData)
+        await addMessageToChat(state.chatId, messageData)
       }
 
       setNewMessage('')
-      setShowCaption(true)
-      if (captionTimeoutRef.current) {
-        clearTimeout(captionTimeoutRef.current)
-      }
-      captionTimeoutRef.current = setTimeout(() => setShowCaption(false), 3000)
+      dispatch({ type: 'SHOW_CAPTION', payload: true })
+      setTimeout(() => dispatch({ type: 'SHOW_CAPTION', payload: false }), 3000)
     } catch (error) {
       console.error('Error sending message:', error)
-      // Optionally show error to the user
+      setError('Failed to send message. Please try again.')
     }
-  }
-
-  const isCurrentUser = (userId: string) => {
-    if (!auth.currentUser) return false
-    return userId === auth.currentUser.uid
   }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          p: 2,
-          bgcolor: 'primary.main',
-          color: 'white',
-          position: 'relative',
-        }}
-      >
+      <Box sx={headerStyles}>
         <Typography
           variant="h6"
           component="div"
@@ -162,177 +136,17 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           </IconButton>
         )}
       </Box>
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflow: 'auto',
-          mb: 0.5,
-          p: 1,
-        }}
-      >
+      <Box sx={messageListStyles}>
         <List sx={{ overflow: 'auto' }}>
-          {messages.map((msg, index) => (
-            <ListItem
+          {state.messages.map((msg, index) => (
+            <MessageBubble
               key={index}
-              sx={{
-                justifyContent: isCurrentUser(msg.from)
-                  ? 'flex-end'
-                  : 'flex-start',
-                alignItems: 'flex-start',
-                mb: 2,
-                px: 1,
-                '&': {
-                  p: 0,
-                },
-              }}
-            >
-              {isCurrentUser(msg.from) ? (
-                <>
-                  <Box sx={{ maxWidth: '80%', textAlign: 'right' }}>
-                    <Paper
-                      elevation={0}
-                      sx={{
-                        bgcolor: 'rgb(60 ,131, 250)',
-                        borderRadius: 2,
-                        minWidth: '60px',
-                        maxWidth: '100%', // Limit the bubble width to 100% of its container
-                        m: 'auto',
-                        justifyContent: 'center',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        color="common.white"
-                        sx={{
-                          p: 1,
-                          width: 'fit-content',
-                          wordBreak: 'break-word',
-                          overflowWrap: 'break-word',
-                          textAlign: 'left',
-                          letterSpacing: '0.5px',
-                          fontSize: {
-                            xs: '1rem',
-                            sm: '0.875rem',
-                            md: '1rem',
-                            lg: '1.125rem',
-                            xl: '1.25rem',
-                          },
-                        }}
-                      >
-                        {msg.body}
-                      </Typography>
-                    </Paper>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        display: 'block',
-                        mt: 0.5,
-                        textAlign: 'right',
-                        fontSize: { xs: '0.75rem', sm: '0.7rem' },
-                      }}
-                    >
-                      {msg.createdAt
-                        ? msg.createdAt.toDate().toLocaleString(undefined, {
-                            month: 'numeric',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                          })
-                        : 'Sending...'}
-                    </Typography>
-                  </Box>
-                  <ListItemAvatar sx={{ minWidth: 'auto', ml: 1 }}>
-                    <Avatar>
-                      <PersonIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </>
-              ) : (
-                <>
-                  <ListItemAvatar sx={{ minWidth: 'auto', mr: 1 }}>
-                    <Avatar>
-                      <AdminIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <Box sx={{ maxWidth: '80%' }}>
-                    <Paper
-                      elevation={0}
-                      sx={{
-                        bgcolor: 'grey.100',
-                        borderRadius: 2,
-                        minWidth: '60px',
-                        maxWidth: '100%', // Limit the bubble width to 100% of its container
-                        m: 'auto',
-                        justifyContent: 'center',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        color="common.white"
-                        sx={{
-                          p: 1,
-                          width: 'fit-content',
-                          wordBreak: 'break-word',
-                          overflowWrap: 'break-word',
-                          textAlign: 'left',
-                          letterSpacing: '0.5px',
-                          fontSize: {
-                            xs: '1rem',
-                            sm: '0.875rem',
-                            md: '1rem',
-                            lg: '1.125rem',
-                            xl: '1.25rem',
-                          },
-                        }}
-                      >
-                        {msg.body}
-                      </Typography>
-                    </Paper>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        display: 'block',
-                        mt: 0.5,
-                        textAlign: 'left',
-                        fontSize: { xs: '0.75rem', sm: '0.7rem' },
-                      }}
-                    >
-                      {msg.createdAt
-                        ? msg.createdAt.toDate().toLocaleString(undefined, {
-                            month: 'numeric',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                          })
-                        : 'Sending...'}
-                    </Typography>
-                  </Box>
-                </>
-              )}
-            </ListItem>
+              message={msg}
+              isCurrentUser={isCurrentUser(msg.from)}
+            />
           ))}
-          {showCaption && (
-            <Paper
-              elevation={3}
-              sx={{
-                position: 'sticky',
-                bottom: 16,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: 'fit-content',
-                padding: '8px 16px',
-                backgroundColor: 'success.light',
-                color: 'success.contrastText',
-                borderRadius: 2,
-                zIndex: 1,
-              }}
-            >
+          {state.showCaption && (
+            <Paper elevation={3} sx={captionStyles}>
               <Typography variant="body2">
                 Your message has been sent
               </Typography>
@@ -341,6 +155,11 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           <div ref={messagesEndRef} />
         </List>
       </Box>
+      {error && (
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
       <form
         onSubmit={handleSubmit}
         style={{ display: 'flex', padding: '16px' }}

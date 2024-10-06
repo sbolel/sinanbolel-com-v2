@@ -27,7 +27,7 @@ import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
  */
 const styleOverrides = Object.freeze({
   __html: 'body, html { background-color: #fff; }',
-}) as { __html: TrustedHTML }
+}) as { __html: string }
 
 const router = createBrowserRouter([
   {

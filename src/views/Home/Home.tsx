@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Container, Dialog, Fab, Typography } from '@mui/material'
 import ChatIcon from '@mui/icons-material/Chat'
-import CloseIcon from '@mui/icons-material/Close'
+import { ChatProvider } from '@/contexts/ChatContext'
 import Chat from '@/components/Chat/Chat'
 import Image from '@/components/Image'
 import styles from '@/views/Home/Home.module.scss'
@@ -108,42 +108,44 @@ const Home: React.FC = () => {
           </a>
         </Box>
       </Box>
-      <Fab
-        id="chat-button"
-        aria-label="chat-button"
-        color="info"
-        onClick={toggleChat}
-        size="large"
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-        }}
-      >
-        <ChatIcon />
-      </Fab>
-      <Dialog
-        open={chatOpen}
-        onClose={toggleChat}
-        aria-labelledby="chat-dialog"
-        PaperProps={{
-          sx: {
+      <ChatProvider>
+        <Fab
+          id="chat-button"
+          aria-label="chat-button"
+          color="info"
+          onClick={toggleChat}
+          size="large"
+          sx={{
             position: 'fixed',
-            bottom: 80,
+            bottom: 16,
             right: 16,
-            m: 0,
-            width: {
-              xs: 'calc(100% - 32px)',
-              sm: 350,
-              md: 400,
-              lg: 450,
+          }}
+        >
+          <ChatIcon />
+        </Fab>
+        <Dialog
+          open={chatOpen}
+          onClose={toggleChat}
+          aria-labelledby="chat-dialog"
+          PaperProps={{
+            sx: {
+              position: 'fixed',
+              bottom: 80,
+              right: 16,
+              m: 0,
+              width: {
+                xs: 'calc(100% - 32px)',
+                sm: 350,
+                md: 400,
+                lg: 450,
+              },
+              maxHeight: 'calc(100% - 96px)',
             },
-            maxHeight: 'calc(100% - 96px)',
-          },
-        }}
-      >
-        <Chat onClose={toggleChat} />
-      </Dialog>
+          }}
+        >
+          <Chat onClose={toggleChat} />
+        </Dialog>
+      </ChatProvider>
     </Container>
   )
 }
