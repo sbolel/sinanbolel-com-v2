@@ -123,7 +123,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Box
         sx={{
           display: 'flex',
@@ -133,8 +133,8 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           color: 'white',
         }}
       >
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Chat
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
+          Chat with Sinan
         </Typography>
         {onClose && (
           <IconButton
@@ -147,8 +147,17 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           </IconButton>
         )}
       </Box>
-      <Paper sx={{ flex: 1, overflow: 'auto', mb: 2, p: 2 }}>
-        <List>
+      <Paper
+        sx={{
+          flexGrow: 1,
+          overflow: 'auto',
+          mb: 2,
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <List sx={{ overflow: 'auto' }}>
           {messages.map((msg, index) => (
             <ListItem
               key={index}
@@ -231,7 +240,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           <div ref={messagesEndRef} />
         </List>
       </Paper>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', margin: '16px' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', padding: '16px' }}>
         <TextField
           fullWidth
           multiline

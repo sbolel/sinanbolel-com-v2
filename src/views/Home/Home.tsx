@@ -133,7 +133,6 @@ const Home: React.FC = () => {
             right: 16,
             m: 0,
             width: { xs: 'calc(100% - 32px)', sm: 350 },
-            height: { xs: '90%', sm: '66%' },
             maxHeight: 'calc(100% - 96px)',
           },
         }}
