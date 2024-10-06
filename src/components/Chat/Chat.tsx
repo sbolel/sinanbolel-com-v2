@@ -68,6 +68,8 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
     [currentUser]
   )
 
+  const textInputIsEmpty = React.useMemo(() => !newMessage.trim(), [newMessage])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const trimmedMessage = newMessage.trim()
@@ -183,8 +185,8 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
               <Box
                 sx={{
                   position: 'absolute',
-                  right: 8,
-                  bottom: 8,
+                  right: 12,
+                  bottom: -2,
                 }}
               >
                 <IconButton
@@ -192,6 +194,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                   color="primary"
                   aria-label="send"
                   edge="end"
+                  disabled={textInputIsEmpty}
                   sx={{
                     transform: 'rotate(-90deg)',
                   }}
