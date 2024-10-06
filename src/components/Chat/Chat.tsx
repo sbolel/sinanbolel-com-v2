@@ -18,21 +18,28 @@ import {
 import {
   Box,
   TextField,
-  Button,
   List,
   ListItem,
   ListItemText,
   ListItemAvatar,
   Paper,
   Typography,
+  IconButton,
+  InputAdornment,
 } from '@mui/material'
 import Avatar from '@/components/mui/Avatar'
 import PersonIcon from '@mui/icons-material/Person'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
+import SendIcon from '@mui/icons-material/Send'
+import CloseIcon from '@mui/icons-material/Close'
 import DOMPurify from 'dompurify'
 import { Message } from '@/types/chat'
 
-const Chat: React.FC = () => {
+interface ChatProps {
+  onClose?: () => void
+}
+
+const Chat: React.FC<ChatProps> = ({ onClose }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState<string | null>(null)
@@ -117,13 +124,29 @@ const Chat: React.FC = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
-      <Typography
-        variant="h6"
-        component="div"
-        sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          p: 2,
+          bgcolor: 'primary.main',
+          color: 'white',
+        }}
       >
-        Chat
-      </Typography>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Chat
+        </Typography>
+        {onClose && (
+          <IconButton
+            onClick={onClose}
+            color="inherit"
+            aria-label="close"
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        )}
+      </Box>
       <Paper sx={{ flex: 1, overflow: 'auto', mb: 2, p: 2 }}>
         <List>
           {messages.map((msg, index) => (
@@ -147,7 +170,7 @@ const Chat: React.FC = () => {
                   {isCurrentUser(msg.from) ? <PersonIcon /> : <AdminIcon />}
                 </Avatar>
               </ListItemAvatar>
-              <Box sx={{ maxWidth: '70%' }}>
+              <Box sx={{ maxWidth: '80%' }}>
                 <Paper
                   elevation={0}
                   sx={{
@@ -156,9 +179,17 @@ const Chat: React.FC = () => {
                       ? 'primary.light'
                       : 'grey.100',
                     borderRadius: 2,
+                    display: 'inline-block',
                   }}
                 >
-                  <Typography variant="body1">{msg.body}</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: { xs: '1rem', sm: '0.875rem' },
+                    }}
+                  >
+                    {msg.body}
+                  </Typography>
                 </Paper>
                 <Typography
                   variant="caption"
@@ -166,6 +197,7 @@ const Chat: React.FC = () => {
                     display: 'block',
                     mt: 0.5,
                     textAlign: isCurrentUser(msg.from) ? 'right' : 'left',
+                    fontSize: { xs: '0.75rem', sm: '0.7rem' },
                   }}
                 >
                   {msg.createdAt
@@ -199,11 +231,7 @@ const Chat: React.FC = () => {
           <div ref={messagesEndRef} />
         </List>
       </Paper>
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: 'flex', m: 2 }}
-      >
+      <form onSubmit={handleSubmit} style={{ display: 'flex', margin: '16px' }}>
         <TextField
           fullWidth
           multiline
@@ -213,16 +241,22 @@ const Chat: React.FC = () => {
           placeholder="Type a message"
           variant="outlined"
           size="small"
-          sx={{ mr: 1 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  type="submit"
+                  color="primary"
+                  aria-label="send"
+                  edge="end"
+                >
+                  <SendIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{ alignSelf: 'flex-end' }}
-        >
-          Send
-        </Button>
-      </Box>
+      </form>
     </Box>
   )
 }

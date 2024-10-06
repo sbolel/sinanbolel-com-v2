@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Container, Dialog, Fab, Typography } from '@mui/material'
 import ChatIcon from '@mui/icons-material/Chat'
+import CloseIcon from '@mui/icons-material/Close'
 import Chat from '@/components/Chat/Chat'
 import Image from '@/components/Image'
 import styles from '@/views/Home/Home.module.scss'
@@ -132,12 +133,12 @@ const Home: React.FC = () => {
             right: 16,
             m: 0,
             width: { xs: 'calc(100% - 32px)', sm: 350 },
-            height: 'auto',
+            height: { xs: '90%', sm: '66%' },
             maxHeight: 'calc(100% - 96px)',
           },
         }}
       >
-        <Chat />
+        <Chat onClose={toggleChat} />
       </Dialog>
     </Container>
   )
