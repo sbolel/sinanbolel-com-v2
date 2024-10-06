@@ -131,12 +131,17 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           p: 2,
           bgcolor: 'primary.main',
           color: 'white',
+          position: 'relative',
         }}
       >
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, color: 'white' }}
+          sx={{
+            color: 'white',
+            margin: '0 auto',
+            textAlign: 'center',
+          }}
         >
           Chat with Sinan
         </Typography>
@@ -146,19 +151,23 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
             color="inherit"
             aria-label="close"
             size="small"
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: '50%',
+              transform: 'translateY(-50%)',
+            }}
           >
             <CloseIcon />
           </IconButton>
         )}
       </Box>
-      <Paper
+      <Box
         sx={{
           flexGrow: 1,
           overflow: 'auto',
-          mb: 2,
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
+          mb: 0.5,
+          p: 1,
         }}
       >
         <List sx={{ overflow: 'auto' }}>
@@ -171,53 +180,110 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                   : 'flex-start',
                 alignItems: 'flex-start',
                 mb: 2,
+                px: 1,
               }}
             >
-              <ListItemAvatar
-                sx={{
-                  minWidth: 'auto',
-                  m: '0 8px 0 0',
-                }}
-              >
-                <Avatar>
-                  {isCurrentUser(msg.from) ? <PersonIcon /> : <AdminIcon />}
-                </Avatar>
-              </ListItemAvatar>
-              <Box sx={{ maxWidth: '80%' }}>
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: 1,
-                    bgcolor: isCurrentUser(msg.from)
-                      ? 'primary.light'
-                      : 'grey.100',
-                    borderRadius: 2,
-                    display: 'inline-block',
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontSize: { xs: '1rem', sm: '0.875rem' },
-                    }}
-                  >
-                    {msg.body}
-                  </Typography>
-                </Paper>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    display: 'block',
-                    mt: 0.5,
-                    textAlign: isCurrentUser(msg.from) ? 'right' : 'left',
-                    fontSize: { xs: '0.75rem', sm: '0.7rem' },
-                  }}
-                >
-                  {msg.createdAt
-                    ? msg.createdAt.toDate().toLocaleString()
-                    : 'Sending...'}
-                </Typography>
-              </Box>
+              {isCurrentUser(msg.from) ? (
+                <>
+                  <Box sx={{ maxWidth: '80%' }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        p: 1,
+                        bgcolor: 'primary.light',
+                        borderRadius: 2,
+                        display: 'inline-block',
+                        minWidth: '60px',
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: { xs: '1rem', sm: '0.875rem' },
+                        }}
+                      >
+                        {msg.body}
+                      </Typography>
+                    </Paper>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: 'block',
+                        mt: 0.5,
+                        textAlign: 'right',
+                        fontSize: { xs: '0.75rem', sm: '0.7rem' },
+                      }}
+                    >
+                      {msg.createdAt
+                        ? msg.createdAt
+                            .toDate()
+                            .toLocaleString(undefined, {
+                              month: 'numeric',
+                              day: 'numeric',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              hour12: true,
+                            })
+                        : 'Sending...'}
+                    </Typography>
+                  </Box>
+                  <ListItemAvatar sx={{ minWidth: 'auto', ml: 1 }}>
+                    <Avatar>
+                      <PersonIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                </>
+              ) : (
+                <>
+                  <ListItemAvatar sx={{ minWidth: 'auto', mr: 1 }}>
+                    <Avatar>
+                      <AdminIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <Box sx={{ maxWidth: '80%' }}>
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        p: 1,
+                        bgcolor: 'grey.100',
+                        borderRadius: 2,
+                        display: 'inline-block',
+                        minWidth: '60px',
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          fontSize: { xs: '1rem', sm: '0.875rem' },
+                        }}
+                      >
+                        {msg.body}
+                      </Typography>
+                    </Paper>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: 'block',
+                        mt: 0.5,
+                        textAlign: 'left',
+                        fontSize: { xs: '0.75rem', sm: '0.7rem' },
+                      }}
+                    >
+                      {msg.createdAt
+                        ? msg.createdAt
+                            .toDate()
+                            .toLocaleString(undefined, {
+                              month: 'numeric',
+                              day: 'numeric',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              hour12: true,
+                            })
+                        : 'Sending...'}
+                    </Typography>
+                  </Box>
+                </>
+              )}
             </ListItem>
           ))}
           {showCaption && (
@@ -251,24 +317,38 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
         <TextField
           fullWidth
           multiline
-          rows={2}
+          minRows={1}
+          maxRows={5}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message"
           variant="outlined"
-          size="small"
+          size="medium"
           InputProps={{
+            sx: {
+              padding: '8px',
+              paddingRight: '48px',
+            },
             endAdornment: (
-              <InputAdornment position="end">
+              <Box
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  bottom: 8,
+                }}
+              >
                 <IconButton
                   type="submit"
                   color="primary"
                   aria-label="send"
                   edge="end"
+                  sx={{
+                    transform: 'rotate(-90deg)',
+                  }}
                 >
                   <SendIcon />
                 </IconButton>
-              </InputAdornment>
+              </Box>
             ),
           }}
         />
