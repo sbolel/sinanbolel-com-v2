@@ -194,12 +194,15 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                         borderRadius: 2,
                         display: 'inline-block',
                         minWidth: '60px',
+                        maxWidth: '100%', // Limit the bubble width to 100% of its container
                       }}
                     >
                       <Typography
                         variant="body1"
                         sx={{
                           fontSize: { xs: '1rem', sm: '0.875rem' },
+                          wordBreak: 'break-word',
+                          overflowWrap: 'break-word',
                         }}
                       >
                         {msg.body}
@@ -247,12 +250,15 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                         borderRadius: 2,
                         display: 'inline-block',
                         minWidth: '60px',
+                        maxWidth: '100%', // Limit the bubble width to 100% of its container
                       }}
                     >
                       <Typography
                         variant="body1"
                         sx={{
                           fontSize: { xs: '1rem', sm: '0.875rem' },
+                          wordBreak: 'break-word',
+                          overflowWrap: 'break-word',
                         }}
                       >
                         {msg.body}
