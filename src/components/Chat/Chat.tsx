@@ -215,15 +215,13 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                       }}
                     >
                       {msg.createdAt
-                        ? msg.createdAt
-                            .toDate()
-                            .toLocaleString(undefined, {
-                              month: 'numeric',
-                              day: 'numeric',
-                              hour: 'numeric',
-                              minute: 'numeric',
-                              hour12: true,
-                            })
+                        ? msg.createdAt.toDate().toLocaleString(undefined, {
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true,
+                          })
                         : 'Sending...'}
                     </Typography>
                   </Box>
@@ -270,15 +268,13 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                       }}
                     >
                       {msg.createdAt
-                        ? msg.createdAt
-                            .toDate()
-                            .toLocaleString(undefined, {
-                              month: 'numeric',
-                              day: 'numeric',
-                              hour: 'numeric',
-                              minute: 'numeric',
-                              hour12: true,
-                            })
+                        ? msg.createdAt.toDate().toLocaleString(undefined, {
+                            month: 'numeric',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true,
+                          })
                         : 'Sending...'}
                     </Typography>
                   </Box>
