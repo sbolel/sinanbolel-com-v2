@@ -168,7 +168,9 @@ const Chat: React.FC = () => {
                     textAlign: isCurrentUser(msg.from) ? 'right' : 'left',
                   }}
                 >
-                  {msg.createdAt.toDate().toLocaleString()}
+                  {msg.createdAt
+                    ? msg.createdAt.toDate().toLocaleString()
+                    : 'Sending...'}
                 </Typography>
               </Box>
             </ListItem>
