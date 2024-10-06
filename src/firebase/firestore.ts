@@ -51,12 +51,12 @@ export const addMessageToChat = async (
   chatId: string,
   messageData: { body: string; from: string }
 ): Promise<void> => {
-  const messagesRef = collection(db, 'chats', chatId, 'messages');
+  const messagesRef = collection(db, 'chats', chatId, 'messages')
   await addDoc(messagesRef, {
     body: messageData.body,
     from: messageData.from,
     createdAt: serverTimestamp(),
-  });
+  })
 }
 
 // TODO: add return type

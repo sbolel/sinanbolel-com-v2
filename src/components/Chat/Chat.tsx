@@ -7,7 +7,7 @@ import {
   where,
   orderBy,
   limit,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 import {
@@ -57,13 +57,13 @@ const Chat: React.FC = () => {
       const messagesQuery = query(
         collection(db, 'chats', chatId, 'messages'),
         orderBy('createdAt', 'asc')
-      );
+      )
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const messagesData = snapshot.docs.map((doc) => doc.data() as Message);
-        setMessages(messagesData);
-      });
+        const messagesData = snapshot.docs.map((doc) => doc.data() as Message)
+        setMessages(messagesData)
+      })
 
-      return () => unsubscribe();
+      return () => unsubscribe()
     }
   }, [chatId])
 
@@ -76,12 +76,12 @@ const Chat: React.FC = () => {
     if (newMessage.trim() === '') return
 
     if (!auth.currentUser) {
-      console.error('User is not authenticated');
-      return;
+      console.error('User is not authenticated')
+      return
     }
 
     try {
-      const sanitizedMessage = DOMPurify.sanitize(newMessage);
+      const sanitizedMessage = DOMPurify.sanitize(newMessage)
 
       const messageData = {
         body: sanitizedMessage,
@@ -105,14 +105,14 @@ const Chat: React.FC = () => {
       }
       captionTimeoutRef.current = setTimeout(() => setShowCaption(false), 3000)
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error sending message:', error)
       // Optionally show error to the user
     }
   }
 
   const isCurrentUser = (userId: string) => {
-    if (!auth.currentUser) return false;
-    return userId === auth.currentUser.uid;
+    if (!auth.currentUser) return false
+    return userId === auth.currentUser.uid
   }
 
   return (
@@ -130,7 +130,9 @@ const Chat: React.FC = () => {
             <ListItem
               key={index}
               sx={{
-                justifyContent: isCurrentUser(msg.from) ? 'flex-end' : 'flex-start',
+                justifyContent: isCurrentUser(msg.from)
+                  ? 'flex-end'
+                  : 'flex-start',
                 alignItems: 'flex-start',
                 mb: 2,
               }}
