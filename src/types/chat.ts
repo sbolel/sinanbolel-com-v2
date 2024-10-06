@@ -5,3 +5,10 @@ export interface Message {
   createdAt: Timestamp
   from: string
 }
+import { Timestamp } from 'firebase/firestore'
+
+export interface Message {
+  body: string
+  createdAt: Timestamp
+  from: string
+}
