@@ -309,7 +309,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           )}
           <div ref={messagesEndRef} />
         </List>
-      </Paper>
+      </Box>
       <form
         onSubmit={handleSubmit}
         style={{ display: 'flex', padding: '16px' }}
