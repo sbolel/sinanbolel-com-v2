@@ -133,7 +133,11 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           color: 'white',
         }}
       >
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, color: 'white' }}
+        >
           Chat with Sinan
         </Typography>
         {onClose && (
@@ -240,7 +244,10 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           <div ref={messagesEndRef} />
         </List>
       </Paper>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', padding: '16px' }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: 'flex', padding: '16px' }}
+      >
         <TextField
           fullWidth
           multiline
