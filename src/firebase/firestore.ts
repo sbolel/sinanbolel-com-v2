@@ -36,23 +36,13 @@ export const createSession = async (): Promise<void> => {
   )
 }
 
-export const createChat = async (messageData: {
-  body: string
-  from: string
-}): Promise<string | undefined> => {
+export const createChat = async (): Promise<string | undefined> => {
   if (!auth?.currentUser) {
     return
   }
   const chatRef = await addDoc(collection(db, 'chats'), {
     userId: auth.currentUser.uid,
     createdAt: serverTimestamp(),
-    messages: [
-      {
-        body: messageData.body,
-        from: messageData.from,
-        createdAt: new Date().toISOString(),
-      },
-    ],
   })
   return chatRef.id
 }
@@ -61,14 +51,12 @@ export const addMessageToChat = async (
   chatId: string,
   messageData: { body: string; from: string }
 ): Promise<void> => {
-  const chatRef = doc(db, 'chats', chatId)
-  await updateDoc(chatRef, {
-    messages: arrayUnion({
-      body: messageData.body,
-      from: messageData.from,
-      createdAt: new Date().toISOString(),
-    }),
-  })
+  const messagesRef = collection(db, 'chats', chatId, 'messages');
+  await addDoc(messagesRef, {
+    body: messageData.body,
+    from: messageData.from,
+    createdAt: serverTimestamp(),
+  });
 }
 
 // TODO: add return type

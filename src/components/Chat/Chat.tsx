@@ -7,6 +7,7 @@ import {
   where,
   orderBy,
   limit,
+  Timestamp
 } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 import {
@@ -27,19 +28,16 @@ import {
 } from '@mui/material'
 import Avatar from '@/components/mui/Avatar'
 import PersonIcon from '@mui/icons-material/Person'
-
-interface Message {
-  body: string
-  createdAt: string
-  from: string
-}
+import AdminIcon from '@mui/icons-material/SupervisorAccount'
+import DOMPurify from 'dompurify'
+import { Message } from '@/types/chat'
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [chatId, setChatId] = useState<string | null>(null)
   const [showCaption, setShowCaption] = useState(false)
-  const [captionTimeout, setCaptionTimeout] = useState<NodeJS.Timeout | null>(null)
+  const captionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
@@ -56,13 +54,16 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (chatId) {
-      const unsubscribe = onSnapshot(doc(db, 'chats', chatId), (doc) => {
-        if (doc.exists()) {
-          setMessages(doc.data().messages)
-        }
-      })
+      const messagesQuery = query(
+        collection(db, 'chats', chatId, 'messages'),
+        orderBy('createdAt', 'asc')
+      );
+      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        const messagesData = snapshot.docs.map((doc) => doc.data() as Message);
+        setMessages(messagesData);
+      });
 
-      return () => unsubscribe()
+      return () => unsubscribe();
     }
   }, [chatId])
 
@@ -74,28 +75,45 @@ const Chat: React.FC = () => {
     e.preventDefault()
     if (newMessage.trim() === '') return
 
-    const messageData = {
-      body: newMessage,
-      from: auth.currentUser?.uid || 'anonymous',
+    if (!auth.currentUser) {
+      console.error('User is not authenticated');
+      return;
     }
 
-    if (!chatId) {
-      const newChatId = await createChat(messageData)
-      if (newChatId) setChatId(newChatId)
-    } else {
-      await addMessageToChat(chatId, messageData)
-    }
+    try {
+      const sanitizedMessage = DOMPurify.sanitize(newMessage);
 
-    setNewMessage('')
-    setShowCaption(true)
-    if (captionTimeout) {
-      clearTimeout(captionTimeout)
+      const messageData = {
+        body: sanitizedMessage,
+        from: auth.currentUser.uid,
+      }
+
+      if (!chatId) {
+        const newChatId = await createChat()
+        if (newChatId) {
+          setChatId(newChatId)
+          await addMessageToChat(newChatId, messageData)
+        }
+      } else {
+        await addMessageToChat(chatId, messageData)
+      }
+
+      setNewMessage('')
+      setShowCaption(true)
+      if (captionTimeoutRef.current) {
+        clearTimeout(captionTimeoutRef.current)
+      }
+      captionTimeoutRef.current = setTimeout(() => setShowCaption(false), 3000)
+    } catch (error) {
+      console.error('Error sending message:', error);
+      // Optionally show error to the user
     }
-    const newTimeout = setTimeout(() => setShowCaption(false), 3000)
-    setCaptionTimeout(newTimeout)
   }
 
-  const isCurrentUser = (userId: string) => userId === auth.currentUser?.uid
+  const isCurrentUser = (userId: string) => {
+    if (!auth.currentUser) return false;
+    return userId === auth.currentUser.uid;
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '400px' }}>
@@ -112,8 +130,7 @@ const Chat: React.FC = () => {
             <ListItem
               key={index}
               sx={{
-                display: 'flex',
-                flexDirection: isCurrentUser(msg.from) ? 'row-reverse' : 'row',
+                justifyContent: isCurrentUser(msg.from) ? 'flex-end' : 'flex-start',
                 alignItems: 'flex-start',
                 mb: 2,
               }}
@@ -121,11 +138,11 @@ const Chat: React.FC = () => {
               <ListItemAvatar
                 sx={{
                   minWidth: 'auto',
-                  m: isCurrentUser(msg.from) ? '0 0 0 8px' : '0 8px 0 0',
+                  m: '0 8px 0 0',
                 }}
               >
                 <Avatar>
-                  <PersonIcon />
+                  {isCurrentUser(msg.from) ? <PersonIcon /> : <AdminIcon />}
                 </Avatar>
               </ListItemAvatar>
               <Box sx={{ maxWidth: '70%' }}>
@@ -149,7 +166,7 @@ const Chat: React.FC = () => {
                     textAlign: isCurrentUser(msg.from) ? 'right' : 'left',
                   }}
                 >
-                  {new Date(msg.createdAt).toLocaleString()}
+                  {msg.createdAt.toDate().toLocaleString()}
                 </Typography>
               </Box>
             </ListItem>
