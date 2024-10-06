@@ -181,28 +181,44 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                 alignItems: 'flex-start',
                 mb: 2,
                 px: 1,
+                '&': {
+                  p: 0,
+                },
               }}
             >
               {isCurrentUser(msg.from) ? (
                 <>
-                  <Box sx={{ maxWidth: '80%' }}>
+                  <Box sx={{ maxWidth: '80%', textAlign: 'right' }}>
                     <Paper
                       elevation={0}
                       sx={{
-                        p: 1,
-                        bgcolor: 'primary.light',
+                        bgcolor: 'rgb(60 ,131, 250)',
                         borderRadius: 2,
-                        display: 'inline-block',
                         minWidth: '60px',
                         maxWidth: '100%', // Limit the bubble width to 100% of its container
+                        m: 'auto',
+                        justifyContent: 'center',
+                        display: 'inline-flex',
+                        alignItems: 'center',
                       }}
                     >
                       <Typography
                         variant="body1"
+                        color="common.white"
                         sx={{
-                          fontSize: { xs: '1rem', sm: '0.875rem' },
+                          p: 1,
+                          width: 'fit-content',
                           wordBreak: 'break-word',
                           overflowWrap: 'break-word',
+                          textAlign: 'left',
+                          letterSpacing: '0.5px',
+                          fontSize: {
+                            xs: '1rem',
+                            sm: '0.875rem',
+                            md: '1rem',
+                            lg: '1.125rem',
+                            xl: '1.25rem',
+                          },
                         }}
                       >
                         {msg.body}
@@ -245,20 +261,33 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                     <Paper
                       elevation={0}
                       sx={{
-                        p: 1,
                         bgcolor: 'grey.100',
                         borderRadius: 2,
-                        display: 'inline-block',
                         minWidth: '60px',
                         maxWidth: '100%', // Limit the bubble width to 100% of its container
+                        m: 'auto',
+                        justifyContent: 'center',
+                        display: 'inline-flex',
+                        alignItems: 'center',
                       }}
                     >
                       <Typography
                         variant="body1"
+                        color="common.white"
                         sx={{
-                          fontSize: { xs: '1rem', sm: '0.875rem' },
+                          p: 1,
+                          width: 'fit-content',
                           wordBreak: 'break-word',
                           overflowWrap: 'break-word',
+                          textAlign: 'left',
+                          letterSpacing: '0.5px',
+                          fontSize: {
+                            xs: '1rem',
+                            sm: '0.875rem',
+                            md: '1rem',
+                            lg: '1.125rem',
+                            xl: '1.25rem',
+                          },
                         }}
                       >
                         {msg.body}
