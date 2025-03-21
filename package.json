@@ -71,7 +71,7 @@
     "react-router-dom": "^6.30.0",
     "uswds": "^2.14.0",
     "uuid": "^9.0.1",
-    "yup": "^1.4.0"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
