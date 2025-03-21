@@ -54,7 +54,7 @@
     "@mui/x-data-grid": "^6.20.4",
     "@popperjs/core": "^2.11.8",
     "@types/dompurify": "^3.0.5",
-    "aws-amplify": "^5.3.21",
+    "aws-amplify": "^5.3.27",
     "classnames": "^2.5.1",
     "clipboard-copy": "^4.0.1",
     "dompurify": "^3.1.7",
