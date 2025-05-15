@@ -28,7 +28,8 @@ export default defineConfig({
   plugins: [
     // Add our custom Sass plugin with debugging enabled only in development
     sassPlugin({
-      outputStyle: process.env.NODE_ENV === 'production' ? 'compressed' : 'expanded',
+      outputStyle:
+        process.env.NODE_ENV === 'production' ? 'compressed' : 'expanded',
       debug: process.env.NODE_ENV !== 'production',
     }),
     react(),
@@ -50,7 +51,7 @@ export default defineConfig({
       'VITE_FIREBASE_APP_ID',
       'VITE_FIREBASE_DATABASE_URL',
       'VITE_FIREBASE_MEASUREMENT_ID',
-      'VITE_FIREBASE_FIRESTORE_CHAT'
+      'VITE_FIREBASE_FIRESTORE_CHAT',
     ]),
     visualizer() as PluginOption,
     {

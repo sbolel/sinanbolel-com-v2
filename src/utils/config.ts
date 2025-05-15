@@ -10,7 +10,9 @@ const CONFIG = {
   //* AWS configuration
   AWS_REGION: process.env.VITE_AWS_REGION || '',
   CF_DOMAIN: process.env.VITE_CF_DOMAIN || '',
-  API_URL: process.env.VITE_CF_DOMAIN ? `${process.env.VITE_CF_DOMAIN}/api` : '',
+  API_URL: process.env.VITE_CF_DOMAIN
+    ? `${process.env.VITE_CF_DOMAIN}/api`
+    : '',
   COGNITO_DOMAIN: process.env.VITE_COGNITO_DOMAIN || '',
   COGNITO_REDIRECT_SIGN_IN: process.env.VITE_COGNITO_REDIRECT_SIGN_IN || '',
   COGNITO_REDIRECT_SIGN_OUT: process.env.VITE_COGNITO_REDIRECT_SIGN_OUT || '',
