@@ -1,4 +1,11 @@
-import React, { useState, useContext, useRef, useCallback } from 'react'
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useReducer,
+  useMemo,
+} from 'react'
 import { createChat, addMessageToChat } from '@/firebase/firestore'
 import DOMPurify from 'dompurify'
 import {
@@ -52,10 +59,46 @@ const captionStyles = {
   zIndex: 1,
 }
 
+// Define state and actions for chat component state management
+type ChatComponentState = {
+  newMessage: string
+  error: string | null
+}
+
+type ChatComponentAction =
+  | { type: 'SET_MESSAGE'; message: string }
+  | { type: 'CLEAR_MESSAGE' }
+  | { type: 'SET_ERROR'; error: string | null }
+  | { type: 'CLEAR_ERROR' }
+
+// Reducer to manage chat component state
+const chatReducer = (
+  state: ChatComponentState,
+  action: ChatComponentAction
+): ChatComponentState => {
+  switch (action.type) {
+    case 'SET_MESSAGE':
+      return { ...state, newMessage: action.message }
+    case 'CLEAR_MESSAGE':
+      return { ...state, newMessage: '' }
+    case 'SET_ERROR':
+      return { ...state, error: action.error }
+    case 'CLEAR_ERROR':
+      return { ...state, error: null }
+    default:
+      return state
+  }
+}
+
 const Chat: React.FC<ChatProps> = ({ onClose }) => {
   const { state, dispatch } = useContext(ChatContext)
-  const [newMessage, setNewMessage] = useState('')
-  const [error, setError] = useState<string | null>(null)
+
+  // Replace multiple useState calls with useReducer
+  const [chatState, chatDispatch] = useReducer(chatReducer, {
+    newMessage: '',
+    error: null,
+  })
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const currentUser = useFirebaseAuth()
 
@@ -68,44 +111,75 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
     [currentUser]
   )
 
-  const textInputIsEmpty = React.useMemo(() => !newMessage.trim(), [newMessage])
+  // Use useMemo for derived values
+  const textInputIsEmpty = useMemo(
+    () => !chatState.newMessage.trim(),
+    [chatState.newMessage]
+  )
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const trimmedMessage = newMessage.trim()
-    if (trimmedMessage === '') return
+  // Handle text input changes
+  const handleMessageChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      chatDispatch({ type: 'SET_MESSAGE', message: e.target.value })
+    },
+    []
+  )
 
-    if (!currentUser) {
-      setError('User is not authenticated')
-      return
-    }
+  // Clear error handler
+  const handleClearError = useCallback(() => {
+    chatDispatch({ type: 'CLEAR_ERROR' })
+  }, [])
 
-    try {
-      const sanitizedMessage = DOMPurify.sanitize(trimmedMessage)
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      const trimmedMessage = chatState.newMessage.trim()
+      if (trimmedMessage === '') return
 
-      const messageData = {
-        body: sanitizedMessage,
-        from: currentUser.uid,
+      if (!currentUser) {
+        chatDispatch({ type: 'SET_ERROR', error: 'User is not authenticated' })
+        return
       }
 
-      if (!state.chatId) {
-        const newChatId = await createChat()
-        if (newChatId) {
-          dispatch({ type: 'SET_CHAT_ID', payload: newChatId })
-          await addMessageToChat(newChatId, messageData)
+      try {
+        const sanitizedMessage = DOMPurify.sanitize(trimmedMessage)
+
+        const messageData = {
+          body: sanitizedMessage,
+          from: currentUser.uid,
         }
-      } else {
-        await addMessageToChat(state.chatId, messageData)
-      }
 
-      setNewMessage('')
-      dispatch({ type: 'SHOW_CAPTION', payload: true })
-      setTimeout(() => dispatch({ type: 'SHOW_CAPTION', payload: false }), 3000)
-    } catch (error) {
-      console.error('Error sending message:', error)
-      setError('Failed to send message. Please try again.')
-    }
-  }
+        // Single batch of state updates for context state management
+        if (!state.chatId) {
+          const newChatId = await createChat()
+          if (newChatId) {
+            // Group dispatch operations to minimize renders
+            dispatch({ type: 'SET_CHAT_ID', payload: newChatId })
+            await addMessageToChat(newChatId, messageData)
+          }
+        } else {
+          await addMessageToChat(state.chatId, messageData)
+        }
+
+        // Clear message in local state
+        chatDispatch({ type: 'CLEAR_MESSAGE' })
+
+        // Show/hide caption with animation
+        dispatch({ type: 'SHOW_CAPTION', payload: true })
+        setTimeout(
+          () => dispatch({ type: 'SHOW_CAPTION', payload: false }),
+          3000
+        )
+      } catch (error) {
+        console.error('Error sending message:', error)
+        chatDispatch({
+          type: 'SET_ERROR',
+          error: 'Failed to send message. Please try again.',
+        })
+      }
+    },
+    [chatState.newMessage, currentUser, state.chatId, dispatch]
+  )
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -139,27 +213,32 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
         )}
       </Box>
       <Box sx={messageListStyles}>
-        <List sx={{ overflow: 'auto' }}>
-          {state.messages.map((msg, index) => (
-            <MessageBubble
-              key={index}
-              message={msg}
-              isCurrentUser={isCurrentUser(msg.from)}
-            />
-          ))}
-          {state.showCaption && (
-            <Paper elevation={3} sx={captionStyles}>
-              <Typography variant="body2">
-                Your message has been sent
-              </Typography>
-            </Paper>
-          )}
-          <div ref={messagesEndRef} />
-        </List>
+        {useMemo(
+          () => (
+            <List sx={{ overflow: 'auto' }}>
+              {state.messages.map((msg, index) => (
+                <MessageBubble
+                  key={index}
+                  message={msg}
+                  isCurrentUser={isCurrentUser(msg.from)}
+                />
+              ))}
+              {state.showCaption && (
+                <Paper elevation={3} sx={captionStyles}>
+                  <Typography variant="body2">
+                    Your message has been sent
+                  </Typography>
+                </Paper>
+              )}
+              <div ref={messagesEndRef} />
+            </List>
+          ),
+          [state.messages, state.showCaption, isCurrentUser]
+        )}
       </Box>
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)}>
-          {error}
+      {chatState.error && (
+        <Alert severity="error" onClose={handleClearError}>
+          {chatState.error}
         </Alert>
       )}
       <form
@@ -171,8 +250,8 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           multiline
           minRows={1}
           maxRows={5}
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          value={chatState.newMessage}
+          onChange={handleMessageChange}
           placeholder="Type a message"
           variant="outlined"
           size="medium"
@@ -210,4 +289,4 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
   )
 }
 
-export default Chat
+export default React.memo(Chat)

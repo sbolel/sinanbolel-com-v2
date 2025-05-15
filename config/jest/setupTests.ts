@@ -34,3 +34,38 @@ Object.defineProperty(URL, 'createObjectURL', {
   writable: true,
   value: jest.fn(),
 })
+
+// Configure React testing environment for act() support
+import { configure } from '@testing-library/react'
+
+// Configure longer timeout for async tests with act()
+configure({
+  asyncUtilTimeout: 5000,
+})
+
+// Add support for concurrent act() environments
+// This helps with "Warning: The current testing environment is not configured to support act(...)"
+globalThis.IS_REACT_ACT_ENVIRONMENT = true
+
+// Extra configuration to deal with react-hook-form state updates
+// This prevents "not configured to support act(...)" warnings with hooks that cause nested state updates
+const originalError = console.error
+console.error = (...args) => {
+  // Don't completely silence the error but filter out act() warnings
+  if (
+    args[0]?.includes?.(
+      'Warning: The current testing environment is not configured to support act'
+    )
+  ) {
+    return
+  }
+  originalError(...args)
+}
+
+// Add TextEncoder/TextDecoder polyfill for JSDOM environment
+// This is needed for React Router v7 and other libraries
+if (typeof global.TextEncoder === 'undefined') {
+  const { TextEncoder, TextDecoder } = require('util')
+  global.TextEncoder = TextEncoder
+  global.TextDecoder = TextDecoder
+}

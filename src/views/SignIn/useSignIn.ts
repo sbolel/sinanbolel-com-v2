@@ -3,7 +3,7 @@
  */
 import { Auth } from 'aws-amplify'
 import { FederatedSignInOptions } from '@aws-amplify/auth/lib/types'
-import { BaseSyntheticEvent, useCallback, useState } from 'react'
+import { BaseSyntheticEvent, useCallback, useReducer, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, UseFormHandleSubmit } from 'react-hook-form'
 import * as yup from 'yup'
@@ -17,6 +17,34 @@ import {
 } from '@/views/SignIn/SignIn.interfaces'
 import { Routes } from '@/router/constants'
 
+// Define state interface and actions for auth state
+type AuthState = {
+  loading: boolean
+  error: Error | null
+}
+
+type AuthAction =
+  | { type: 'LOGIN_START' }
+  | { type: 'LOGIN_SUCCESS' }
+  | { type: 'LOGIN_FAILURE'; error: Error }
+  | { type: 'SET_LOADING'; loading: boolean }
+
+// Reducer to manage auth-related state in a batched way
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  switch (action.type) {
+    case 'LOGIN_START':
+      return { ...state, loading: true, error: null }
+    case 'LOGIN_SUCCESS':
+      return { ...state, loading: false, error: null }
+    case 'LOGIN_FAILURE':
+      return { ...state, loading: false, error: action.error }
+    case 'SET_LOADING':
+      return { ...state, loading: action.loading }
+    default:
+      return state
+  }
+}
+
 /**
  * A custom hook to retrieve methods and state pertaining to the SignIn.
  * @returns {useSignInReturnType} All the methods and state required for the SignIn/SignOut Views.
@@ -26,7 +54,12 @@ const useSignIn = (): useSignInReturnType => {
   const dispatch = useAuthDispatch()
   const navigate = useNavigate()
 
-  const [loading, setLoading] = useState<boolean>(false)
+  // Replace useState with useReducer for related state
+  const [authState, authDispatch] = useReducer(authReducer, {
+    loading: false,
+    error: null,
+  })
+
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const {
@@ -46,6 +79,7 @@ const useSignIn = (): useSignInReturnType => {
     trigger,
     unregister,
     watch,
+    subscribe,
   } = useForm({
     defaultValues: {
       email: '',
@@ -82,13 +116,18 @@ const useSignIn = (): useSignInReturnType => {
   const onSubmit = useCallback(
     async (data: TFieldValues) => {
       const { email, password } = data
-      setLoading(true)
+
+      // Dispatch a single action to start login process - avoids multiple state updates
+      authDispatch({ type: 'LOGIN_START' })
+
       try {
         await loginUser(dispatch, { email, password })
-        setLoading(false)
+        // Dispatch a single action for success - avoids multiple state updates
+        authDispatch({ type: 'LOGIN_SUCCESS' })
         navigate(Routes.DASHBOARD)
       } catch (error) {
-        setLoading(false)
+        // Dispatch a single action for failure - combines error and loading state updates
+        authDispatch({ type: 'LOGIN_FAILURE', error: error as Error })
         setAlert({
           message: 'There was an error logging in. Please try again.',
           severity: 'error',
@@ -98,8 +137,13 @@ const useSignIn = (): useSignInReturnType => {
     [dispatch, navigate, setAlert]
   )
 
+  // Create a setLoading function that uses the reducer
+  const setLoading = useCallback((loading: boolean) => {
+    authDispatch({ type: 'SET_LOADING', loading })
+  }, [])
+
   return {
-    loading,
+    loading: authState.loading,
     setLoading,
     showPassword,
     setShowPassword,
@@ -110,10 +154,10 @@ const useSignIn = (): useSignInReturnType => {
     getFieldState,
     getValues,
     handleFederatedSignIn,
-    handleSubmit: handleSubmitInternal(onSubmit) as ((
+    handleSubmit: handleSubmitInternal(onSubmit) as unknown as ((
       e?: BaseSyntheticEvent<unknown, unknown, unknown> | undefined
     ) => Promise<void>) &
-      UseFormHandleSubmit<TFieldValues>,
+      UseFormHandleSubmit<TFieldValues, TFieldValues>,
     register,
     reset,
     resetField,
@@ -123,6 +167,7 @@ const useSignIn = (): useSignInReturnType => {
     trigger,
     unregister,
     watch,
+    subscribe,
   }
 }
 

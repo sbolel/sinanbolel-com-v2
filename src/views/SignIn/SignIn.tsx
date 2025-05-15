@@ -2,7 +2,7 @@
  * The view at the /login route that renders the sign in form.
  * @module views/SignIn/SignIn
  */
-import React, { memo, ReactNode } from 'react'
+import React, { memo, ReactNode, useMemo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -35,7 +35,8 @@ import {
 } from '@/locales/en'
 import CONFIG from '@/utils/config'
 
-const LoadingIcon: React.FC = () => {
+// Extract LoadingIcon into a separate memoized component
+const LoadingIcon = memo(function LoadingIcon() {
   const { loading = false } = useSignIn()
   const { breakpoints } = useTheme()
   const hidden = useMediaQuery(breakpoints.down('md'))
@@ -54,9 +55,26 @@ const LoadingIcon: React.FC = () => {
       <CircularProgress data-testid="linear-indeterminate" />
     </Backdrop>
   )
-}
+})
 
-const SignInForm: React.FC = () => {
+// Extract PasswordToggle into a proper memoized component
+const PasswordToggle = memo(function PasswordToggle({
+  showPassword,
+  setShowPassword,
+}: {
+  showPassword: boolean
+  setShowPassword: (show: boolean) => void
+}) {
+  return (
+    <PasswordVisibilityToggle
+      showPassword={showPassword}
+      setShowPassword={setShowPassword}
+    />
+  )
+})
+
+// Extract SignInForm into a separate memoized component
+const SignInForm = memo(function SignInForm() {
   const {
     control,
     loading,
@@ -66,16 +84,54 @@ const SignInForm: React.FC = () => {
     setShowPassword,
   } = useSignIn()
 
-  const ShowPasswordButton = memo(
-    Object.assign(
-      () => (
-        <PasswordVisibilityToggle
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
+  // Memoize the form content
+  const formContent = useMemo(
+    () => (
+      <>
+        <InputFormControl<TFieldValues, TContext>
+          control={control}
+          name="email"
+          InputProps={{
+            autoComplete: 'username',
+            placeholder: SIGN_IN_EMAIL_PLACEHOLDER,
+          }}
         />
-      ),
-      { displayName: 'ShowPasswordButton' }
-    ) as React.FC
+        <InputFormControl<TFieldValues, TContext>
+          control={control}
+          name="password"
+          InputProps={{
+            autoComplete: 'current-password',
+            endAdornment: (
+              <PasswordToggle
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
+            ),
+            type: showPassword ? 'text' : 'password',
+          }}
+        />
+        <SubmitButton disabled={loading} fullWidth name="login" role="button">
+          {SIGN_IN_CTA}
+        </SubmitButton>
+        <LoadingIcon />
+        {CONFIG.IDP_ENABLED && (
+          <>
+            <Typography align="center" variant="subtitle2">
+              or...
+            </Typography>
+            <Button
+              fullWidth
+              onClick={handleFederatedSignIn}
+              role="button"
+              variant="outlined"
+            >
+              {SIGN_IN_CTA_IDP}
+            </Button>
+          </>
+        )}
+      </>
+    ),
+    [control, loading, handleFederatedSignIn, showPassword, setShowPassword]
   )
 
   return (
@@ -87,45 +143,10 @@ const SignInForm: React.FC = () => {
       onSubmit={handleSubmit}
       spacing={3}
     >
-      <InputFormControl<TFieldValues, TContext>
-        control={control}
-        name="email"
-        InputProps={{
-          autoComplete: 'username',
-          placeholder: SIGN_IN_EMAIL_PLACEHOLDER,
-        }}
-      />
-      <InputFormControl<TFieldValues, TContext>
-        control={control}
-        name="password"
-        InputProps={{
-          autoComplete: 'current-password',
-          endAdornment: <ShowPasswordButton />,
-          type: showPassword ? 'text' : 'password',
-        }}
-      />
-      <SubmitButton disabled={loading} fullWidth name="login" role="button">
-        {SIGN_IN_CTA}
-      </SubmitButton>
-      <LoadingIcon />
-      {CONFIG.IDP_ENABLED && (
-        <>
-          <Typography align="center" variant="subtitle2">
-            or...
-          </Typography>
-          <Button
-            fullWidth
-            onClick={handleFederatedSignIn}
-            role="button"
-            variant="outlined"
-          >
-            {SIGN_IN_CTA_IDP}
-          </Button>
-        </>
-      )}
+      {formContent}
     </Stack>
   )
-}
+})
 
 /**
  * Component that renders the page containing the sign in form.
@@ -134,6 +155,33 @@ const SignInForm: React.FC = () => {
 const SignIn = (): JSX.Element => {
   const { breakpoints } = useTheme()
   const hidden = useMediaQuery(breakpoints.down('md'))
+
+  // Memoize logo component
+  const LogoComponent = useMemo(() => {
+    if (hidden) return null
+
+    return (
+      <CenteredFlexBox
+        sx={{
+          position: 'absolute',
+          left: 40,
+          top: 30,
+        }}
+      >
+        <SignInGraphic />
+        <Typography
+          variant="h6"
+          sx={{
+            fontSize: '1.5rem !important',
+            lineHeight: 1,
+            ml: 2,
+          }}
+        >
+          {PUBLIC_APP_NAME}
+        </Typography>
+      </CenteredFlexBox>
+    )
+  }, [hidden])
 
   return (
     <BoxWrapper
@@ -157,27 +205,7 @@ const SignIn = (): JSX.Element => {
             p: 7,
           }}
         >
-          {hidden === false && (
-            <CenteredFlexBox
-              sx={{
-                position: 'absolute',
-                left: 40,
-                top: 30,
-              }}
-            >
-              <SignInGraphic />
-              <Typography
-                variant="h6"
-                sx={{
-                  fontSize: '1.5rem !important',
-                  lineHeight: 1,
-                  ml: 2,
-                }}
-              >
-                {PUBLIC_APP_NAME}
-              </Typography>
-            </CenteredFlexBox>
-          )}
+          {LogoComponent}
           <VerticalCenteredFlexBox>
             <Box sx={{ mb: 6 }}>
               <Typography variant="h5">{`${SIGN_IN_GREETING} 👋🏻`}</Typography>
@@ -193,4 +221,4 @@ const SignIn = (): JSX.Element => {
 
 SignIn.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
-export default SignIn
+export default memo(SignIn)
