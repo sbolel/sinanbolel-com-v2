@@ -17,7 +17,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
-      'npm:': '/node_modules/',
     },
   },
   css: {
@@ -27,13 +26,32 @@ export default defineConfig({
     },
   },
   plugins: [
-    // Add our custom Sass plugin with debugging enabled
+    // Add our custom Sass plugin with debugging enabled only in development
     sassPlugin({
-      outputStyle: 'expanded',
-      debug: true,
+      outputStyle: process.env.NODE_ENV === 'production' ? 'compressed' : 'expanded',
+      debug: process.env.NODE_ENV !== 'production',
     }),
     react(),
-    EnvironmentPlugin('all'),
+    EnvironmentPlugin([
+      'VITE_APP_TITLE',
+      'VITE_CF_DOMAIN',
+      'VITE_USER_POOL_ID',
+      'VITE_USER_POOL_CLIENT_ID',
+      'VITE_AWS_REGION',
+      'VITE_IDP_ENABLED',
+      'VITE_COGNITO_DOMAIN',
+      'VITE_COGNITO_REDIRECT_SIGN_IN',
+      'VITE_COGNITO_REDIRECT_SIGN_OUT',
+      'VITE_FIREBASE_API_KEY',
+      'VITE_FIREBASE_AUTH_DOMAIN',
+      'VITE_FIREBASE_PROJECT_ID',
+      'VITE_FIREBASE_STORAGE_BUCKET',
+      'VITE_FIREBASE_MESSAGING_SENDER_ID',
+      'VITE_FIREBASE_APP_ID',
+      'VITE_FIREBASE_DATABASE_URL',
+      'VITE_FIREBASE_MEASUREMENT_ID',
+      'VITE_FIREBASE_FIRESTORE_CHAT'
+    ]),
     visualizer() as PluginOption,
     {
       name: 'load+transform-js-files-as-jsx',
