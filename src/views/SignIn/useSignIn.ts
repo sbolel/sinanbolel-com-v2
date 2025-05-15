@@ -46,6 +46,7 @@ const useSignIn = (): useSignInReturnType => {
     trigger,
     unregister,
     watch,
+    subscribe,
   } = useForm({
     defaultValues: {
       email: '',
@@ -110,10 +111,10 @@ const useSignIn = (): useSignInReturnType => {
     getFieldState,
     getValues,
     handleFederatedSignIn,
-    handleSubmit: handleSubmitInternal(onSubmit) as ((
+    handleSubmit: handleSubmitInternal(onSubmit) as unknown as ((
       e?: BaseSyntheticEvent<unknown, unknown, unknown> | undefined
     ) => Promise<void>) &
-      UseFormHandleSubmit<TFieldValues>,
+      UseFormHandleSubmit<TFieldValues, TFieldValues>,
     register,
     reset,
     resetField,
@@ -123,6 +124,7 @@ const useSignIn = (): useSignInReturnType => {
     trigger,
     unregister,
     watch,
+    subscribe,
   }
 }
 

@@ -2,7 +2,8 @@ import { defineConfig, transformWithEsbuild, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { visualizer } from 'rollup-plugin-visualizer'
-import sass from 'sass'
+// Import our custom Sass plugin (TypeScript version)
+import sassPlugin from './vite-sass-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,13 +21,17 @@ export default defineConfig({
     },
   },
   css: {
+    // Keep minimal configuration here as our plugin will handle Sass
     preprocessorOptions: {
-      scss: {
-        implementation: sass,
-      },
+      scss: {},
     },
   },
   plugins: [
+    // Add our custom Sass plugin with debugging enabled
+    sassPlugin({
+      outputStyle: 'expanded',
+      debug: true,
+    }),
     react(),
     EnvironmentPlugin('all'),
     visualizer() as PluginOption,

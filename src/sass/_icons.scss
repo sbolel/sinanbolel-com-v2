@@ -7,23 +7,23 @@
 
   &.ion-logo-stackoverflow {
     background-color: rgb(173, 91, 27);
-    background-image: url('./logo-stackoverflow.svg');
+    background-image: url('/logo-stackoverflow.svg');
     background-position: center 47%;
   }
 
   &.ion-logo-linkedin {
     background-color: rgba(19, 100, 142, 0.9);
-    background-image: url('./logo-linkedin.svg');
+    background-image: url('/logo-linkedin.svg');
   }
 
   &.ion-logo-github {
     background-color: rgb(53, 56, 57);
-    background-image: url('./logo-github.svg');
+    background-image: url('/logo-github.svg');
   }
 
   &.ion-logo-resume {
     background-color: rgb(58, 92, 111);
-    background-image: url('./candidate.svg');
+    background-image: url('/candidate.svg');
     background-size: 90%;
   }
 }
