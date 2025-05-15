@@ -61,3 +61,11 @@ console.error = (...args) => {
   }
   originalError(...args)
 }
+
+// Add TextEncoder/TextDecoder polyfill for JSDOM environment
+// This is needed for React Router v7 and other libraries
+if (typeof global.TextEncoder === 'undefined') {
+  const { TextEncoder, TextDecoder } = require('util')
+  global.TextEncoder = TextEncoder
+  global.TextDecoder = TextDecoder
+}
