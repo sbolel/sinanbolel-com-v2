@@ -16,7 +16,7 @@ const List: React.FC<ListProps> = ({
   items,
   schema,
   deleteItem,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const handleDelete = (id: GridRowId) => {
     deleteItem(id as string)
   }
@@ -24,10 +24,13 @@ const List: React.FC<ListProps> = ({
   const columns: GridColDef[] = [
     ...schema.map(
       (field: FormField): GridColDef => ({
-        ...field,
+        // Don't spread the entire field object to avoid type conflicts
         field: field.name,
         flex: 1,
         headerName: toTitleCase(field.label || field.name),
+        // Map type property appropriately based on FormField.type
+        // If type is needed, add explicit mapping here
+        // For example: type: field.type === 'select' ? 'singleSelect' : undefined,
       })
     ),
     {

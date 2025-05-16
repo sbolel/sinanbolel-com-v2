@@ -14,11 +14,12 @@ type InputProps = AvatarProps & {
 }
 
 const Avatar = forwardRef(
-  (props: InputProps, ref: React.Ref<HTMLDivElement>) => {
+  (
+    { color = 'primary', skin = 'filled', sx, src, ...props }: InputProps,
+    ref: React.Ref<HTMLDivElement>
+  ) => {
     const theme = useTheme()
     const bgColors: UseBgColorType = useBgColor()
-
-    const { color = 'primary', sx, src, skin = 'filled' } = props
 
     const getAvatarStyles = (
       skin: ThemeSkin | undefined,
@@ -56,10 +57,7 @@ const Avatar = forwardRef(
   }
 )
 
-Avatar.defaultProps = {
-  skin: 'filled',
-  color: 'primary',
-}
+// Default props are now handled through destructuring in the component parameters
 
 Avatar.displayName = 'Avatar'
 

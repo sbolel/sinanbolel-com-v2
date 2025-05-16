@@ -33,13 +33,13 @@ type UserAvatarProps = {
  * @param {string} [props.avatarSrc] An optional image source URL for the avatar.
  * @param {string} props.email The user's email address.
  * @param {string} props.name The user's full name.
- * @returns {JSX.Element} A component that renders a table row.
+ * @returns {React.JSX.Element} A component that renders a table row.
  */
 const UserAvatar: React.FC<UserAvatarProps> = ({
   avatarSrc,
   email,
   name,
-}): JSX.Element => {
+}): React.JSX.Element => {
   if (!name && !email && !avatarSrc) {
     return <StyledAvatar />
   }

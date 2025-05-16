@@ -15,7 +15,7 @@ type DateLocaleStringProps = {
  */
 const DateLocaleString: React.FC<DateLocaleStringProps> = ({
   date,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <Typography variant="caption">{date.toLocaleDateString('en-US')}</Typography>
 )
 

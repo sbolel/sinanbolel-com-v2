@@ -9,7 +9,7 @@
 //     inputId: string
 //     componentDidMount(): void
 //     componentWillUnmount(): void
-//     render(): import('react/jsx-runtime').JSX.Element
+//     render(): import('react/jsx-runtime').React.JSX.Element
 //   }
 //   declare namespace TextInput {
 //     namespace propTypes {

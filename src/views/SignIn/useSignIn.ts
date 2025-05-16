@@ -3,7 +3,14 @@
  */
 import { Auth } from 'aws-amplify'
 import { FederatedSignInOptions } from '@aws-amplify/auth/lib/types'
-import { BaseSyntheticEvent, useCallback, useReducer, useState } from 'react'
+import {
+  BaseSyntheticEvent,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useReducer,
+  useState,
+} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, UseFormHandleSubmit } from 'react-hook-form'
 import * as yup from 'yup'
@@ -138,9 +145,14 @@ const useSignIn = (): useSignInReturnType => {
   )
 
   // Create a setLoading function that uses the reducer
-  const setLoading = useCallback((loading: boolean) => {
-    authDispatch({ type: 'SET_LOADING', loading })
-  }, [])
+  const setLoading = useCallback(
+    (value: SetStateAction<boolean>) => {
+      const loading =
+        typeof value === 'function' ? value(authState.loading) : value
+      authDispatch({ type: 'SET_LOADING', loading })
+    },
+    [authState.loading]
+  )
 
   return {
     loading: authState.loading,

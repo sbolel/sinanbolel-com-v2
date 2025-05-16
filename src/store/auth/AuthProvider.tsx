@@ -16,11 +16,11 @@ import { Routes } from '@/router/constants'
  * The AuthContextProvider is used to provide user data to components.
  * @param {AuthProviderProps} props The input props passed to the component.
  * @param {React.ReactNode} props.children The children nodes being rendered.
- * @returns {JSX.Element} The rendered provider that wraps the children nodes.
+ * @returns {React.JSX.Element} The rendered provider that wraps the children nodes.
  */
 const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const location = useLocation()
   const navigate = useNavigate()
   const matchProtectedRoute = useMatch('/app/*')

@@ -5,7 +5,7 @@
  * @see https://material-ui.com/customization/themes/ for documentation.
  */
 import { createTheme } from '@mui/material/styles'
-import { CSSProperties } from '@mui/material/styles/createMixins'
+import { CSSProperties } from '@mui/material/styles'
 
 export const MuiDrawerWidth = 200
 

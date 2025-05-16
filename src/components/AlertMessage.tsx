@@ -9,7 +9,7 @@ import Collapse from '@mui/material/Collapse'
 import IconButton from '@mui/material/IconButton'
 import { useAlert } from '@/hooks/useAlert'
 
-const AlertMessage: React.FC = (): JSX.Element => {
+const AlertMessage: React.FC = () => {
   const { clearAlert, state } = useAlert()
 
   return (

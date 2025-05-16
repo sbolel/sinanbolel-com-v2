@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
 import { MuiDrawerWidth } from '@/theme/theme'
 
+// Add default role and variant props to the styled component
 const AppDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -54,9 +55,11 @@ const AppDrawer = styled(MuiDrawer, {
   },
 }))
 
-AppDrawer.defaultProps = {
-  role: 'navigation',
-  variant: 'permanent',
-}
+// Create a wrapper component that includes the default props
+import { DrawerProps } from '@mui/material/Drawer'
 
-export default AppDrawer
+const StyledAppDrawer = (props: Omit<DrawerProps, 'role' | 'variant'>) => (
+  <AppDrawer role="navigation" variant="permanent" {...props} />
+)
+
+export default StyledAppDrawer

@@ -11,9 +11,9 @@ type InputProps = ChipProps & { skin?: 'light' }
  * A chip component that renders a colored chip.
  * @param {InputProps} props - These are the Chip component properties.
  * @param {Color} [props.skin] The chip color.
- * @returns {JSX.Element} A styled chip component.
+ * @returns {React.JSX.Element} A styled chip component.
  */
-const Chip: React.FC<InputProps> = (props): JSX.Element => {
+const Chip: React.FC<InputProps> = (props): React.JSX.Element => {
   const { sx, skin, color } = props
 
   const bgColors = useBgColor()

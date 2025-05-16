@@ -14,7 +14,7 @@ import {
 import Dialog, { DialogProps } from '@mui/material/Dialog'
 
 type DialogState = {
-  children: JSX.Element
+  children: React.JSX.Element
   props?: DialogProps | null
 }
 
@@ -27,7 +27,7 @@ const DialogContext = createContext([
 
 const DialogProvider: React.FC<React.PropsWithChildren> = ({
   children,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const [
     { children: dialogChildren, props: dialogProps, ...params },
     setDialog,

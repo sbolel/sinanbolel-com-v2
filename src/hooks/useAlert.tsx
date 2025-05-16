@@ -85,7 +85,7 @@ export type AlertProviderOverrideProps = {
 }
 
 export type AlertProviderProps = {
-  children: JSX.Element
+  children: React.JSX.Element
 } & AlertProviderOverrideProps
 
 // Custom hook to manage timeout
@@ -125,7 +125,7 @@ export const AlertProvider = ({
   children,
   initialState = INITIAL_STATE,
   contextOverrides = {},
-}: AlertProviderProps): JSX.Element => {
+}: AlertProviderProps): React.JSX.Element => {
   // Use reducer for state management
   const [state, dispatch] = useReducer(alertReducer, initialState)
   const isControlled = Object.keys(contextOverrides).length > 0

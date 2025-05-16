@@ -22,7 +22,7 @@ type ImageProps = {
  * @param {React.CSSProperties} [props.sx] The image style.
  * @param {number} props.sx.height The image height in pixels.
  * @param {number} props.sx.width The image width in pixels.
- * @returns {JSX.Element} The Image component.
+ * @returns {React.JSX.Element} The Image component.
  */
 const Image: React.FC<ImageProps> = ({
   alt = '',
@@ -31,7 +31,7 @@ const Image: React.FC<ImageProps> = ({
   srcSet,
   sx = {},
   sx: { height, width } = {},
-}): JSX.Element => (
+}): React.JSX.Element => (
   <Box sx={sx}>
     <img
       alt={alt}

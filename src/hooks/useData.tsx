@@ -21,14 +21,14 @@ const DataContext = React.createContext<{
 })
 
 type DataProviderProps = {
-  children: JSX.Element
+  children: React.JSX.Element
   initialState?: DataState
 }
 
 export const DataProvider = ({
   children,
   initialState = INITIAL_STATE,
-}: DataProviderProps): JSX.Element => {
+}: DataProviderProps): React.JSX.Element => {
   const [data, dispatchSetData] = React.useState<DataState>(initialState)
 
   const setData = (values: DataState) => {

@@ -41,7 +41,7 @@ describe('useAlert', () => {
 
   const Wrapper: React.FC<{
     children: React.ReactNode
-  }> = ({ children }): JSX.Element => (
+  }> = ({ children }): React.JSX.Element => (
     <AlertProvider
       contextOverrides={{
         clearAlert: mockClearAlert,

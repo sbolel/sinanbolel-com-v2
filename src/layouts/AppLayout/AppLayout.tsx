@@ -33,9 +33,9 @@ import { Routes } from '@/router/constants'
 /**
  * The main layout that renders the application layout for authenticated users.
  * If the user is not authenticated, they will be redirected to the login page.
- * @returns {JSX.Element} The main application layout component.
+ * @returns {React.JSX.Element} The main application layout component.
  */
-const AppLayout: React.FC = (): JSX.Element => {
+const AppLayout: React.FC = (): React.JSX.Element => {
   const jwtToken = useLoaderData() as string
   const [drawerOpen, setDrawerOpen] = useState(true)
   const [chatOpen, setChatOpen] = useState(false)

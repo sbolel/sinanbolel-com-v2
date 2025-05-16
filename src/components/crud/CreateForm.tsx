@@ -31,7 +31,7 @@ export interface CreateFormProps {
  * @param {FormField[]} props.schema - The schema for the form
  * @param {() => void} props.onClose - The function to call when the form is closed
  * @param {(data: unknown) => void} props.onSubmit - The function to call when the form is submitted
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  * @example
  * <CreateForm
  *  open={open}
@@ -53,7 +53,7 @@ const CreateForm: React.FC<CreateFormProps> = ({
   submitLabel,
   DialogProps,
   FormProps,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const {
     control,
     register,

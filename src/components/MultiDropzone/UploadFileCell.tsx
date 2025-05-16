@@ -36,7 +36,7 @@ const UploadFileCell: React.FC<UploadFileCellProps> = ({
   uploading,
   uploadStatus,
   onRemoveFile,
-}: UploadFileCellProps): JSX.Element => {
+}: UploadFileCellProps): React.JSX.Element => {
   const {
     error,
     id,
