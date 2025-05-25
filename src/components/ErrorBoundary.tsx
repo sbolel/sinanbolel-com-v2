@@ -29,7 +29,7 @@ const useErrorTitle = (error: ErrorResponse): string => {
     return `${error.status} ${error.statusText}`
   }
 
-  return `Uknown Error`
+  return `Unknown Error`
 }
 
 /**
