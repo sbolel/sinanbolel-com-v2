@@ -17,7 +17,7 @@ type BackdropLoadingCircularProps = {
  *  indicator when `loading = true` and null when `loading = false`.
  * @param {BackdropLoadingCircularProps} props - Input props for the component.
  * @param {boolean} props.loading - Whether to show the loading indicator
- * @returns {JSX.Element} A circular loading indicator component
+ * @returns {React.JSX.Element} A circular loading indicator component
  */
 const BackdropLoadingCircular: React.FC<BackdropLoadingCircularProps> = ({
   loading,

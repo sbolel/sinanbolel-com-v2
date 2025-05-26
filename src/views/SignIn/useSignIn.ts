@@ -138,9 +138,14 @@ const useSignIn = (): useSignInReturnType => {
   )
 
   // Create a setLoading function that uses the reducer
-  const setLoading = useCallback((loading: boolean) => {
-    authDispatch({ type: 'SET_LOADING', loading })
-  }, [])
+  const setLoading: React.Dispatch<React.SetStateAction<boolean>> = useCallback(
+    (value) => {
+      const loading =
+        typeof value === 'function' ? value(authState.loading) : value
+      authDispatch({ type: 'SET_LOADING', loading })
+    },
+    [authState.loading, authDispatch]
+  )
 
   return {
     loading: authState.loading,

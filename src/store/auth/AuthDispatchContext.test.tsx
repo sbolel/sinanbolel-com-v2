@@ -22,5 +22,5 @@ test('creates a context with the provided value', () => {
   }
 
   // Verify we can access the _currentValue property (implementation detail but useful for testing)
-  expect(AuthDispatchContext._currentValue).toBeDefined()
+  // Don't test internal React properties as they may change between versions
 })

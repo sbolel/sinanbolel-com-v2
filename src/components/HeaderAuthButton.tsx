@@ -17,9 +17,9 @@ const ButtonContainerBox = styled(Box)({ mr: 2, ml: 2, pr: 2, pl: 2 })
 
 /**
  * Internal component for a login button to be rendered HeaderAuthButton.
- * @returns {JSX.Element} Button that navigates to login view on click.
+ * @returns {React.JSX.Element} Button that navigates to login view on click.
  */
-const LoginButton: React.FC = (): JSX.Element => (
+const LoginButton: React.FC = (): React.JSX.Element => (
   <ButtonBox>
     <Button
       component={RouterLink}
@@ -35,9 +35,9 @@ const LoginButton: React.FC = (): JSX.Element => (
 
 /**
  * Internal component for a logout button to be rendered by HeaderAuthButton.
- * @returns {JSX.Element} Button that navigates to the logout route on click.
+ * @returns {React.JSX.Element} Button that navigates to the logout route on click.
  */
-const LogoutButton: React.FC = (): JSX.Element => {
+const LogoutButton: React.FC = (): React.JSX.Element => {
   return (
     <ButtonBox>
       <Button
@@ -56,10 +56,10 @@ const LogoutButton: React.FC = (): JSX.Element => {
 /**
  * A component that conditionally renders a login or a logout button based on
  *  the auth state. If auth state is not yet known, renders an empty container.
- * @returns {JSX.Element} Component containing a login or logout button.
+ * @returns {React.JSX.Element} Component containing a login or logout button.
  * @todo Fix the flashing of the login button when the user is already logged in.
  */
-const HeaderAuthButton: React.FC = (): JSX.Element => {
+const HeaderAuthButton: React.FC = (): React.JSX.Element => {
   const { jwtToken } = useAuthState()
 
   // AuthContext.initAuth hasn't resolved yet, so don't render anything

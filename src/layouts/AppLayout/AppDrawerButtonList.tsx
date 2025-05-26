@@ -6,7 +6,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import AppDrawerButton from '@/components/AppDrawerButton'
 import { RouteIds, RouteNames, Routes } from '@/router/constants'
 
-const AppDrawerButtonList: React.FC = (): JSX.Element => {
+const AppDrawerButtonList: React.FC = (): React.JSX.Element => {
   const items = useMemo(
     () => [
       {

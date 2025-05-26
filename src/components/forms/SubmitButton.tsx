@@ -15,7 +15,7 @@ type SubmitButtonProps = {
  * @param {SubmitButtonProps} props
  * @param {string} [props.label] Option to add a button label
  * @param {boolean} [props.disabled] Option to disable the button
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
 const SubmitButton: React.FC<PropsWithChildren<SubmitButtonProps>> = ({
   children = 'Submit',
@@ -25,7 +25,7 @@ const SubmitButton: React.FC<PropsWithChildren<SubmitButtonProps>> = ({
   type = 'submit',
   variant = 'contained',
   ...props
-}): JSX.Element => (
+}): React.JSX.Element => (
   <Button
     {...{
       color,

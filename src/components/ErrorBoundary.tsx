@@ -3,7 +3,7 @@
  * @module components/ErrorBoundary
  */
 import { useNavigate, useRouteError } from 'react-router-dom'
-import { ErrorResponse } from '@remix-run/router'
+import { ErrorResponse } from 'react-router-dom'
 import Container from '@mui/material/Container'
 import { Routes } from '@/router/constants'
 import {
@@ -34,9 +34,9 @@ const useErrorTitle = (error: ErrorResponse): string => {
 
 /**
  * A generic React error boundary component.
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
-const ErrorBoundary: React.FC = (): JSX.Element => {
+const ErrorBoundary: React.FC = (): React.JSX.Element => {
   const navigate = useNavigate()
   const error = useRouteError() as ErrorResponse
   const title = useErrorTitle(error)

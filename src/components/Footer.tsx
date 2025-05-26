@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Copyright from '@/components/Copyright'
 
-const StickyFooter: React.FC = (): JSX.Element => (
+const StickyFooter: React.FC = (): React.JSX.Element => (
   <Box
     component="footer"
     sx={{

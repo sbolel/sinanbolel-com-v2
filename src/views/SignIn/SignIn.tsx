@@ -150,9 +150,9 @@ const SignInForm = memo(function SignInForm() {
 
 /**
  * Component that renders the page containing the sign in form.
- * @returns {JSX.Element} component that renders the the sign in form.
+ * @returns {React.JSX.Element} component that renders the the sign in form.
  */
-const SignIn = (): JSX.Element => {
+const SignIn = (): React.JSX.Element => {
   const { breakpoints } = useTheme()
   const hidden = useMediaQuery(breakpoints.down('md'))
 

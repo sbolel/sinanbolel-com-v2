@@ -15,7 +15,8 @@ const Button = styled(MuiButton)({
   right: 10,
 })
 
-Button.defaultProps = { variant: 'contained', size: 'large' }
+// Instead of using defaultProps, we can set these props when using the Button component
+// or create a custom styled Button with these default properties
 
 const AlertComponent = ({
   autoHide = true,

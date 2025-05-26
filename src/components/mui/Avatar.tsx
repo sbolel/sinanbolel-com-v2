@@ -18,7 +18,7 @@ const Avatar = forwardRef(
     const theme = useTheme()
     const bgColors: UseBgColorType = useBgColor()
 
-    const { color = 'primary', sx, src, skin = 'filled' } = props
+    const { color = 'primary', sx, src, skin = 'filled', ...rest } = props
 
     const getAvatarStyles = (
       skin: ThemeSkin | undefined,
@@ -49,17 +49,16 @@ const Avatar = forwardRef(
       <MuiAvatar
         ref={ref}
         data-testid="avatar"
-        {...props}
+        // skin and color are handled through sx prop
+        src={src}
+        {...rest}
         sx={!src && skin && color ? Object.assign(colors[color], sx) : sx}
       />
     )
   }
 )
 
-Avatar.defaultProps = {
-  skin: 'filled',
-  color: 'primary',
-}
+// Default props are now handled with default parameter values in the component
 
 Avatar.displayName = 'Avatar'
 

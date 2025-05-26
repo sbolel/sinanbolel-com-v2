@@ -7,7 +7,7 @@ import AppBar from '@/components/AppBar'
 import AuthButton from '@/components/HeaderAuthButton'
 import { PUBLIC_APP_NAME } from '@/locales/en'
 
-const Header: React.FC = (): JSX.Element => (
+const Header: React.FC = (): React.JSX.Element => (
   <AppBar position="static" role="banner">
     <Toolbar role="toolbar">
       <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">

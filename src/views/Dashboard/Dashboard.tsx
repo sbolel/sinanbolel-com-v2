@@ -11,9 +11,9 @@ import Fallback from '@/components/SimpleLoadingFallback'
 
 /**
  * Component that renders the contents of the Dashboard view.
- * @returns {JSX.Element} Component that renders the dashboard contents.
+ * @returns {React.JSX.Element} Component that renders the dashboard contents.
  */
-const DashboardContainer: React.FC = (): JSX.Element => {
+const DashboardContainer: React.FC = (): React.JSX.Element => {
   const data = useLoaderData() as { username: string }
 
   return (

@@ -4,6 +4,17 @@
 // global mocks
 jest.mock('aws-amplify')
 jest.mock('web-vitals')
+jest.mock('@/firebase', () => ({
+  auth: {
+    currentUser: null,
+    onAuthStateChanged: jest.fn(),
+  },
+  db: {},
+  FIREBASE_INDEX_ERROR_NAME: 'FirebaseError',
+  FIREBASE_INDEX_CREATE_REQUIRED:
+    'Index creation required. Please visit the following URL to create the necessary index:',
+  FIREBASE_INDEX_ERROR_CONTENT: 'The query requires an index',
+}))
 
 // enable mocking of fetch requests
 import { enableFetchMocks } from 'jest-fetch-mock'

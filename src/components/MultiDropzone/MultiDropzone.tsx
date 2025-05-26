@@ -72,7 +72,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
  * The default CallToAction component rendered in the MultiDropzone component.
  * @returns {React.FC} - The default CallToAction component
  */
-const DefaultCTA: React.FC = (): JSX.Element => (
+const DefaultCTA: React.FC = (): React.JSX.Element => (
   <span
     style={{
       alignItems: 'center',
@@ -110,7 +110,7 @@ const CallToAction: React.FC<MultiDropzoneStyleProps> = ({
   uploading,
   isCondensed = false,
   textOverrides: { currentlyUploadingText = '', instructionsText = '' } = {},
-}: MultiDropzoneStyleProps): JSX.Element => (
+}: MultiDropzoneStyleProps): React.JSX.Element => (
   <Typography variant={isCondensed ? 'body2' : 'body1'}>
     {uploading
       ? currentlyUploadingText || DEFAULT_UPLOADING_TEXT
@@ -144,7 +144,7 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
   textOverrides,
   uploadedFiles,
   uploading,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const [errors, setErrors] = useState<ErrorMessage[]>(() => {
     return uploadedFiles
       .filter((file) => file.error)

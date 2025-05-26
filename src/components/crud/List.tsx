@@ -16,20 +16,22 @@ const List: React.FC<ListProps> = ({
   items,
   schema,
   deleteItem,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const handleDelete = (id: GridRowId) => {
     deleteItem(id as string)
   }
 
   const columns: GridColDef[] = [
-    ...schema.map(
-      (field: FormField): GridColDef => ({
-        ...field,
+    ...schema.map((field: FormField): GridColDef => {
+      // Extract the properties we need and exclude 'type' to avoid type conflicts
+      const { type, ...rest } = field
+      return {
+        ...rest,
         field: field.name,
         flex: 1,
         headerName: toTitleCase(field.label || field.name),
-      })
-    ),
+      }
+    }),
     {
       field: 'action',
       headerName: 'Action',

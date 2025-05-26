@@ -15,7 +15,7 @@ type PasswordVisibilityToggleProps = {
 const PasswordVisibilityToggle: React.FC<PasswordVisibilityToggleProps> = ({
   showPassword,
   setShowPassword,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const handleClick = useCallback(
     () => setShowPassword(!showPassword),
     [showPassword, setShowPassword]
