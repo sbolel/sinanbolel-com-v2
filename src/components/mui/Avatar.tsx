@@ -18,7 +18,7 @@ const Avatar = forwardRef(
     const theme = useTheme()
     const bgColors: UseBgColorType = useBgColor()
 
-    const { color = 'primary', sx, src, skin = 'filled' } = props
+    const { color = 'primary', sx, src, skin = 'filled', ...rest } = props
 
     const getAvatarStyles = (
       skin: ThemeSkin | undefined,
@@ -49,7 +49,10 @@ const Avatar = forwardRef(
       <MuiAvatar
         ref={ref}
         data-testid="avatar"
-        {...props}
+        skin={skin}
+        color={color}
+        src={src}
+        {...rest}
         sx={!src && skin && color ? Object.assign(colors[color], sx) : sx}
       />
     )
