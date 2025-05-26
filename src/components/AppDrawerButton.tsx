@@ -20,17 +20,17 @@ type AppDrawerButtonProps = {
  * @param {[React.ReactNode]} props.icon The optional SVG icon to display next to the label.
  * @param {string} props.label The text label for menu button.
  * @param {string} props.to The URL path that the menu button should link to.
- * @returns {JSX.Element} The menu button list item.
+ * @returns {React.JSX.Element} The menu button list item.
  */
 const AppDrawerButton: React.FC<AppDrawerButtonProps> = ({
   icon,
   label,
   to,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <Link to={to} component={RouterLink}>
     <ListItemButton sx={{ margin: 'auto', border: '0' }}>
       {icon && <ListItemIcon>{icon}</ListItemIcon>}
-      <GridSeparatorIcon sx={{ visibility: 'hidden' }} />
+      <GridSeparatorIcon style={{ visibility: 'hidden' }} />
       <ListItemText primary={label} />
     </ListItemButton>
   </Link>

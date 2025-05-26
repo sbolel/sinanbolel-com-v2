@@ -11,9 +11,9 @@ import { Routes } from '@/router/constants'
 
 /**
  * Component that renders the Navigate component to redirect to the login page.
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
-const NavigateToSignIn: React.FC = (): JSX.Element => (
+const NavigateToSignIn: React.FC = (): React.JSX.Element => (
   <Navigate to={Routes.AUTH_LOGIN} replace={true} />
 )
 

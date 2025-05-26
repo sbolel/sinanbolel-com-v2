@@ -99,7 +99,9 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
     error: null,
   })
 
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>
   const currentUser = useFirebaseAuth()
 
   useUserChats(dispatch)

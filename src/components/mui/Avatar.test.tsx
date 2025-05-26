@@ -47,7 +47,7 @@ describe('MUI Avatar Component', () => {
         </ThemeProvider>
       )
       const avatarElement = getByTestId('avatar')
-      expect(avatarElement).toHaveAttribute('skin', 'light-static')
+      // skin and color props are now only used for styling, not as attributes
       expect(avatarElement).toHaveStyle(
         `background-color: ${lighten(theme.palette.secondary.main, 0.88)}`
       )
@@ -60,7 +60,7 @@ describe('MUI Avatar Component', () => {
         </ThemeProvider>
       )
       const avatarElement = getByTestId('avatar')
-      expect(avatarElement).toHaveAttribute('skin', 'light')
+      // skin and color props are now only used for styling, not as attributes
       expect(avatarElement).toHaveStyle(
         `background-color: ${hexToRGBA(theme.palette.secondary.main, 0.12)}`
       )
@@ -74,8 +74,7 @@ describe('MUI Avatar Component', () => {
       </ThemeProvider>
     )
     const avatarElement = getByTestId('avatar')
-    expect(avatarElement).toHaveAttribute('skin', 'filled')
-    expect(avatarElement).toHaveAttribute('color', 'primary')
+    // skin and color props are now only used for styling, not as attributes
     expect(avatarElement).toHaveStyle(`
       background-color: ${theme.palette.primary.main};
       color: #fff;

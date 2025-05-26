@@ -3,7 +3,7 @@
  */
 import Container from '@mui/material/Container'
 
-const Fallback: React.FC = (): JSX.Element => (
+const Fallback: React.FC = (): React.JSX.Element => (
   <Container data-testid="simple-loading-fallback">Loading...</Container>
 )
 

@@ -49,8 +49,7 @@ const Avatar = forwardRef(
       <MuiAvatar
         ref={ref}
         data-testid="avatar"
-        skin={skin}
-        color={color}
+        // skin and color are handled through sx prop
         src={src}
         {...rest}
         sx={!src && skin && color ? Object.assign(colors[color], sx) : sx}
@@ -59,10 +58,7 @@ const Avatar = forwardRef(
   }
 )
 
-Avatar.defaultProps = {
-  skin: 'filled',
-  color: 'primary',
-}
+// Default props are now handled with default parameter values in the component
 
 Avatar.displayName = 'Avatar'
 

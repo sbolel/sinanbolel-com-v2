@@ -11,10 +11,10 @@ import { Routes } from '@/router/constants'
 
 /**
  * Component that renders the Navigate component to redirect to the input route.
- * @returns {JSX.Element}
+ * @returns {React.JSX.Element}
  */
-const NavigateTo: React.FC<{ route: Routes }> = ({ route }): JSX.Element => (
-  <Navigate to={route} replace={true} />
-)
+const NavigateTo: React.FC<{ route: Routes }> = ({
+  route,
+}): React.JSX.Element => <Navigate to={route} replace={true} />
 
 export default NavigateTo

@@ -11,9 +11,9 @@ import { Routes } from '@/router/constants'
 
 /**
  * A blank component that signs out the user and redirects to the login page.
- * @returns {JSX.Element} A component that renders an empty React Fragment.
+ * @returns {React.JSX.Element} A component that renders an empty React Fragment.
  */
-const SignOut = (): JSX.Element => {
+const SignOut = (): React.JSX.Element => {
   const dispatch = useAuthDispatch()
   const navigate = useNavigate()
 

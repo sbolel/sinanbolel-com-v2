@@ -54,7 +54,7 @@ const StyledDrawer = styled(MuiDrawer, {
   },
 }))
 
-const AppDrawer = (props) => (
+const AppDrawer = (props: React.ComponentProps<typeof StyledDrawer>) => (
   <StyledDrawer
     component="nav"
     role="navigation"

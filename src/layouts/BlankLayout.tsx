@@ -12,11 +12,11 @@ const BlankLayoutWrapper = styled(Box)<BoxProps>({
  * Layout component renders a basic wrapper container for other components.
  * @param {BlankLayoutProps} props The props for the BlankLayout component.
  * @param {React.ReactNode} props.children The child elements to render.
- * @returns {JSX.Element} The BlankLayout component.
+ * @returns {React.JSX.Element} The BlankLayout component.
  */
 const BlankLayout: React.FC<React.PropsWithChildren> = ({
   children,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <BlankLayoutWrapper className="layout-wrapper">
     <Box
       className="app-content"

@@ -3,11 +3,11 @@
  * @module router/authLoader
  * @see {@link dashboard/Routes}
  */
-import { defer } from 'react-router-dom'
+import { json } from 'react-router-dom'
 import getJWT from '@/utils/getJWT'
 
 const authLoader = async (): Promise<unknown> =>
-  defer({
+  json({
     jwtToken: getJWT(),
   })
 

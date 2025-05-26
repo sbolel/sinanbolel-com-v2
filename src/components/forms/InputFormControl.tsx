@@ -25,7 +25,7 @@ const InputFormControl = <TFieldValues extends FieldValues, TContext>({
   FormHelperTextProps,
   InputLabelProps,
   InputProps,
-}: InputFormControlProps<TFieldValues, TContext>): JSX.Element => {
+}: InputFormControlProps<TFieldValues, TContext>): React.JSX.Element => {
   const {
     slotProps: { input: inputSlotProps = {}, root: rootSlotProps = {} } = {},
   } = InputProps || {}

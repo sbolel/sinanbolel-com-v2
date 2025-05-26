@@ -16,7 +16,7 @@ type CopyrightProps = {
 const Copyright: React.FC<CopyrightProps> = ({
   sx,
   typograpyProps,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <Container sx={{ m: 1, p: 2, ...sx }}>
     <Typography
       variant="body2"
