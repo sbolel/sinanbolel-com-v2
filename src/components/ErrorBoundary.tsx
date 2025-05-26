@@ -3,7 +3,7 @@
  * @module components/ErrorBoundary
  */
 import { useNavigate, useRouteError } from 'react-router-dom'
-import { ErrorResponse } from '@remix-run/router/dist/utils'
+import { ErrorResponse } from 'react-router-dom'
 import Container from '@mui/material/Container'
 import { Routes } from '@/router/constants'
 import {
