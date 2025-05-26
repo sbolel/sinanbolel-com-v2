@@ -28,7 +28,7 @@ const Home: React.FC = () => {
       }}
     >
       <Image
-        src=""
+        src="sinan-bolel.png"
         srcSet="sinan-bolel.png 3x"
         alt="Sinan Bolel"
         sx={{ height: '240' }}
