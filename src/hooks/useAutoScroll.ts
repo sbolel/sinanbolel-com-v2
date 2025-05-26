@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 
-const useAutoScroll = (
-  dependency: any,
+const useAutoScroll = <T>(
+  dependency: T,
   ref: React.RefObject<HTMLDivElement>
 ) => {
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [dependency, ref])
+  }, [dependency])
 }
 
 export default useAutoScroll

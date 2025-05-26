@@ -2,6 +2,7 @@
  * @module store/auth/AuthProvider
  */
 import { Auth } from 'aws-amplify'
+import type { CognitoUserSession } from 'amazon-cognito-identity-js'
 import { useCallback, useEffect, useReducer } from 'react'
 import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { AuthActions } from '@/actions/actionTypes'
@@ -49,19 +50,27 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
         throw new Error('No jwtToken')
       }
 
-      // TODO: implement refresh sessions
-      // user.refreshSession(
-      //   session.getRefreshToken(),
-      //   async (err: any, session: CognitoUserSession) => {
-      //     if (err) {
-      //       throw err
-      //     }
-      //   }
-      // )
+      const refreshSession = (): Promise<CognitoUserSession> =>
+        new Promise((resolve, reject) => {
+          user.refreshSession(
+            session.getRefreshToken(),
+            (err: Error | null, newSession: CognitoUserSession) => {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(newSession)
+              }
+            }
+          )
+        })
+
+      const refreshed = await refreshSession()
 
       dispatch({
         type: AuthActions.LOGIN_SUCCESS,
-        payload: { jwtToken },
+        payload: {
+          jwtToken: refreshed.getAccessToken().getJwtToken(),
+        },
       })
 
       // if the unauthenticated user is trying to navigate to a
