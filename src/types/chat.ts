@@ -5,3 +5,9 @@ export interface Message {
   createdAt: Timestamp
   from: string
 }
+
+export interface Chat {
+  id: string
+  userId: string
+  createdAt: Timestamp
+}

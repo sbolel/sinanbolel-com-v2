@@ -20,18 +20,26 @@ const useFetch = (
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    const controller = new AbortController()
     ;(async function () {
       try {
         setLoading(true)
-        const response = await fetch(url)
+        const response = await fetch(url, { signal: controller.signal })
         const data = await response.json()
-        setData(data)
+        if (!controller.signal.aborted) {
+          setData(data)
+        }
       } catch (error) {
-        setError(error as Error)
+        if (!controller.signal.aborted) {
+          setError(error as Error)
+        }
       } finally {
-        setLoading(false)
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
       }
     })()
+    return () => controller.abort()
   }, [url])
 
   return { data, error, loading }

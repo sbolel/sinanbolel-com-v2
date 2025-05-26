@@ -13,6 +13,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore'
+import type { Chat } from '@/types/chat'
 import {
   db,
   auth,
@@ -59,8 +60,7 @@ export const addMessageToChat = async (
   })
 }
 
-// TODO: add return type
-export const getUserChats = async (userId: string) => {
+export const getUserChats = async (userId: string): Promise<Chat[]> => {
   try {
     const chatsQuery = query(
       collection(db, 'chats'),
@@ -69,7 +69,10 @@ export const getUserChats = async (userId: string) => {
       limit(1)
     )
     const querySnapshot = await getDocs(chatsQuery)
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    return querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Omit<Chat, 'id'>),
+    }))
   } catch (error) {
     if (
       error instanceof Error &&
