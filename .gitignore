@@ -2,6 +2,11 @@
 .env.*.local
 !.env.example
 
+# firebase
+**/.firebase/**
+.firebase
+.firebase/hosting.*.cache
+
 # logs
 **/*.log
 logs
