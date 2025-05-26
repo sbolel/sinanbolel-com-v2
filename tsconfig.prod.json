@@ -1,6 +1,12 @@
 {
   "extends": "./tsconfig",
-  "exclude": ["./src/__tests__/**", "./src/__mocks__/**", "./src/test-utils"],
+  "exclude": [
+    "./src/__tests__/**",
+    "./src/__mocks__/**",
+    "./src/test-utils",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ],
   "compilerOptions": {
     "noUnusedLocals": false
   }
