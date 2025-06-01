@@ -7,6 +7,7 @@ import * as ReactDOMClient from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import CONFIG from '@/utils/config'
 import router from '@/router/router'
+import configureCognito from '@/utils/configureCognito'
 import onPerfEntry from '@/utils/onPerfEntry'
 import { SIGN_IN_GREETING } from '@/locales/en'
 import { auth } from '@/firebase'
@@ -16,6 +17,7 @@ import '@/sass/style.scss'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {
+  configureCognito()
   // Check if user is already signed in
   onAuthStateChanged(auth, async (user) => {
     if (!user) {

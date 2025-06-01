@@ -3,20 +3,23 @@
  * @module router/router
  * @see {@link dashboard/main} for usage.
  */
-import { createBrowserRouter, Outlet } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { createBrowserRouter } from 'react-router-dom'
+import { Suspense, lazy } from 'react'
 import RootProvider from '@/Root'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import Fallback from '@/components/SimpleLoadingFallback'
 import NavigateTo from '@/components/react-router/NavigateTo'
 import authLoader from '@/router/authLoader'
 import { RouteIds, Routes } from '@/router/constants'
-import configureCognito from '@/utils/configureCognito'
 import AppLayout from '@/layouts/AppLayout/AppLayout'
-import Home from '@/views/Home/Home'
-import SignIn from '@/views/SignIn/SignIn'
-import SignOut from '@/views/SignOut/SignOut'
-import Dashboard from '@/views/Dashboard/Dashboard'
+import AuthLayout from '@/layouts/AuthLayout'
 import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
+
+const Home = lazy(() => import('@/views/Home/Home'))
+const SignIn = lazy(() => import('@/views/SignIn/SignIn'))
+const SignOut = lazy(() => import('@/views/SignOut/SignOut'))
+const Dashboard = lazy(() => import('@/views/Dashboard/Dashboard'))
+const NotFound = lazy(() => import('@/views/NotFound/NotFound'))
 
 /**
  * The hash router for the application that defines routes
@@ -25,45 +28,45 @@ import dashboardLoader from '@/views/Dashboard/Dashboard.loader'
  * @see {@link https://reactrouter.com/web/api/BrowserRouter BrowserRouter}
  * @see {@link https://reactrouter.com/en/main/route/loader loader}
  */
-const styleOverrides = Object.freeze({
-  __html: 'body, html { background-color: #fff; }',
-}) as { __html: string }
 
 const router = createBrowserRouter([
   {
     id: RouteIds.ROOT,
-    path: '/',
+    path: Routes.ROOT,
     element: <RootProvider />,
     errorElement: <ErrorBoundary />,
-    loader: configureCognito,
     children: [
       {
-        element: <Home />,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <Home />
+          </Suspense>
+        ),
         id: RouteIds.HOME,
         index: true,
       },
       {
         id: RouteIds.AUTH,
         path: Routes.AUTH,
-        element: (
-          <Box width="100%" height="100%">
-            <style dangerouslySetInnerHTML={styleOverrides}></style>
-            <Outlet />
-          </Box>
-        ),
-        errorElement: <ErrorBoundary />,
+        element: <AuthLayout />,
         children: [
           {
             id: RouteIds.LOGIN,
             path: RouteIds.LOGIN,
-            element: <SignIn />,
-            errorElement: <ErrorBoundary />,
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <SignIn />
+              </Suspense>
+            ),
           },
           {
             id: RouteIds.LOGOUT,
             path: RouteIds.LOGOUT,
-            element: <SignOut />,
-            errorElement: <ErrorBoundary />,
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <SignOut />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -71,22 +74,33 @@ const router = createBrowserRouter([
         path: Routes.DASHBOARD,
         id: RouteIds.PROTECTED,
         element: <AppLayout />,
-        errorElement: <ErrorBoundary />,
         loader: authLoader,
         children: [
           {
             id: RouteIds.DASHBOARD,
-            element: <Dashboard />,
-            errorElement: <ErrorBoundary />,
+            element: (
+              <Suspense fallback={<Fallback />}>
+                <Dashboard />
+              </Suspense>
+            ),
             loader: dashboardLoader,
           },
         ],
+      },
+      {
+        id: RouteIds.NOT_FOUND,
+        path: Routes.NOT_FOUND,
+        element: (
+          <Suspense fallback={<Fallback />}>
+            <NotFound />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: '*',
-    element: <NavigateTo route={Routes.ROOT} />,
+    element: <NavigateTo route={Routes.NOT_FOUND} />,
   },
 ])
 
