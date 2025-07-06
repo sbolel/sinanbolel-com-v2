@@ -3,7 +3,7 @@
  */
 
 import { BaseSyntheticEvent, Dispatch, SetStateAction } from 'react'
-import { FieldErrors, UseFormReturn } from 'react-hook-form'
+import { FieldErrors, UseFormReturn, Control } from 'react-hook-form'
 
 export interface FormData {
   email: string
@@ -18,7 +18,7 @@ export type TFieldValues = {
 }
 
 export type useSignInReturnType = {
-  control: unknown
+  control: Control<TFieldValues, TContext>
   errors: FieldErrors<{
     email: string
     password: string
