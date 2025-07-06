@@ -60,7 +60,7 @@ let theme = createTheme({
 theme = createTheme(theme, {
   shape: {
     // hack around the typing for border radius being wrong
-    borderRadius: +`${theme.spacing(2)}`.replace('px', ''),
+    borderRadius: parseFloat(theme.spacing(2)),
   },
 })
 
