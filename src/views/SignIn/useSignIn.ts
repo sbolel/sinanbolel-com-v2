@@ -13,6 +13,7 @@ import useAlert from '@/hooks/useAlert'
 import useAuthDispatch from '@/store/auth/useAuthDispatch'
 import {
   TFieldValues,
+  TContext,
   useSignInReturnType,
 } from '@/views/SignIn/SignIn.interfaces'
 import { Routes } from '@/router/constants'
@@ -80,7 +81,7 @@ const useSignIn = (): useSignInReturnType => {
     unregister,
     watch,
     subscribe,
-  } = useForm({
+  } = useForm<TFieldValues, TContext>({
     defaultValues: {
       email: '',
       password: '',

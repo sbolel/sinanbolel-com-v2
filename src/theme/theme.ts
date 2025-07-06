@@ -57,10 +57,10 @@ let theme = createTheme({
 })
 
 //* Spacing
-theme = createTheme({
+theme = createTheme(theme, {
   shape: {
     // hack around the typing for border radius being wrong
-    borderRadius: +`${theme.spacing(2)}`.replace('px', ''),
+    borderRadius: parseFloat(theme.spacing(2)),
   },
 })
 
@@ -1012,7 +1012,7 @@ theme = createTheme(theme, {
       styleOverrides: {
         paper: {
           boxShadow: theme.shadows[6],
-          borderRadius: theme.shape.borderRadius * 1.5,
+          borderRadius: (theme.shape.borderRadius as number) * 1.5,
           border: `1px solid ${theme.palette.primary.dark}`,
         },
       },
