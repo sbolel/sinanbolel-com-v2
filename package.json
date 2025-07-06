@@ -13,11 +13,11 @@
     "Sinan Bolel"
   ],
   "type": "module",
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.9.2",
   "engines": {
-    "node": "20",
+    "node": "22",
     "npm": "please-use-yarn",
-    "yarn": "4.7.0"
+    "yarn": "4.9.2"
   },
   "scripts": {
     "start": "yarn run dev",
