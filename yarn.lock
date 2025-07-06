@@ -7424,8 +7424,8 @@ __metadata:
     react-router-dom: "npm:^7.6.1"
     rimraf: "npm:^6.0.1"
     rollup-plugin-visualizer: "npm:^5.14.0"
-    sass: "npm:^1.89.0"
-    sass-embedded: "npm:^1.89.0"
+    sass: "npm:^1.89.2"
+    sass-embedded: "npm:^1.89.2"
     semantic-release: "npm:^24.2.5"
     source-map-explorer: "npm:^2.5.3"
     storybook: "npm:^7.6.20"
@@ -19883,7 +19883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-embedded@npm:^1.89.0":
+"sass-embedded@npm:^1.89.2":
   version: 1.89.2
   resolution: "sass-embedded@npm:1.89.2"
   dependencies:
@@ -19974,7 +19974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.70.0, sass@npm:^1.89.0":
+"sass@npm:^1.70.0, sass@npm:^1.89.2":
   version: 1.89.2
   resolution: "sass@npm:1.89.2"
   dependencies:
