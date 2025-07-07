@@ -81,6 +81,11 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
           VITE_FIREBASE_FIRESTORE_CHAT: ${{ vars.VITE_FIREBASE_FIRESTORE_CHAT }}
+      - name: UPLOAD ARTIFACT - dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       # semantic-release will only run on pushes to main (see package.json)
       - name: RELEASE
