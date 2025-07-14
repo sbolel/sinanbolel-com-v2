@@ -109,7 +109,7 @@
     "@types/react-helmet": "^6.1.11",
     "@types/testing-library__jest-dom": "^6.0.0",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.32.1",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "babel-plugin-transform-import-meta": "^2.3.2",
