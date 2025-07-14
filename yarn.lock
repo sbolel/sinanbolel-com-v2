@@ -5640,13 +5640,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-data-grid@npm:^8.4.0":
-  version: 8.7.0
-  resolution: "@mui/x-data-grid@npm:8.7.0"
+"@mui/x-data-grid@npm:^8.8.0":
+  version: 8.8.0
+  resolution: "@mui/x-data-grid@npm:8.8.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
-    "@mui/utils": "npm:^7.1.1"
-    "@mui/x-internals": "npm:8.7.0"
+    "@mui/utils": "npm:^7.2.0"
+    "@mui/x-internals": "npm:8.8.0"
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
     use-sync-external-store: "npm:^1.5.0"
@@ -5662,21 +5662,21 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/26a3c1b8f0c828482b72fd693a682a221874e5ced7f696728cbc8821e87ca92fe1c587711397073fbb64c553e29c91aff5fae341fadaa9ecda8c409366d4a34a
+  checksum: 10/3b5a0f8c02e2b42efe2285824947b59a102bb0bf7ededc0b168fcd533afac5d7b93e505034ecd9a610d81dabf6077367f98d0168a663cf2de11b040a6219aa78
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:8.7.0":
-  version: 8.7.0
-  resolution: "@mui/x-internals@npm:8.7.0"
+"@mui/x-internals@npm:8.8.0":
+  version: 8.8.0
+  resolution: "@mui/x-internals@npm:8.8.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
-    "@mui/utils": "npm:^7.1.1"
+    "@mui/utils": "npm:^7.2.0"
     reselect: "npm:^5.1.1"
   peerDependencies:
     "@mui/system": ^5.15.14 || ^6.0.0 || ^7.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/a0b8259aeaaea2e83894617dd2be3e4b29cbfe59bd4764f1789af808d6d57e9caac835c90bb833eb6a70ddc4148ae5a95c25146b078cac4f56e3a2c883c3cea1
+  checksum: 10/72ac258b603f7d905b06af6df8013a732ccdfcceb2f41ddc1ec7c8d4e5c11601dae2c59580d7c7a609335953eb759f3cdbbf0f8282a016dc9645e0421eae6b22
   languageName: node
   linkType: hard
 
@@ -7342,7 +7342,7 @@ __metadata:
     "@mui/icons-material": "npm:^7.2.0"
     "@mui/lab": "npm:^7.0.0-beta.13"
     "@mui/material": "npm:^7.2.0"
-    "@mui/x-data-grid": "npm:^8.4.0"
+    "@mui/x-data-grid": "npm:^8.8.0"
     "@popperjs/core": "npm:^2.11.8"
     "@semantic-release/changelog": "npm:^6.0.3"
     "@semantic-release/commit-analyzer": "npm:^13.0.1"
@@ -9220,13 +9220,6 @@ __metadata:
   linkType: hard
 
 "@types/prop-types@npm:^15.7.14, @types/prop-types@npm:^15.7.15":
-  version: 15.7.15
-  resolution: "@types/prop-types@npm:15.7.15"
-  checksum: 10/31aa2f59b28f24da6fb4f1d70807dae2aedfce090ec63eaf9ea01727a9533ef6eaf017de5bff99fbccad7d1c9e644f52c6c2ba30869465dd22b1a7221c29f356
-  languageName: node
-  linkType: hard
-
-"@types/prop-types@npm:^15.7.15":
   version: 15.7.15
   resolution: "@types/prop-types@npm:15.7.15"
   checksum: 10/31aa2f59b28f24da6fb4f1d70807dae2aedfce090ec63eaf9ea01727a9533ef6eaf017de5bff99fbccad7d1c9e644f52c6c2ba30869465dd22b1a7221c29f356
