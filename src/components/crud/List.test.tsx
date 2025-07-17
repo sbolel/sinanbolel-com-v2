@@ -63,7 +63,7 @@ test('deletes an item when delete button is clicked', async () => {
     <List items={items} schema={schema} deleteItem={deleteItemMock} />
   )
 
-  const deleteButtons = getAllByLabelText('delete')
+  const deleteButtons = getAllByLabelText('Delete row')
 
   await act(() => {
     fireEvent.click(deleteButtons[0])

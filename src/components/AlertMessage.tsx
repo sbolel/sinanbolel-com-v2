@@ -29,7 +29,7 @@ const AlertMessage: React.FC = (): React.JSX.Element => {
             severity={state.severity}
             action={
               <IconButton
-                aria-label="close"
+                aria-label="Close alert"
                 color="inherit"
                 size="small"
                 onClick={clearAlert}

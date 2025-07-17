@@ -66,7 +66,9 @@ test('calls onRemoveFile when a file is removed', () => {
     />
   )
 
-  fireEvent.click(screen.getByRole('button', { name: /file-action/i }))
+  fireEvent.click(
+    screen.getByRole('button', { name: /Remove file hello.png/i })
+  )
 
   expect(handleRemoveFile).toHaveBeenCalledWith('1')
 })
