@@ -8,15 +8,13 @@ import React, {
 } from 'react'
 import { createChat, addMessageToChat } from '@/firebase/firestore'
 import DOMPurify from 'dompurify'
-import {
-  Box,
-  TextField,
-  List,
-  Paper,
-  Typography,
-  IconButton,
-  Alert,
-} from '@mui/material'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import List from '@mui/material/List'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Alert from '@mui/material/Alert'
 import SendIcon from '@mui/icons-material/Send'
 import CloseIcon from '@mui/icons-material/Close'
 import { ChatContext } from '@/contexts/ChatContext'

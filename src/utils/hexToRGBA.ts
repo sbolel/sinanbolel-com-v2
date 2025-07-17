@@ -2,7 +2,7 @@
  * Returns Hex color to RGBA color
  * @module utils/hexToRGBA
  */
-import { hexToRgb } from '@mui/material'
+import hexToRgb from '@mui/material/utils/hexToRgb'
 
 /**
  * Returns Hex color to RGBA color
