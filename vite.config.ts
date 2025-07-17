@@ -4,6 +4,8 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 import { visualizer } from 'rollup-plugin-visualizer'
 // Import our custom Sass plugin (TypeScript version)
 import sassPlugin from './vite-sass-plugin'
+// Import our custom CSP plugin
+import cspPlugin from './vite-csp-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,6 +28,8 @@ export default defineConfig({
     },
   },
   plugins: [
+    // Add CSP plugin first to ensure headers are set
+    cspPlugin(),
     // Add our custom Sass plugin with debugging enabled only in development
     sassPlugin({
       outputStyle:
