@@ -21,6 +21,7 @@ import Fab from '@mui/material/Fab'
 import Tooltip from '@mui/material/Tooltip'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
 import AlertMessage from '@/components/AlertMessage'
 import AppBar from '@/components/AppBar'
 import AppDrawer from '@/components/AppDrawer'
@@ -172,6 +173,7 @@ const AppLayout: React.FC = (): React.JSX.Element => {
               maxWidth="sm"
               fullWidth
             >
+              <DialogTitle id="chat-dialog">Chat with Sinan</DialogTitle>
               <DialogContent>
                 <Suspense fallback={<CircularProgress />}>
                   <Chat />
