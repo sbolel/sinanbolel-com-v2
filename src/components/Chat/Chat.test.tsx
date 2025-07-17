@@ -1,14 +1,9 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 import Chat from './Chat'
 import { ChatContext, type ChatState } from '@/contexts/ChatContext'
 import useFirebaseAuth from '@/hooks/useFirebaseAuth'
-import useUserChats from '@/hooks/useUserChats'
-import useChatMessages from '@/hooks/useChatMessages'
-import useAutoScroll from '@/hooks/useAutoScroll'
 import { createChat, addMessageToChat } from '@/firebase/firestore'
-import DOMPurify from 'dompurify'
 
 jest.mock('@/hooks/useFirebaseAuth')
 jest.mock('@/hooks/useUserChats')

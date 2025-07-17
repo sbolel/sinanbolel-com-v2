@@ -1,7 +1,6 @@
 import { type FirebaseError } from 'firebase/app'
 import {
   addDoc,
-  arrayUnion,
   collection,
   doc,
   getDocs,
@@ -10,7 +9,6 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore'
 import type { Chat } from '@/types/chat'

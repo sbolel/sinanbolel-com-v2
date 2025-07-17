@@ -28,7 +28,7 @@ describe('useAutoScroll', () => {
   })
 
   test('does not throw when ref is null', () => {
-    const ref = { current: null } as React.RefObject<HTMLDivElement>
+    const ref = { current: null } as unknown as React.RefObject<HTMLDivElement>
     renderHook(() => useAutoScroll(1, ref))
     // no scrollIntoView call possible
   })
