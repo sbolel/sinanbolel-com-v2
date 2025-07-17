@@ -1,7 +1,7 @@
 /**
  * @module components/crud/CreateForm
  */
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useForm, Controller, FieldValues, UseFormProps } from 'react-hook-form'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -64,8 +64,21 @@ const CreateForm: React.FC<CreateFormProps> = ({
     ...FormProps,
   })
 
+  const firstFieldRef = useRef<HTMLInputElement>(null)
+  const titleId = 'create-form-title'
+  const descriptionId = 'create-form-description'
+
   const disabled =
     !isValid || isValidating || isSubmitting || Object.keys(errors).length > 0
+
+  // Focus management - focus first field when dialog opens
+  useEffect(() => {
+    if (open && firstFieldRef.current) {
+      setTimeout(() => {
+        firstFieldRef.current?.focus()
+      }, 100)
+    }
+  }, [open])
 
   const onSubmit = useCallback(
     (data: unknown) => {
@@ -84,16 +97,25 @@ const CreateForm: React.FC<CreateFormProps> = ({
     <Dialog
       open={open}
       onClose={onClose}
-      autoFocus
       fullWidth
       maxWidth="sm"
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      disableEscapeKeyDown={false}
       {...DialogProps}
     >
-      <DialogTitle sx={{ mb: 0 }}>{title || 'Create New'}</DialogTitle>
+      <DialogTitle id={titleId} sx={{ mb: 0 }}>
+        {title || 'Create New'}
+      </DialogTitle>
       <DialogContent>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} role="form">
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          role="form"
+          aria-describedby={descriptionId}
+        >
           <Stack spacing={4} sx={{ pt: 1 }}>
-            {schema.map(({ component: Component, ...field }) => {
+            {schema.map(({ component: Component, ...field }, index) => {
               // dynamically register the fields
               const { ref: inputRef, ...inputProps } = register(field.name, {
                 required: 'This field is required',
@@ -110,7 +132,7 @@ const CreateForm: React.FC<CreateFormProps> = ({
                     <Component
                       {...field}
                       {...inputProps}
-                      inputRef={inputRef}
+                      inputRef={index === 0 ? firstFieldRef : inputRef}
                       label={field.label}
                       required={field.required}
                       error={!!error}
@@ -128,14 +150,16 @@ const CreateForm: React.FC<CreateFormProps> = ({
             })}
           </Stack>
           <DialogActions>
-            <Button onClick={onClose}>{cancelLabel || 'Cancel'}</Button>
+            <Button onClick={onClose} aria-label="cancel form">
+              {cancelLabel || 'Cancel'}
+            </Button>
             <Button
               disabled={disabled ? true : false}
               variant="contained"
               type="submit"
               onClick={onSubmit}
               role="button"
-              aria-label="submit"
+              aria-label="submit form"
             >
               {submitLabel || 'Submit'}
             </Button>
