@@ -7,6 +7,14 @@ jest.mock('@/firebase/firestore', () => ({
   getUserChats: jest.fn(),
 }))
 
+// Mock the auth module to allow currentUser modification
+jest.mock('@/firebase', () => ({
+  auth: {
+    currentUser: null,
+    onAuthStateChanged: jest.fn(),
+  },
+}))
+
 describe('useUserChats', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -14,7 +22,7 @@ describe('useUserChats', () => {
 
   test('fetches chats and dispatches chat id', async () => {
     const dispatch = jest.fn()
-    auth.currentUser = { uid: 'user1' } as any
+    ;(auth as any).currentUser = { uid: 'user1' }
     ;(getUserChats as jest.Mock).mockResolvedValue([{ id: 'chat1' }])
     renderHook(() => useUserChats(dispatch))
     await waitFor(() => {
@@ -30,7 +38,7 @@ describe('useUserChats', () => {
 
   test('does nothing when no current user', async () => {
     const dispatch = jest.fn()
-    auth.currentUser = null
+    ;(auth as any).currentUser = null
     renderHook(() => useUserChats(dispatch))
     await waitFor(() => {
       expect(getUserChats).not.toHaveBeenCalled()
