@@ -1,6 +1,6 @@
 import { render, cleanup } from '@testing-library/react'
 import { ThemeProvider, lighten } from '@mui/material/styles'
-import { createTheme } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
 import Avatar from '@/components/mui/Avatar'
 import hexToRGBA from '@/utils/hexToRGBA'
 
