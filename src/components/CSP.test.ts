@@ -26,7 +26,7 @@ describe('Content Security Policy', () => {
     // Check for external service domains
     expect(indexHtml).toContain('https://*.googleapis.com')
     expect(indexHtml).toContain('https://*.firebaseio.com')
-    expect(indexHtml).toContain('https://cognito-idp.*.amazonaws.com')
+    expect(indexHtml).toContain('https://cognito-idp.us-east-1.amazonaws.com')
   })
 
   it('should have security directives in CSP', async () => {
@@ -38,7 +38,9 @@ describe('Content Security Policy', () => {
     // Check for security directives
     expect(indexHtml).toContain("object-src 'none'")
     expect(indexHtml).toContain("base-uri 'self'")
-    expect(indexHtml).toContain("frame-ancestors 'none'")
     expect(indexHtml).toContain('upgrade-insecure-requests')
+    expect(indexHtml).toContain(
+      "'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='"
+    )
   })
 })

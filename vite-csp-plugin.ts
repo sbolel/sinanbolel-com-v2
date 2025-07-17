@@ -10,16 +10,15 @@ interface CSPPluginOptions {
 export function cspPlugin(options: CSPPluginOptions = {}): Plugin {
   const defaultPolicy = [
     "default-src 'self'",
-    "script-src 'self'",
+    "script-src 'self' 'sha256-Z2/iFzh9VMlVkEOar1f/oSHWwQk3ve1qk/C2WdsC4Xk='", // Allow specific inline script hash
     "style-src 'self' 'unsafe-inline'", // unsafe-inline needed for Material-UI
     "img-src 'self' data:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://cognito-idp.*.amazonaws.com https://*.firebaseio.com https://*.firestore.googleapis.com",
+    "connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://cognito-idp.us-east-1.amazonaws.com https://*.firebaseio.com https://*.firestore.googleapis.com",
     "frame-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
     'upgrade-insecure-requests',
   ].join('; ')
 
