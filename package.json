@@ -4,9 +4,13 @@
   "version": "0.0.0-semantic-release",
   "license": "UNLICENSED",
   "description": "Sinan Bolel's personal website",
-  "homepage": "https://github.com/sbolel/website",
+  "homepage": "https://sinanbolel.com",
   "bugs": {
-    "url": "https://github.com/sbolel/website/issues"
+    "url": "https://github.com/sbolel/sinanbolel-com-v2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sbolel/sinanbolel-com-v2.git"
   },
   "author": "Sinan Bolel (https://sinanbolel.com)",
   "contributors": [
@@ -15,7 +19,7 @@
   "type": "module",
   "packageManager": "yarn@4.9.2",
   "engines": {
-    "node": "22",
+    "node": "20 || 22",
     "npm": "please-use-yarn",
     "yarn": "4.9.2"
   },
