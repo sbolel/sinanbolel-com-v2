@@ -5665,9 +5665,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-data-grid@npm:^8.8.0":
-  version: 8.8.0
-  resolution: "@mui/x-data-grid@npm:8.8.0"
+"@mui/x-data-grid@npm:^8.9.1":
+  version: 8.9.1
+  resolution: "@mui/x-data-grid@npm:8.9.1"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     "@mui/utils": "npm:^7.2.0"
@@ -5687,7 +5687,7 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 10/3b5a0f8c02e2b42efe2285824947b59a102bb0bf7ededc0b168fcd533afac5d7b93e505034ecd9a610d81dabf6077367f98d0168a663cf2de11b040a6219aa78
+  checksum: 10/80e58357f352b7dd3627e283518d1640470d8e551013a245f38a319d37e8c56bb48722980971b17957d9793ef860673b9650fae2d7b47f27a0db5b1efc400bce
   languageName: node
   linkType: hard
 
@@ -7367,7 +7367,7 @@ __metadata:
     "@mui/icons-material": "npm:^7.2.0"
     "@mui/lab": "npm:^7.0.0-beta.13"
     "@mui/material": "npm:^7.2.0"
-    "@mui/x-data-grid": "npm:^8.8.0"
+    "@mui/x-data-grid": "npm:^8.9.1"
     "@popperjs/core": "npm:^2.11.8"
     "@semantic-release/changelog": "npm:^6.0.3"
     "@semantic-release/commit-analyzer": "npm:^13.0.1"
