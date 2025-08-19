@@ -38,7 +38,6 @@ describe('Content Security Policy', () => {
 
   it('should have security directives in CSP', async () => {
     const fs = require('fs')
-    const path = require('path')
     const indexHtmlPath = path.join(__dirname, '../../index.html')
     const indexHtml = fs.readFileSync(indexHtmlPath, 'utf-8')
 
