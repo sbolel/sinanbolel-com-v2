@@ -10,10 +10,40 @@ import { Message } from '@/types/chat'
 interface MessageBubbleProps {
   message: Message
   isCurrentUser: boolean
+  onClick?: () => void
+  tabIndex?: number
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = React.memo(
-  ({ message, isCurrentUser }) => {
+  ({ message, isCurrentUser, onClick, tabIndex }) => {
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (onClick && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault()
+        onClick()
+      }
+    }
+
+    const isInteractive = !!onClick
+    const bubbleProps = isInteractive
+      ? {
+          role: 'button',
+          tabIndex: tabIndex ?? 0,
+          onClick,
+          onKeyDown: handleKeyDown,
+          sx: {
+            cursor: 'pointer',
+            '&:hover': {
+              bgcolor: isCurrentUser ? 'primary.dark' : 'grey.200',
+            },
+            '&:focus': {
+              outline: '2px solid',
+              outlineColor: 'primary.main',
+              outlineOffset: '2px',
+            },
+          },
+        }
+      : {}
+
     return (
       <Box
         sx={{
@@ -38,6 +68,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = React.memo(
         >
           <Paper
             elevation={0}
+            {...bubbleProps}
             sx={{
               bgcolor: isCurrentUser ? 'primary.light' : 'grey.100',
               borderRadius: 2,
@@ -47,6 +78,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = React.memo(
               display: 'inline-flex',
               alignItems: 'center',
               m: 0,
+              ...bubbleProps.sx,
             }}
           >
             <Typography

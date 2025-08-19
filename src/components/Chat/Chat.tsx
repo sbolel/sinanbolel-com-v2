@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useReducer,
   useMemo,
+  useEffect,
 } from 'react'
 import { createChat, addMessageToChat } from '@/firebase/firestore'
 import DOMPurify from 'dompurify'
@@ -99,11 +100,21 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
   const messagesEndRef = useRef<HTMLDivElement>(
     null
   ) as React.RefObject<HTMLDivElement>
+  const textFieldRef = useRef<HTMLInputElement>(null)
   const currentUser = useFirebaseAuth()
 
   useUserChats(dispatch)
   useChatMessages(state.chatId, dispatch)
   useAutoScroll(state.messages, messagesEndRef)
+
+  // Focus management - focus text field when chat opens
+  useEffect(() => {
+    if (textFieldRef.current) {
+      setTimeout(() => {
+        textFieldRef.current?.focus()
+      }, 100)
+    }
+  }, [])
 
   const isCurrentUser = useCallback(
     (userId: string) => (currentUser ? userId === currentUser.uid : false),
@@ -184,6 +195,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Box sx={headerStyles}>
         <Typography
+          id="chat-dialog-title"
           variant="h6"
           component="div"
           sx={{
@@ -198,7 +210,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           <IconButton
             onClick={onClose}
             color="inherit"
-            aria-label="close"
+            aria-label="close chat dialog"
             size="small"
             sx={{
               position: 'absolute',
@@ -254,6 +266,8 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           placeholder="Type a message"
           variant="outlined"
           size="medium"
+          inputRef={textFieldRef}
+          aria-label="Message input"
           InputProps={{
             sx: {
               padding: '8px',
@@ -270,7 +284,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                 <IconButton
                   type="submit"
                   color="primary"
-                  aria-label="send"
+                  aria-label="send message"
                   edge="end"
                   disabled={textInputIsEmpty}
                   sx={{

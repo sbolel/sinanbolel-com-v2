@@ -27,12 +27,21 @@ const AlertMessage: React.FC = (): React.JSX.Element => {
         <Collapse in={state.isVisible}>
           <Alert
             severity={state.severity}
+            role="alert"
+            aria-live="polite"
+            aria-atomic="true"
             action={
               <IconButton
-                aria-label="close"
+                aria-label="close alert message"
                 color="inherit"
                 size="small"
                 onClick={clearAlert}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    clearAlert()
+                  }
+                }}
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>

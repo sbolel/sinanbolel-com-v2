@@ -84,6 +84,7 @@ const DefaultCTA: React.FC = (): React.JSX.Element => (
       aria-label="Browse for Files"
       color="primary"
       size="small"
+      tabIndex={-1}
       sx={{
         p: 0,
         lineHeight: 2,
@@ -212,6 +213,22 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
     onDrop,
   })
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if ((event.key === 'Enter' || event.key === ' ') && !uploading) {
+        event.preventDefault()
+        // Trigger the hidden input click
+        const input = event.currentTarget.querySelector(
+          'input[type="file"]'
+        ) as HTMLInputElement
+        if (input) {
+          input.click()
+        }
+      }
+    },
+    [uploading]
+  )
+
   return (
     <>
       <StyledBox
@@ -219,8 +236,17 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
           uploading ? 'disabled' : ''
         }`}
         {...getRootProps()}
+        onKeyDown={handleKeyDown}
+        tabIndex={uploading ? -1 : 0}
+        role="button"
+        aria-label="File upload area. Press Enter or Space to browse files."
+        aria-disabled={uploading}
       >
-        <input aria-label="Drag and Drop File Selection" {...getInputProps()} />
+        <input
+          {...getInputProps()}
+          aria-label="File selection input"
+          data-testid="file-input"
+        />
         <UploadFileIcon
           color="primary"
           fontSize={isCondensed ? 'small' : 'large'}

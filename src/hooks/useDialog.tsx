@@ -10,6 +10,7 @@ import {
   useContext,
   useRef,
   useState,
+  useEffect,
 } from 'react'
 import Dialog, { DialogProps } from '@mui/material/Dialog'
 
@@ -37,15 +38,42 @@ const DialogProvider: React.FC<React.PropsWithChildren> = ({
   ] = useState<DialogState>({ children: <></>, props: null })
 
   const [open, setOpen] = useState(false)
+  const previousActiveElementRef = useRef<HTMLElement | null>(null)
 
   const openDialog = useCallback((dialog: DialogState) => {
+    // Store the currently focused element before opening dialog
+    previousActiveElementRef.current = document.activeElement as HTMLElement
     setDialog(dialog)
     setOpen(true)
   }, [])
 
-  const closeDialog = () => {
+  const closeDialog = useCallback(() => {
     setOpen(false)
-  }
+    // Return focus to the element that was focused before opening dialog
+    setTimeout(() => {
+      if (previousActiveElementRef.current) {
+        previousActiveElementRef.current.focus()
+      }
+    }, 100)
+  }, [])
+
+  // Focus management effect
+  useEffect(() => {
+    if (open) {
+      // Move focus to first focusable element in dialog after it opens
+      setTimeout(() => {
+        const dialog = document.querySelector('[role="dialog"]')
+        if (dialog) {
+          const firstFocusable = dialog.querySelector(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          ) as HTMLElement
+          if (firstFocusable) {
+            firstFocusable.focus()
+          }
+        }
+      }, 100)
+    }
+  }, [open])
 
   const contextValue = useRef<[(dialog: DialogState) => void, () => void]>([
     openDialog,
@@ -55,7 +83,17 @@ const DialogProvider: React.FC<React.PropsWithChildren> = ({
   return (
     <DialogContext.Provider value={contextValue.current}>
       {children}
-      <Dialog {...dialogProps} onClose={closeDialog} open={open}>
+      <Dialog
+        {...dialogProps}
+        onClose={closeDialog}
+        open={open}
+        aria-labelledby={dialogProps?.['aria-labelledby'] || 'dialog-title'}
+        aria-describedby={
+          dialogProps?.['aria-describedby'] || 'dialog-description'
+        }
+        disableEscapeKeyDown={false}
+        keepMounted={false}
+      >
         {Children.map(dialogChildren, (child) => {
           // Checking isValidElement is the safe way and avoids a
           // typescript error too.

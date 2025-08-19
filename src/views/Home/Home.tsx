@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Dialog from '@mui/material/Dialog'
@@ -12,10 +12,20 @@ import styles from '@/views/Home/Home.module.scss'
 
 const Home: React.FC = () => {
   const [chatOpen, setChatOpen] = useState(false)
+  const chatButtonRef = useRef<HTMLButtonElement>(null)
 
   const toggleChat = () => {
     setChatOpen(!chatOpen)
   }
+
+  // Focus management when chat closes
+  useEffect(() => {
+    if (!chatOpen && chatButtonRef.current) {
+      setTimeout(() => {
+        chatButtonRef.current?.focus()
+      }, 100)
+    }
+  }, [chatOpen])
 
   return (
     <Container
@@ -114,8 +124,11 @@ const Home: React.FC = () => {
       </Box>
       <ChatProvider>
         <Fab
+          ref={chatButtonRef}
           id="chat-button"
-          aria-label="chat-button"
+          aria-label={chatOpen ? 'close chat' : 'open chat'}
+          aria-expanded={chatOpen}
+          aria-controls="chat-dialog"
           color="info"
           onClick={toggleChat}
           size="large"
@@ -130,7 +143,9 @@ const Home: React.FC = () => {
         <Dialog
           open={chatOpen}
           onClose={toggleChat}
-          aria-labelledby="chat-dialog"
+          aria-labelledby="chat-dialog-title"
+          aria-describedby="chat-dialog-description"
+          id="chat-dialog"
           PaperProps={{
             sx: {
               position: 'fixed',
