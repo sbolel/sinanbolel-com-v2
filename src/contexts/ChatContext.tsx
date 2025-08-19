@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, ProviderProps } from 'react'
+import React, { createContext, useReducer } from 'react'
 import { Message } from '@/types/chat'
 import { AuthProviderProps } from '@/store/auth/types'
 
