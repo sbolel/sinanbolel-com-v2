@@ -3,7 +3,6 @@ import { describe, it, expect } from '@jest/globals'
 describe('Content Security Policy', () => {
   it('should have CSP meta tag in index.html', async () => {
     // Read the index.html file from the repository
-    const fs = require('fs')
 import * as fs from 'fs'
 import * as path from 'path'
 import { describe, it, expect } from '@jest/globals'
