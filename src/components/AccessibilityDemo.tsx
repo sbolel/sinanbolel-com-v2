@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { Box, Typography, Button, Container } from '@mui/material'
 import Image from './Image'
 import MessageBubble from '../components/Chat/MessageBubble'
-import MultiDropzone from '../components/MultiDropzone/MultiDropzone'
+import MultiDropzone from './MultiDropzone/MultiDropzone'
 import CreateForm from '../components/crud/CreateForm'
 import { FormField } from '../types'
 
