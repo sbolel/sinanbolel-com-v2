@@ -44,7 +44,7 @@ const List: React.FC<ListProps> = ({
       renderCell: (params) => {
         return (
           <IconButton
-            aria-label="delete"
+            aria-label="Delete row"
             color="primary"
             onClick={() => handleDelete(params.id)}
           >

@@ -130,8 +130,7 @@ const UploadFileCell: React.FC<UploadFileCellProps> = ({
             {isUploading && fileIcon}
             {!isUploading && (
               <IconButton
-                role="button"
-                aria-label="file-action"
+                aria-label={`Remove file ${name}`}
                 disabled={uploading}
                 onClick={handleRemoveFile}
                 color={hasError ? 'error' : 'primary'}

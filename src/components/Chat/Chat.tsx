@@ -198,7 +198,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           <IconButton
             onClick={onClose}
             color="inherit"
-            aria-label="close"
+            aria-label="Close chat"
             size="small"
             sx={{
               position: 'absolute',
@@ -270,7 +270,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                 <IconButton
                   type="submit"
                   color="primary"
-                  aria-label="send"
+                  aria-label="Send message"
                   edge="end"
                   disabled={textInputIsEmpty}
                   sx={{
