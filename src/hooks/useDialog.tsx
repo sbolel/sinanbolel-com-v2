@@ -18,11 +18,14 @@ type DialogState = {
   props?: DialogProps | null
 }
 
-const DialogContext = createContext([
+const DialogContext = createContext<
+  [(dialog: DialogState) => void, () => void]
+>([
   (dialog: DialogState): void => {
     // HACK: this is a hack to get around the unused variable error
     return dialog as unknown as void
   },
+  () => {},
 ])
 
 const DialogProvider: React.FC<React.PropsWithChildren> = ({
@@ -44,7 +47,10 @@ const DialogProvider: React.FC<React.PropsWithChildren> = ({
     setOpen(false)
   }
 
-  const contextValue = useRef([openDialog, closeDialog])
+  const contextValue = useRef<[(dialog: DialogState) => void, () => void]>([
+    openDialog,
+    closeDialog,
+  ])
 
   return (
     <DialogContext.Provider value={contextValue.current}>

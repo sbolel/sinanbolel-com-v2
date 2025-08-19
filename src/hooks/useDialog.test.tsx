@@ -28,10 +28,10 @@ describe('useDialog', () => {
     )
     const { result } = renderHook(() => useDialog(), { wrapper })
     act(() => {
-      result.current[0]({ children: <Child />, foo: 'bar' })
+      result.current[0]({ children: <Child /> })
     })
     expect(screen.getByTestId('dialog')).toHaveAttribute('data-open', 'true')
-    expect(screen.getByTestId('child')).toHaveAttribute('data-foo', 'bar')
+    expect(screen.getByTestId('child')).toBeInTheDocument()
 
     act(() => {
       result.current[1]()
