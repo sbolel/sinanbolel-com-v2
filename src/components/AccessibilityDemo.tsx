@@ -8,10 +8,11 @@ import MessageBubble from './Chat/MessageBubble'
 import MultiDropzone from './MultiDropzone/MultiDropzone'
 import CreateForm from './crud/CreateForm'
 import { FormField } from '../types'
+import { UploadedFile } from './MultiDropzone/types'
 
 const AccessibilityDemo: React.FC = () => {
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState([])
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
 
   const mockMessage = {
     body: 'This is a test message that you can interact with using keyboard navigation. Try pressing Tab to focus it, then Enter or Space to activate.',
@@ -23,6 +24,7 @@ const AccessibilityDemo: React.FC = () => {
     {
       name: 'testField',
       label: 'Test Field',
+      type: 'text',
       required: true,
       component: ({ inputRef, ...props }) => (
         <input
@@ -48,6 +50,13 @@ const AccessibilityDemo: React.FC = () => {
 
   const handleFileSelect = (files: File[]) => {
     console.log('Files selected:', files)
+    // Convert File objects to UploadedFile objects for demo
+    const uploadedFileObjects: UploadedFile[] = files.map((file, index) => ({
+      id: `file-${index}-${Date.now()}`,
+      name: file.name,
+      progress: 100, // Simulate completed upload for demo
+    }))
+    setUploadedFiles(uploadedFileObjects)
   }
 
   const handleRemoveFile = (id: string) => {
@@ -82,7 +91,6 @@ const AccessibilityDemo: React.FC = () => {
           src="https://picsum.photos/200/150"
           alt="Demo image that is keyboard accessible"
           onClick={handleImageClick}
-          sx={{ mb: 2 }}
         />
       </Box>
 

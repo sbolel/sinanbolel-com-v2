@@ -1,17 +1,22 @@
 /**
  * Tests for accessibility enhancements
  */
-import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { Timestamp } from 'firebase/firestore'
 import Image from './Image'
 import MessageBubble from './Chat/MessageBubble'
-import AlertMessage from './AlertMessage'
 
 // Mock Firebase timestamp
 const mockTimestamp = {
   toDate: () => new Date('2024-01-01T12:00:00Z'),
-}
+  seconds: 1704110400,
+  nanoseconds: 0,
+  toMillis: () => 1704110400000,
+  isEqual: () => false,
+  toJSON: () => ({ seconds: 1704110400, nanoseconds: 0 }),
+  valueOf: () => '2024-01-01T12:00:00Z',
+} as Timestamp
 
 describe('Accessibility Enhancements', () => {
   describe('Image Component', () => {
