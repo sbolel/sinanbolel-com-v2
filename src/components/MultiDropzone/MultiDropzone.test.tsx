@@ -45,7 +45,9 @@ test('calls onFileSelect when a file is dropped', () => {
 
   act(() => {
     fireEvent.drop(
-      screen.getByLabelText('Drag and Drop File Selection'),
+      screen.getByLabelText(
+        'File upload area. Press Enter or Space to browse files.'
+      ),
       dataTransfer
     )
 
@@ -66,7 +68,7 @@ test('calls onRemoveFile when a file is removed', () => {
     />
   )
 
-  fireEvent.click(screen.getByRole('button', { name: /file-action/i }))
+  fireEvent.click(screen.getByRole('button', { name: /remove file/i }))
 
   expect(handleRemoveFile).toHaveBeenCalledWith('1')
 })
@@ -125,7 +127,9 @@ test('displays an error message when a file exceeds the maxSize', () => {
 
   act(() => {
     fireEvent.drop(
-      screen.getByLabelText('Drag and Drop File Selection'),
+      screen.getByLabelText(
+        'File upload area. Press Enter or Space to browse files.'
+      ),
       dataTransfer
     )
 
