@@ -1,23 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow authenticated users to read and write only to their own session document
+    // Sessions: only the owner can read/write
     match /sessions/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if request.auth != null
+                         && request.auth.uid == userId;
     }
-    
-    // Allow authenticated users to read and write only to their own chat documents
-    match /chats/{chatId} {
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
 
-      // Messages subcollection
+    // Chats: create/read/update/delete only by owner, with field validation
+    match /chats/{chatId} {
+      allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+      allow read:   if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null
+                    && resource.data.userId == request.auth.uid
+                    && request.resource.data.userId == resource.data.userId;
+      allow delete: if false;
+
+      // Messages: owner can create and read; messages are immutable (no update/delete)
       match /messages/{messageId} {
-        allow create: if request.auth != null && request.resource.data.from == request.auth.uid;
-        allow read: if request.auth != null && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        allow create: if request.auth != null
+                      && request.resource.data.from == request.auth.uid;
+        allow read:   if request.auth != null
+                      && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        allow update, delete: if false;
       }
     }
-    
+
     // Deny access to all other documents
     match /{document=**} {
       allow read, write: if false;
