@@ -7446,7 +7446,7 @@ __metadata:
     react-hook-form: "npm:^7.56.4"
     react-popper: "npm:^2.3.0"
     react-router: "npm:^7.6.2"
-    react-router-dom: "npm:^7.6.1"
+    react-router-dom: "npm:^7.8.2"
     rimraf: "npm:^6.0.1"
     rollup-plugin-visualizer: "npm:^5.14.0"
     sass: "npm:^1.89.2"
@@ -19322,19 +19322,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.6.1":
-  version: 7.6.3
-  resolution: "react-router-dom@npm:7.6.3"
+"react-router-dom@npm:^7.8.2":
+  version: 7.8.2
+  resolution: "react-router-dom@npm:7.8.2"
   dependencies:
-    react-router: "npm:7.6.3"
+    react-router: "npm:7.8.2"
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10/b6e6a4dd696c7c0cf9f1f6ce88d388013a7f71d8fd6267968979ad473f222796f75506068786e47c6911f576f8946ad37a324642310fc8987e3cd898875aac3e
+  checksum: 10/2b8693c65b6c87004909c76a4cf1e2e1d4d241d20161ee792ce1aba0763e36484e98792a0c98a4d36d53cf8a7bc8a372ec5067b06f459df0d840dbfc8508e96e
   languageName: node
   linkType: hard
 
-"react-router@npm:7.6.3, react-router@npm:^7.6.2":
+"react-router@npm:7.8.2":
+  version: 7.8.2
+  resolution: "react-router@npm:7.8.2"
+  dependencies:
+    cookie: "npm:^1.0.1"
+    set-cookie-parser: "npm:^2.6.0"
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10/d1af3980cdfe8b915f6a8b219d57f18f9e3c4c062fa33bbb0946d4ff18c4c09fbf2f5c3616f5953f576c1d3be31616e4578773794cbb6eacf7812050997e04a2
+  languageName: node
+  linkType: hard
+
+"react-router@npm:^7.6.2":
   version: 7.6.3
   resolution: "react-router@npm:7.6.3"
   dependencies:
