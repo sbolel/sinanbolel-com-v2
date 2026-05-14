@@ -1,7 +1,6 @@
 // Custom Vite plugin for Sass compilation using the modern API
 import * as sass from 'sass'
 import path from 'path'
-import fs from 'fs'
 import type { Plugin } from 'vite'
 
 interface SassPluginOptions {
