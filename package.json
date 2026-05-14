@@ -33,9 +33,10 @@
     "test:precommit": "NODE_ENV=test jest --onlyChanged --coverage --colors --watch=false --maxWorkers=50%",
     "test:watch": "NODE_ENV=test jest --onlyChanged --coverage --colors --watch --maxWorkers=25%",
     "test:ci": "NODE_ENV=test jest --ci --all  --coverage --colors --maxWorkers=100%",
-    "ci": "run-p 'lint:js' 'lint:other' 'test:ci'",
+    "test:firestore-rules": "firebase emulators:exec --config firebase.rules-test.json --only firestore \"node --test src/firebase/firestore.rules.test.mjs\"",
+    "ci": "run-p 'lint:js' 'lint:other' 'test:ci' 'test:firestore-rules'",
     "lint": "run-p 'lint:js' 'lint:other'",
-    "lint:js": "prettier --check '**/*.{ts,tsx,js,jsx,cjs}' --ignore-path .gitignore --ignore-path .prettierignore",
+    "lint:js": "prettier --check '**/*.{ts,tsx,js,jsx,cjs,mjs}' --ignore-path .gitignore --ignore-path .prettierignore",
     "lint:other": "prettier --check '**/*.{json,md,yaml,yml}' --ignore-path .gitignore --ignore-path .prettierignore",
     "fix": "run-p 'fix:**'",
     "fix:js": "yarn run lint:js --write",
@@ -82,6 +83,7 @@
     "@babel/core": "^7.29.0",
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
+    "@firebase/rules-unit-testing": "^5.0.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/github": "^12.0.8",
@@ -126,6 +128,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-storybook": "^10.3.6",
+    "firebase-tools": "^15.18.0",
     "husky": "^9.1.7",
     "jest": "^30.4.2",
     "jest-date-mock": "^1.0.10",
@@ -171,7 +174,7 @@
   },
   "lint-staged": {
     "**/*.html": "prettier --parser html --fix",
-    "**/*.{js,jsx,ts,tsx,cjs}": [
+    "**/*.{js,jsx,ts,tsx,cjs,mjs}": [
       "yarn fix:js"
     ],
     "**/*.{json,md,yaml,yml}": [

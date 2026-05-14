@@ -35,11 +35,19 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'yarn.lock'
 
+      - name: INSTALL - java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
       - name: DEBUG - node, npm, yarn versions
         run: |
           echo "node --version: $(node --version)"
           echo "npm --version: $(npm --version)"
           echo "yarn --version: $(yarn --version)"
+          echo "java --version:"
+          java --version
 
       - name: CACHE - get yarn cache folder path
         id: yarn-cache-path
