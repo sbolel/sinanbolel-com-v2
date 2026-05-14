@@ -1,6 +1,11 @@
 import router from './router'
 import { RouteIds, Routes } from './constants'
 
+jest.mock('aws-amplify/auth', () => ({
+  fetchAuthSession: jest.fn(),
+  getCurrentUser: jest.fn(),
+}))
+
 describe('router configuration', () => {
   test('includes expected paths', () => {
     const collectPaths = (routes: any[]): string[] =>

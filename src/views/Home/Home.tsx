@@ -131,19 +131,21 @@ const Home: React.FC = () => {
           open={chatOpen}
           onClose={toggleChat}
           aria-labelledby="chat-dialog"
-          PaperProps={{
-            sx: {
-              position: 'fixed',
-              bottom: 80,
-              right: 16,
-              m: 0,
-              width: {
-                xs: 'calc(100% - 32px)',
-                sm: 350,
-                md: 400,
-                lg: 450,
+          slotProps={{
+            paper: {
+              sx: {
+                position: 'fixed',
+                bottom: 80,
+                right: 16,
+                m: 0,
+                width: {
+                  xs: 'calc(100% - 32px)',
+                  sm: 350,
+                  md: 400,
+                  lg: 450,
+                },
+                maxHeight: 'calc(100% - 96px)',
               },
-              maxHeight: 'calc(100% - 96px)',
             },
           }}
         >

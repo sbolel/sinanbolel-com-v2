@@ -1,10 +1,9 @@
 import fetchMock from 'jest-fetch-mock'
 import apiRequest from '@/utils/apiRequest'
-import CONFIG from '@/utils/config'
 
 const jwtToken = 'test-token'
 const path = 'test-endpoint'
-const url = new URL(`${CONFIG.API_URL}/v1/${path}`)
+const url = new URL('https://localhost:3000/api/v1/test-endpoint')
 const headers = {
   authorization: jwtToken,
   'content-type': 'application/json',

@@ -2,11 +2,7 @@
  * Type definitions for the application.
  * @module types
  */
-import type {
-  CognitoIdToken,
-  CognitoUser,
-  CognitoUserSession,
-} from 'amazon-cognito-identity-js'
+import type { AuthSession, AuthUser, JWT } from 'aws-amplify/auth'
 
 export type AppConfig = {
   AWS_REGION: string | 'us-east-1'
@@ -44,10 +40,10 @@ export type CognitoUserInfo = {
 }
 
 export type UserState = {
-  user: CognitoUser
+  user: AuthUser
   userInfo: CognitoUserInfo
-  userSession: CognitoUserSession
-  idToken: CognitoIdToken
+  userSession: AuthSession
+  idToken: JWT
   jwtToken: string
 }
 

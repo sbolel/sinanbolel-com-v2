@@ -1,8 +1,8 @@
 /**
  * @module store/auth/AuthProvider
  */
-import { Auth } from 'aws-amplify'
-import type { CognitoUserSession } from 'amazon-cognito-identity-js'
+import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth'
+import type { AuthSession } from 'aws-amplify/auth'
 import { useCallback, useEffect, useReducer } from 'react'
 import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { AuthActions } from '@/actions/actionTypes'
@@ -36,40 +36,29 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
   const initAuth = useCallback(async () => {
     try {
       const [user, session] = await Promise.all([
-        Auth.currentAuthenticatedUser(),
-        Auth.currentSession(),
+        getCurrentUser(),
+        fetchAuthSession(),
       ])
 
-      if (!user || !session) {
+      if (!user || !session.tokens) {
         throw new Error('No user or session')
       }
 
-      const jwtToken = session?.getAccessToken()?.getJwtToken()
+      const jwtToken = session.tokens.accessToken.toString()
 
       if (!jwtToken) {
         throw new Error('No jwtToken')
       }
 
-      const refreshSession = (): Promise<CognitoUserSession> =>
-        new Promise((resolve, reject) => {
-          user.refreshSession(
-            session.getRefreshToken(),
-            (err: Error | null, newSession: CognitoUserSession) => {
-              if (err) {
-                reject(err)
-              } else {
-                resolve(newSession)
-              }
-            }
-          )
-        })
-
-      const refreshed = await refreshSession()
+      const refreshed: AuthSession = await fetchAuthSession({
+        forceRefresh: true,
+      })
+      const refreshedJwtToken = refreshed.tokens?.accessToken.toString()
 
       dispatch({
         type: AuthActions.LOGIN_SUCCESS,
         payload: {
-          jwtToken: refreshed.getAccessToken().getJwtToken(),
+          jwtToken: refreshedJwtToken ?? jwtToken,
         },
       })
 

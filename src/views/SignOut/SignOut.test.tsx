@@ -9,7 +9,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }))
 jest.mock('@/store/auth/useAuthDispatch')
-jest.mock('@/actions/logoutUser')
+jest.mock('@/actions/logoutUser', () => jest.fn())
 
 test('logs out and navigates to login page', async () => {
   const dispatch = jest.fn()
