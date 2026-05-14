@@ -16,9 +16,6 @@ export default async function loginUserFederated(
   try {
     dispatch({ type: AuthActions.LOGIN_REQUEST })
     await signInWithRedirect()
-
-    dispatch({ type: AuthActions.LOGIN_SUCCESS, payload: {} })
-    return {}
   } catch (error) {
     dispatch({ type: AuthActions.LOGIN_FAILURE, error: error as Error })
   }

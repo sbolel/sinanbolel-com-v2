@@ -27,15 +27,16 @@ describe('loginUserFederated', () => {
     })
   })
 
-  test('dispatches LOGIN_SUCCESS action when login is successful', async () => {
+  test('does not dispatch LOGIN_SUCCESS before the redirect completes', async () => {
     ;(signInWithRedirect as jest.Mock).mockResolvedValue(undefined)
 
     await loginUserFederated(mockDispatch)
 
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: AuthActions.LOGIN_SUCCESS,
-      payload: {},
-    })
+    expect(mockDispatch).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: AuthActions.LOGIN_SUCCESS,
+      })
+    )
   })
 
   test('dispatches LOGIN_FAILURE action when login fails', async () => {

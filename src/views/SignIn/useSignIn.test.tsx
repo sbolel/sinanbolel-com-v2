@@ -17,22 +17,29 @@ jest.mock('react-router-dom', () => ({
 jest.mock('@/hooks/useAlert')
 jest.mock('@/store/auth/useAuthDispatch')
 jest.mock('@/store/auth/useAuthState')
-;(useAuthDispatch as jest.Mock).mockReturnValue(jest.fn())
-;(useNavigate as jest.Mock).mockReturnValue(jest.fn())
 const setAlertMock = jest.fn()
 
 beforeEach(() => {
   jest.clearAllMocks()
+  ;(useAuthDispatch as jest.Mock).mockReturnValue(jest.fn())
+  ;(useNavigate as jest.Mock).mockReturnValue(jest.fn())
   ;(useAlert as jest.Mock).mockReturnValue({ setAlert: setAlertMock })
 })
 
 test('handles form submission', async () => {
   ;(loginUser as jest.Mock).mockResolvedValueOnce({})
   const { result } = renderHook(useSignIn)
-  await act(async () => {
-    result.current.handleSubmit()
+  act(() => {
+    result.current.reset({
+      email: 'test@test.com',
+      password: 'password',
+    })
   })
-  waitFor(() => {
+
+  act(() => {
+    void result.current.handleSubmit()
+  })
+  await waitFor(() => {
     expect(result.current.loading).toBe(false)
     expect(loginUser).toHaveBeenCalledWith(expect.any(Function), {
       email: 'test@test.com',
@@ -47,7 +54,7 @@ test('handles federated sign in', async () => {
   await act(async () => {
     await result.current.handleFederatedSignIn()
   })
-  waitFor(() => {
+  await waitFor(() => {
     expect(signInWithRedirect).toHaveBeenCalled()
   })
 })
@@ -57,7 +64,7 @@ test('toggles password visibility', async () => {
   await act(() => {
     result.current.setShowPassword(true)
   })
-  waitFor(() => {
+  await waitFor(() => {
     expect(result.current.showPassword).toBe(true)
   })
 })
@@ -67,10 +74,17 @@ test('handles form submission error', async () => {
     new AuthError({ status: 400, message: 'Invalid credentials' })
   )
   const { result } = renderHook(useSignIn)
-  await act(async () => {
-    result.current.handleSubmit()
+  act(() => {
+    result.current.reset({
+      email: 'test@test.com',
+      password: 'password',
+    })
   })
-  waitFor(() => {
+
+  act(() => {
+    void result.current.handleSubmit()
+  })
+  await waitFor(() => {
     expect(result.current.loading).toBe(false)
     expect(setAlertMock).toHaveBeenCalledWith({
       message: 'There was an error logging in. Please try again.',
@@ -87,7 +101,7 @@ test('handles federated sign in error', async () => {
   await act(async () => {
     await result.current.handleFederatedSignIn()
   })
-  waitFor(() => {
+  await waitFor(() => {
     expect(setAlertMock).toHaveBeenCalledWith({
       message: 'There was an error with the identity provider.',
       severity: 'error',

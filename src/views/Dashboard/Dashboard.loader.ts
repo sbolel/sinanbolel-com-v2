@@ -3,13 +3,14 @@
  * @module views/Dashboard/Dashboard.loader
  * @see {@link dashboard/Routes}
  */
-import { getCurrentUser } from 'aws-amplify/auth'
+import { fetchUserAttributes } from 'aws-amplify/auth'
 
 // @ts-ignore
 const dashboardLoader = async () => {
-  const userInfo = await getCurrentUser()
+  const attributes = await fetchUserAttributes()
+
   return {
-    username: userInfo.username,
+    username: attributes.preferred_username ?? attributes.email,
   }
 }
 
