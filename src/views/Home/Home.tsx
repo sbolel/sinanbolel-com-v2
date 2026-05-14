@@ -40,8 +40,8 @@ const Home: React.FC = () => {
       <Typography
         variant="h1"
         component="h1"
-        color="white"
         sx={{
+          color: (theme) => theme.palette.common.white,
           fontSize: '3rem',
           fontWeight: 300,
           marginBottom: '.5rem',
@@ -53,8 +53,8 @@ const Home: React.FC = () => {
       <Typography
         variant="h2"
         component="h2"
-        color="white"
         sx={{
+          color: (theme) => theme.palette.common.white,
           fontSize: '1.5rem',
           fontWeight: 200,
         }}
