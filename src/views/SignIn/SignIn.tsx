@@ -24,7 +24,7 @@ import {
   SignInGraphic,
   VerticalCenteredFlexBox,
 } from '@/views/SignIn/SignIn.components'
-import { TContext, TFieldValues } from '@/views/SignIn/SignIn.interfaces'
+import type { TContext, TFieldValues } from '@/views/SignIn/SignIn.interfaces'
 import {
   PUBLIC_APP_NAME,
   SIGN_IN_CTA,
