@@ -1,11 +1,15 @@
-import { Auth } from 'aws-amplify'
+import { getCurrentUser } from 'aws-amplify/auth'
 import dashboardLoader from './Dashboard.loader'
 
+jest.mock('aws-amplify/auth', () => ({
+  getCurrentUser: jest.fn(),
+}))
+
 test('returns username from current user info', async () => {
-  ;(Auth.currentUserInfo as jest.Mock).mockResolvedValue({
+  ;(getCurrentUser as jest.Mock).mockResolvedValue({
     username: 'test-user',
   })
   const data = await dashboardLoader()
-  expect(Auth.currentUserInfo).toHaveBeenCalled()
+  expect(getCurrentUser).toHaveBeenCalled()
   expect(data).toEqual({ username: 'test-user' })
 })

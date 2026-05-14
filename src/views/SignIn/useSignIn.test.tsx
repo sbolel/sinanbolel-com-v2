@@ -1,4 +1,4 @@
-import { Auth } from 'aws-amplify'
+import { signInWithRedirect } from 'aws-amplify/auth'
 import { useNavigate } from 'react-router-dom'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import loginUser from '@/actions/loginUser'
@@ -8,6 +8,9 @@ import useSignIn from '@/views/SignIn/useSignIn'
 import AuthError from '@/errors/AuthError'
 
 jest.mock('@/actions/loginUser')
+jest.mock('aws-amplify/auth', () => ({
+  signInWithRedirect: jest.fn(),
+}))
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }))
@@ -39,13 +42,13 @@ test('handles form submission', async () => {
 })
 
 test('handles federated sign in', async () => {
-  ;(Auth.federatedSignIn as jest.Mock).mockResolvedValueOnce({})
+  ;(signInWithRedirect as jest.Mock).mockResolvedValueOnce(undefined)
   const { result } = renderHook(useSignIn)
   await act(async () => {
     await result.current.handleFederatedSignIn()
   })
   waitFor(() => {
-    expect(Auth.federatedSignIn).toHaveBeenCalledWith({ provider: 'COGNITO' })
+    expect(signInWithRedirect).toHaveBeenCalled()
   })
 })
 
@@ -77,7 +80,7 @@ test('handles form submission error', async () => {
 })
 
 test('handles federated sign in error', async () => {
-  ;(Auth.federatedSignIn as jest.Mock).mockRejectedValueOnce(
+  ;(signInWithRedirect as jest.Mock).mockRejectedValueOnce(
     new AuthError({ status: 401, message: 'Unauthorized federated sign in' })
   )
   const { result } = renderHook(useSignIn)

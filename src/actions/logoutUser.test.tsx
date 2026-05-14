@@ -1,7 +1,11 @@
-import { Auth } from 'aws-amplify'
+import { signOut } from 'aws-amplify/auth'
 import { act } from '@testing-library/react'
 import { AuthActions } from '@/actions/actionTypes'
 import logoutUser from '@/actions/logoutUser'
+
+jest.mock('aws-amplify/auth', () => ({
+  signOut: jest.fn(),
+}))
 
 /**
  * Helper function to provide a mock dispatch function for our tests
@@ -21,7 +25,7 @@ describe('logoutUser action', () => {
   test('calls Auth.signOut', async () => {
     const { doLogout } = useMockDispatch()
     await doLogout()
-    expect(Auth.signOut).toHaveBeenCalled()
+    expect(signOut).toHaveBeenCalled()
   })
 
   test('dispatches LOGOUT action', async () => {
