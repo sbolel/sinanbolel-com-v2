@@ -8,7 +8,7 @@ This project is a personal website for Sinan Bolel. The website includes a home 
 
 ## Requirements
 
-- Node v20
+- Node v22
 - Yarn
 - Java 21 for Firestore emulator-backed rules tests
 
