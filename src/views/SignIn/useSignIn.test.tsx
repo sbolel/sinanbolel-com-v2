@@ -1,4 +1,4 @@
-import { Auth } from 'aws-amplify'
+import { signInWithRedirect } from 'aws-amplify/auth'
 import { useNavigate } from 'react-router-dom'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import loginUser from '@/actions/loginUser'
@@ -8,28 +8,38 @@ import useSignIn from '@/views/SignIn/useSignIn'
 import AuthError from '@/errors/AuthError'
 
 jest.mock('@/actions/loginUser')
+jest.mock('aws-amplify/auth', () => ({
+  signInWithRedirect: jest.fn(),
+}))
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }))
 jest.mock('@/hooks/useAlert')
 jest.mock('@/store/auth/useAuthDispatch')
 jest.mock('@/store/auth/useAuthState')
-;(useAuthDispatch as jest.Mock).mockReturnValue(jest.fn())
-;(useNavigate as jest.Mock).mockReturnValue(jest.fn())
 const setAlertMock = jest.fn()
 
 beforeEach(() => {
   jest.clearAllMocks()
+  ;(useAuthDispatch as jest.Mock).mockReturnValue(jest.fn())
+  ;(useNavigate as jest.Mock).mockReturnValue(jest.fn())
   ;(useAlert as jest.Mock).mockReturnValue({ setAlert: setAlertMock })
 })
 
 test('handles form submission', async () => {
   ;(loginUser as jest.Mock).mockResolvedValueOnce({})
   const { result } = renderHook(useSignIn)
-  await act(async () => {
-    result.current.handleSubmit()
+  act(() => {
+    result.current.reset({
+      email: 'test@test.com',
+      password: 'password',
+    })
   })
-  waitFor(() => {
+
+  act(() => {
+    void result.current.handleSubmit()
+  })
+  await waitFor(() => {
     expect(result.current.loading).toBe(false)
     expect(loginUser).toHaveBeenCalledWith(expect.any(Function), {
       email: 'test@test.com',
@@ -39,13 +49,13 @@ test('handles form submission', async () => {
 })
 
 test('handles federated sign in', async () => {
-  ;(Auth.federatedSignIn as jest.Mock).mockResolvedValueOnce({})
+  ;(signInWithRedirect as jest.Mock).mockResolvedValueOnce(undefined)
   const { result } = renderHook(useSignIn)
   await act(async () => {
     await result.current.handleFederatedSignIn()
   })
-  waitFor(() => {
-    expect(Auth.federatedSignIn).toHaveBeenCalledWith({ provider: 'COGNITO' })
+  await waitFor(() => {
+    expect(signInWithRedirect).toHaveBeenCalled()
   })
 })
 
@@ -54,7 +64,7 @@ test('toggles password visibility', async () => {
   await act(() => {
     result.current.setShowPassword(true)
   })
-  waitFor(() => {
+  await waitFor(() => {
     expect(result.current.showPassword).toBe(true)
   })
 })
@@ -64,10 +74,17 @@ test('handles form submission error', async () => {
     new AuthError({ status: 400, message: 'Invalid credentials' })
   )
   const { result } = renderHook(useSignIn)
-  await act(async () => {
-    result.current.handleSubmit()
+  act(() => {
+    result.current.reset({
+      email: 'test@test.com',
+      password: 'password',
+    })
   })
-  waitFor(() => {
+
+  act(() => {
+    void result.current.handleSubmit()
+  })
+  await waitFor(() => {
     expect(result.current.loading).toBe(false)
     expect(setAlertMock).toHaveBeenCalledWith({
       message: 'There was an error logging in. Please try again.',
@@ -77,14 +94,14 @@ test('handles form submission error', async () => {
 })
 
 test('handles federated sign in error', async () => {
-  ;(Auth.federatedSignIn as jest.Mock).mockRejectedValueOnce(
+  ;(signInWithRedirect as jest.Mock).mockRejectedValueOnce(
     new AuthError({ status: 401, message: 'Unauthorized federated sign in' })
   )
   const { result } = renderHook(useSignIn)
   await act(async () => {
     await result.current.handleFederatedSignIn()
   })
-  waitFor(() => {
+  await waitFor(() => {
     expect(setAlertMock).toHaveBeenCalledWith({
       message: 'There was an error with the identity provider.',
       severity: 'error',

@@ -1,5 +1,5 @@
 import type { StoryObj, Meta } from '@storybook/react'
-import { useArgs } from '@storybook/client-api'
+import { useArgs } from 'storybook/preview-api'
 import MultiDropzone from '@/components/MultiDropzone/MultiDropzone'
 
 type Story = StoryObj<typeof MultiDropzone>

@@ -66,6 +66,9 @@ console.error = (...args) => {
   if (
     args[0]?.includes?.(
       'Warning: The current testing environment is not configured to support act'
+    ) ||
+    args[0]?.includes?.(
+      'The current testing environment is not configured to support act'
     )
   ) {
     return

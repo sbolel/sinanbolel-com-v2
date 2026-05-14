@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
     "rootDir": "./",
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -50,7 +51,10 @@
     "**/node_modules",
     "**/coverage",
     "**/dist",
-    "**/*.stories.(js|jsx|ts|tsx)",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
     "**/*.mdx",
     "**/.yarn"
   ],

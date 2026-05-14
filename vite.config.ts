@@ -7,6 +7,27 @@ import sassPlugin from './vite-sass-plugin'
 // Import our custom CSP plugin
 import cspPlugin from './vite-csp-plugin'
 
+const envDefaults = {
+  VITE_APP_TITLE: '',
+  VITE_CF_DOMAIN: '',
+  VITE_USER_POOL_ID: '',
+  VITE_USER_POOL_CLIENT_ID: '',
+  VITE_AWS_REGION: '',
+  VITE_IDP_ENABLED: 'false',
+  VITE_COGNITO_DOMAIN: '',
+  VITE_COGNITO_REDIRECT_SIGN_IN: '',
+  VITE_COGNITO_REDIRECT_SIGN_OUT: '',
+  VITE_FIREBASE_API_KEY: '',
+  VITE_FIREBASE_AUTH_DOMAIN: '',
+  VITE_FIREBASE_PROJECT_ID: '',
+  VITE_FIREBASE_STORAGE_BUCKET: '',
+  VITE_FIREBASE_MESSAGING_SENDER_ID: '',
+  VITE_FIREBASE_APP_ID: '',
+  VITE_FIREBASE_DATABASE_URL: '',
+  VITE_FIREBASE_MEASUREMENT_ID: '',
+  VITE_FIREBASE_FIRESTORE_CHAT: '',
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
@@ -37,26 +58,7 @@ export default defineConfig({
       debug: process.env.NODE_ENV !== 'production',
     }),
     react(),
-    EnvironmentPlugin([
-      'VITE_APP_TITLE',
-      'VITE_CF_DOMAIN',
-      'VITE_USER_POOL_ID',
-      'VITE_USER_POOL_CLIENT_ID',
-      'VITE_AWS_REGION',
-      'VITE_IDP_ENABLED',
-      'VITE_COGNITO_DOMAIN',
-      'VITE_COGNITO_REDIRECT_SIGN_IN',
-      'VITE_COGNITO_REDIRECT_SIGN_OUT',
-      'VITE_FIREBASE_API_KEY',
-      'VITE_FIREBASE_AUTH_DOMAIN',
-      'VITE_FIREBASE_PROJECT_ID',
-      'VITE_FIREBASE_STORAGE_BUCKET',
-      'VITE_FIREBASE_MESSAGING_SENDER_ID',
-      'VITE_FIREBASE_APP_ID',
-      'VITE_FIREBASE_DATABASE_URL',
-      'VITE_FIREBASE_MEASUREMENT_ID',
-      'VITE_FIREBASE_FIRESTORE_CHAT',
-    ]),
+    EnvironmentPlugin(envDefaults),
     visualizer() as PluginOption,
     {
       name: 'load+transform-js-files-as-jsx',

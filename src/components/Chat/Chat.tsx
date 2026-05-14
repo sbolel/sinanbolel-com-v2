@@ -254,33 +254,35 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           placeholder="Type a message"
           variant="outlined"
           size="medium"
-          InputProps={{
-            sx: {
-              padding: '8px',
-              paddingRight: '48px',
-            },
-            endAdornment: (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  right: 12,
-                  bottom: -2,
-                }}
-              >
-                <IconButton
-                  type="submit"
-                  color="primary"
-                  aria-label="Send message"
-                  edge="end"
-                  disabled={textInputIsEmpty}
+          slotProps={{
+            input: {
+              sx: {
+                padding: '8px',
+                paddingRight: '48px',
+              },
+              endAdornment: (
+                <Box
                   sx={{
-                    transform: 'rotate(-90deg)',
+                    position: 'absolute',
+                    right: 12,
+                    bottom: -2,
                   }}
                 >
-                  <SendIcon />
-                </IconButton>
-              </Box>
-            ),
+                  <IconButton
+                    type="submit"
+                    color="primary"
+                    aria-label="Send message"
+                    edge="end"
+                    disabled={textInputIsEmpty}
+                    sx={{
+                      transform: 'rotate(-90deg)',
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Box>
+              ),
+            },
           }}
         />
       </form>

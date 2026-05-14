@@ -1,8 +1,7 @@
 /**
  * @module views/SignIn/useSignIn
  */
-import { Auth } from 'aws-amplify'
-import { FederatedSignInOptions } from '@aws-amplify/auth/lib/types'
+import { signInWithRedirect } from 'aws-amplify/auth'
 import { BaseSyntheticEvent, useCallback, useReducer, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, UseFormHandleSubmit } from 'react-hook-form'
@@ -103,9 +102,7 @@ const useSignIn = (): useSignInReturnType => {
 
   const handleFederatedSignIn = useCallback(async () => {
     try {
-      await Auth.federatedSignIn({
-        provider: 'COGNITO',
-      } as FederatedSignInOptions)
+      await signInWithRedirect()
     } catch (error) {
       setAlert({
         message: 'There was an error with the identity provider.',
