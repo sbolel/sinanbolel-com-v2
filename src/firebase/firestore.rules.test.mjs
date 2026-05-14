@@ -66,6 +66,13 @@ describe('Firestore security rules', () => {
     await assertSucceeds(getDoc(chatRef))
   })
 
+  test('authenticated user cannot create a chat for another user', async () => {
+    const db = authedDb('alice')
+    const chatRef = doc(db, 'chats/bob-chat')
+
+    await assertFails(setDoc(chatRef, { userId: 'bob' }))
+  })
+
   test('non-owner cannot read another chat', async () => {
     await seed('chats/alice-chat', { userId: 'alice' })
 
@@ -95,6 +102,18 @@ describe('Firestore security rules', () => {
       })
     )
     await assertSucceeds(getDoc(messageRef))
+  })
+
+  test('chat owner cannot create messages spoofing another sender', async () => {
+    await seed('chats/alice-chat', { userId: 'alice' })
+
+    await assertFails(
+      setDoc(doc(authedDb('alice'), 'chats/alice-chat/messages/message-1'), {
+        body: 'Hello',
+        from: 'bob',
+        createdAt: new Date(),
+      })
+    )
   })
 
   test('non-owner cannot create messages in another user chat even when from matches their uid', async () => {
