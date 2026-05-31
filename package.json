@@ -33,7 +33,7 @@
     "test:precommit": "NODE_ENV=test jest --onlyChanged --coverage --colors --watch=false --maxWorkers=50%",
     "test:watch": "NODE_ENV=test jest --onlyChanged --coverage --colors --watch --maxWorkers=25%",
     "test:ci": "NODE_ENV=test jest --ci --all  --coverage --colors --maxWorkers=100%",
-    "test:firestore-rules": "firebase emulators:exec --config firebase.rules-test.json --only firestore \"node --test src/firebase/firestore.rules.test.mjs\"",
+    "test:firestore-rules": "node scripts/run-firestore-rules-tests.mjs",
     "ci": "run-p 'lint:js' 'lint:other' 'test:ci' 'test:firestore-rules'",
     "lint": "run-p 'lint:js' 'lint:other'",
     "lint:js": "prettier --check '**/*.{ts,tsx,js,jsx,cjs,mjs}' --ignore-path .gitignore --ignore-path .prettierignore",
