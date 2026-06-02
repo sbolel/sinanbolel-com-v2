@@ -94,7 +94,6 @@ const DefaultCTA: React.FC = (): React.JSX.Element => (
       aria-label="Browse for Files"
       color="primary"
       size="small"
-      tabIndex={-1}
       sx={{
         p: 0,
         lineHeight: 2,

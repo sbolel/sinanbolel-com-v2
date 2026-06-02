@@ -3,7 +3,12 @@ import DialogProvider, { useDialog } from '@/hooks/useDialog'
 import React from 'react'
 
 jest.mock('@mui/material/Dialog', () => (props: any) => (
-  <div data-testid="dialog" data-open={String(props.open)}>
+  <div
+    data-testid="dialog"
+    data-open={String(props.open)}
+    aria-labelledby={props['aria-labelledby']}
+    aria-describedby={props['aria-describedby']}
+  >
     {props.open ? props.children : null}
   </div>
 ))
@@ -46,5 +51,35 @@ describe('useDialog', () => {
     })
     expect(screen.getByTestId('dialog')).toHaveAttribute('data-open', 'true')
     expect(screen.getByTestId('dialog').textContent).toBe('text')
+  })
+
+  test('does not emit fallback aria ids when none are provided', () => {
+    const { result } = renderHook(() => useDialog(), { wrapper })
+    act(() => {
+      result.current[0]({ children: <div>child</div> })
+    })
+    expect(screen.getByTestId('dialog')).not.toHaveAttribute('aria-labelledby')
+    expect(screen.getByTestId('dialog')).not.toHaveAttribute('aria-describedby')
+  })
+
+  test('passes through explicit aria ids from dialog props', () => {
+    const { result } = renderHook(() => useDialog(), { wrapper })
+    act(() => {
+      result.current[0]({
+        children: <div>child</div>,
+        props: {
+          'aria-labelledby': 'custom-title',
+          'aria-describedby': 'custom-description',
+        },
+      })
+    })
+    expect(screen.getByTestId('dialog')).toHaveAttribute(
+      'aria-labelledby',
+      'custom-title'
+    )
+    expect(screen.getByTestId('dialog')).toHaveAttribute(
+      'aria-describedby',
+      'custom-description'
+    )
   })
 })
