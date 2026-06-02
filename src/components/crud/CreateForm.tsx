@@ -101,7 +101,6 @@ const CreateForm: React.FC<CreateFormProps> = ({
       maxWidth="sm"
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
-      disableEscapeKeyDown={false}
       {...DialogProps}
     >
       <DialogTitle id={titleId} sx={{ mb: 0 }}>

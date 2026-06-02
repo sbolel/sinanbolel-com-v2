@@ -91,7 +91,6 @@ const DialogProvider: React.FC<React.PropsWithChildren> = ({
         aria-describedby={
           dialogProps?.['aria-describedby'] || 'dialog-description'
         }
-        disableEscapeKeyDown={false}
         keepMounted={false}
       >
         {Children.map(dialogChildren, (child) => {
