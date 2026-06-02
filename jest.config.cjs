@@ -19,19 +19,16 @@ module.exports = {
       '<rootDir>/config/jest/fileTransform.cjs',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)',
-    '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
+    '[/\\\\]node_modules[/\\\\](?!uuid[/\\\\])',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   modulePaths: ['<rootDir>/src'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^aws-amplify$': '<rootDir>/config/__mocks__/aws-amplify.ts',
+    '^uuid$': '<rootDir>/config/__mocks__/uuid.ts',
     '^react-native$': 'react-native-web',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    // Force module uuid to resolve with the CJS entry point,
-    // because Jest does not support package.json.exports.
-    // See https://github.com/uuidjs/uuid/issues/451
-    uuid: require.resolve('uuid'),
   },
   moduleFileExtensions: [
     // Place tsx and ts to beginning as suggestion from Jest team

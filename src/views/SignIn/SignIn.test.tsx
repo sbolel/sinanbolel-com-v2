@@ -3,6 +3,10 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import SignIn from '@/views/SignIn/SignIn'
 
+jest.mock('aws-amplify/auth', () => ({
+  signInWithRedirect: jest.fn(),
+}))
+
 function setup(
   jsx: ReactElement<
     typeof SignIn,

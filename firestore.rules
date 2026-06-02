@@ -5,19 +5,25 @@ service cloud.firestore {
     match /sessions/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
-    // Allow authenticated users to read and write only to their own chat documents
+
+    // Allow authenticated users to create and read only their own chat documents
     match /chats/{chatId} {
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
       allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Preserve chat history after creation.
+      allow update, delete: if false;
 
       // Messages subcollection
       match /messages/{messageId} {
-        allow create: if request.auth != null && request.resource.data.from == request.auth.uid;
+        allow create: if request.auth != null
+          && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid
+          && request.resource.data.from == request.auth.uid;
         allow read: if request.auth != null && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
+        // Keep messages immutable for the audit trail.
+        allow update, delete: if false;
       }
     }
-    
+
     // Deny access to all other documents
     match /{document=**} {
       allow read, write: if false;

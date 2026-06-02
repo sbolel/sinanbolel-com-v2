@@ -8,8 +8,9 @@ This project is a personal website for Sinan Bolel. The website includes a home 
 
 ## Requirements
 
-- Node v20
+- Node v22
 - Yarn
+- Java 21 for Firestore emulator-backed rules tests
 
 ## Technologies Used
 
@@ -34,10 +35,13 @@ This project is a personal website for Sinan Bolel. The website includes a home 
 4. Deploy Firestore security rules from `firestore.rules`
 5. Create necessary indexes in Firestore for querying messages
 
+This app uses Cloud Firestore rules only. It does not use Firebase Realtime Database rules.
+
 ## Running the Project
 
 1. Start the development server with `yarn start`
 2. Build for production with `yarn build`
+3. Run all checks with `yarn ci`, including Firestore rules validation through the local Firestore emulator
 
 ## Contributing
 

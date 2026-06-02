@@ -4,7 +4,6 @@
  */
 import React, { useCallback, useState } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import { v4 as uuidv4 } from 'uuid'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -35,6 +34,17 @@ import {
   getUploadStatus,
 } from '@/components/MultiDropzone/utils'
 import formatBytes from '@/utils/formatBytes'
+
+const createFileId = (): string => {
+  if (
+    typeof crypto !== 'undefined' &&
+    typeof crypto.randomUUID === 'function'
+  ) {
+    return crypto.randomUUID()
+  }
+
+  return Math.random().toString(36).slice(2)
+}
 
 /**
  * The styled container that's the target for the drag and drop functionality.
@@ -150,7 +160,7 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
     return uploadedFiles
       .filter((file) => file.error)
       .map((file) => ({
-        id: file.id || uuidv4(),
+        id: file.id || createFileId(),
         message: file.error || '',
       }))
   })
@@ -178,7 +188,7 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
       // get errors from any rejected files
       const currentErrors = filesRejected.map(({ file, errors }) => ({
         file,
-        id: uuidv4(),
+        id: createFileId(),
         message: getErrorMessage(
           errors[0],
           { fileList, maxSize },
@@ -262,7 +272,7 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
       </StyledBox>
 
       {errors.length > 0 && (
-        <Box mt={2}>
+        <Box sx={{ mt: 2 }}>
           {errors.map(({ id, message }) => (
             <Typography key={id} variant="body2" color="error">
               {message}
@@ -272,7 +282,7 @@ const MultiDropZone: React.FC<MultiDropzoneProps> = ({
       )}
 
       {uploadedFiles.length > 0 && (
-        <Box mt={2}>
+        <Box sx={{ mt: 2 }}>
           {uploadedFiles.map((file) => (
             <UploadFileCell
               file={file}

@@ -1,7 +1,7 @@
 import React from 'react'
-import { withThemeFromJSXProvider } from '@storybook/addon-styling'
+import { withThemeFromJSXProvider } from '@storybook/addon-themes'
 import CssBaseline from '@mui/material/CssBaseline'
-import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from '../src/theme/theme'
 
 export const decorators = [

@@ -1,6 +1,6 @@
 import { screen, render, act, waitFor } from '@testing-library/react'
 import { useLocation, useMatch, useNavigate } from 'react-router-dom'
-import { Auth as mockAuth } from 'aws-amplify'
+import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth'
 import { AuthActions } from '@/actions/actionTypes'
 import AuthProvider from '@/store/auth/AuthProvider'
 import AuthDispatchContext from '@/store/auth/AuthDispatchContext'
@@ -18,6 +18,25 @@ jest.mock('react-router-dom', () => ({
   useMatch: jest.fn(),
   useNavigate: jest.fn(),
 }))
+jest.mock('aws-amplify/auth', () => ({
+  fetchAuthSession: jest.fn(),
+  getCurrentUser: jest.fn(),
+}))
+
+const mockGetCurrentUser = getCurrentUser as jest.MockedFunction<
+  typeof getCurrentUser
+>
+const mockFetchAuthSession = fetchAuthSession as jest.MockedFunction<
+  typeof fetchAuthSession
+>
+
+const mockSession = (jwtToken: string) => ({
+  tokens: {
+    accessToken: {
+      toString: () => jwtToken,
+    },
+  },
+})
 
 describe('AuthProvider', () => {
   let mockDispatch: jest.Mock
@@ -34,6 +53,13 @@ describe('AuthProvider', () => {
     mockUseMatch = useMatch as jest.Mock
     mockUseNavigate = useNavigate as jest.Mock
     mockUseNavigate.mockReturnValue(mockNavigate)
+    mockUseLocation.mockReturnValue({ pathname: Routes.AUTH_LOGIN })
+    mockUseMatch.mockReturnValue(null)
+    mockGetCurrentUser.mockResolvedValue({
+      username: 'test',
+      userId: 'test',
+    })
+    mockFetchAuthSession.mockResolvedValue(mockSession('mockJwtToken'))
   })
 
   test('renders the children', async () => {
@@ -97,8 +123,8 @@ describe('AuthProvider', () => {
       expect(mockUseLocation).toHaveBeenCalled()
       expect(mockUseMatch).toHaveBeenCalled()
       expect(mockUseNavigate).toHaveBeenCalled()
-      expect(mockAuth.currentAuthenticatedUser).toHaveBeenCalled()
-      expect(mockAuth.currentSession).toHaveBeenCalled()
+      expect(mockGetCurrentUser).toHaveBeenCalled()
+      expect(mockFetchAuthSession).toHaveBeenCalled()
       expect(mockDispatch).toHaveBeenCalledTimes(1)
       expect(mockDispatch).toHaveBeenCalledWith({
         type: AuthActions.LOGIN_FAILURE,
@@ -116,12 +142,11 @@ describe('AuthProvider', () => {
     mockUseLocation.mockReturnValue(mockLocation)
     mockUseMatch.mockReturnValue(mockMatch)
 
-    // @ts-expect-error
-    mockAuth.currentAuthenticatedUser.mockResolvedValue({ username: 'test' })
-    // @ts-expect-error
-    mockAuth.currentSession.mockResolvedValue({
-      getAccessToken: () => ({ getJwtToken: () => '123456' }),
+    mockGetCurrentUser.mockResolvedValue({
+      username: 'test',
+      userId: 'test',
     })
+    mockFetchAuthSession.mockResolvedValue(mockSession('123456'))
 
     await act(async () => {
       render(
@@ -145,10 +170,7 @@ describe('AuthProvider', () => {
     mockUseLocation.mockReturnValue(mockLocation)
     mockUseMatch.mockReturnValue(mockMatch)
 
-    // @ts-expect-error
-    mockAuth.currentAuthenticatedUser.mockRejectedValue(
-      new Error('No user or session')
-    )
+    mockGetCurrentUser.mockRejectedValue(new Error('No user or session'))
 
     act(() => {
       render(
@@ -164,10 +186,7 @@ describe('AuthProvider', () => {
   })
 
   test(`redirects to ${Routes.AUTH_LOGIN} if the current session does not get a valid jwtToken`, async () => {
-    // @ts-expect-error
-    mockAuth.currentSession.mockResolvedValue({
-      getAccessToken: () => ({ getJwtToken: () => '' }),
-    })
+    mockFetchAuthSession.mockResolvedValue(mockSession(''))
 
     mockUseLocation.mockReturnValue({ pathname: Routes.DASHBOARD })
     mockUseMatch.mockReturnValue({ path: Routes.DASHBOARD })

@@ -4,6 +4,11 @@
     "./src/__tests__/**",
     "./src/__mocks__/**",
     "./src/test-utils",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.mdx",
     "**/*.test.ts",
     "**/*.test.tsx"
   ],

@@ -47,6 +47,8 @@ export const Auth = {
     return Promise.resolve(session)
   }),
   signOut: jest.fn(),
+  currentUserInfo: jest.fn(),
+  federatedSignIn: jest.fn(),
   signIn: jest.fn().mockImplementation(
     (email: string, pass: string) =>
       new Promise((resolve, reject) => {
@@ -113,4 +115,8 @@ export const Auth = {
       })
   ),
   updateUserAttributes: jest.fn(),
+}
+
+export const Amplify = {
+  configure: jest.fn(),
 }

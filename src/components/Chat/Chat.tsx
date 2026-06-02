@@ -57,6 +57,18 @@ const captionStyles = {
   zIndex: 1,
 }
 
+const visuallyHiddenStyles = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+}
+
 // Define state and actions for chat component state management
 type ChatComponentState = {
   newMessage: string
@@ -193,6 +205,9 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Typography id="chat-dialog-description" sx={visuallyHiddenStyles}>
+        Send a message to Sinan using the chat input and send button.
+      </Typography>
       <Box sx={headerStyles}>
         <Typography
           id="chat-dialog-title"
@@ -267,34 +282,38 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           variant="outlined"
           size="medium"
           inputRef={textFieldRef}
-          aria-label="Message input"
-          InputProps={{
-            sx: {
-              padding: '8px',
-              paddingRight: '48px',
+          slotProps={{
+            htmlInput: {
+              'aria-label': 'Message input',
             },
-            endAdornment: (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  right: 12,
-                  bottom: -2,
-                }}
-              >
-                <IconButton
-                  type="submit"
-                  color="primary"
-                  aria-label="send message"
-                  edge="end"
-                  disabled={textInputIsEmpty}
+            input: {
+              sx: {
+                padding: '8px',
+                paddingRight: '48px',
+              },
+              endAdornment: (
+                <Box
                   sx={{
-                    transform: 'rotate(-90deg)',
+                    position: 'absolute',
+                    right: 12,
+                    bottom: -2,
                   }}
                 >
-                  <SendIcon />
-                </IconButton>
-              </Box>
-            ),
+                  <IconButton
+                    type="submit"
+                    color="primary"
+                    aria-label="send message"
+                    edge="end"
+                    disabled={textInputIsEmpty}
+                    sx={{
+                      transform: 'rotate(-90deg)',
+                    }}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Box>
+              ),
+            },
           }}
         />
       </form>

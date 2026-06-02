@@ -141,7 +141,11 @@ const UploadFileCell: React.FC<UploadFileCellProps> = ({
             {!isUploading && (
               <IconButton
                 role="button"
-                aria-label={hasError ? 'remove failed file' : 'remove file'}
+                aria-label={
+                  hasError
+                    ? `Remove failed file ${name}`
+                    : `Remove file ${name}`
+                }
                 disabled={uploading}
                 onClick={handleRemoveFile}
                 onKeyDown={handleKeyDown}

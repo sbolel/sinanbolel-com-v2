@@ -17,6 +17,24 @@ export type TFieldValues = {
   password: string
 }
 
+type SignInFormMethods = Pick<
+  UseFormReturn<TFieldValues, TContext, TFieldValues>,
+  | 'clearErrors'
+  | 'formState'
+  | 'getFieldState'
+  | 'getValues'
+  | 'register'
+  | 'reset'
+  | 'resetField'
+  | 'setError'
+  | 'setFocus'
+  | 'setValue'
+  | 'trigger'
+  | 'unregister'
+  | 'watch'
+  | 'subscribe'
+>
+
 export type useSignInReturnType = {
   control: Control<TFieldValues, TContext>
   errors: FieldErrors<{
@@ -31,4 +49,4 @@ export type useSignInReturnType = {
   setLoading: Dispatch<SetStateAction<boolean>>
   showPassword: boolean
   setShowPassword: Dispatch<SetStateAction<boolean>>
-} & UseFormReturn<TFieldValues, TContext, TFieldValues>
+} & SignInFormMethods

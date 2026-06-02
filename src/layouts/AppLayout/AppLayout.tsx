@@ -43,8 +43,6 @@ const AppLayout: React.FC = (): React.JSX.Element => {
   const [chatClicked, setChatClicked] = useState(false)
 
   const chatButtonRef = useRef<HTMLButtonElement>(null)
-  const mainContentRef = useRef<HTMLElement>(null)
-
   const toggleDrawer = useCallback(() => {
     setDrawerOpen(!drawerOpen)
     // Focus management - return focus to toggle button or main content
@@ -171,7 +169,6 @@ const AppLayout: React.FC = (): React.JSX.Element => {
             </AppDrawer>
             <Container
               component="main"
-              ref={mainContentRef}
               sx={{
                 mt: (theme) => `${theme.mixins.toolbar.minHeight}px`,
                 pt: (theme) => theme.spacing(4),

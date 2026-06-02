@@ -1,5 +1,5 @@
 import { Story, Meta } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 import TextField from '@mui/material/TextField'
 import CreateForm, { CreateFormProps } from './CreateForm'
 

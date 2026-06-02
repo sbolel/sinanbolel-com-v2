@@ -1,11 +1,24 @@
-import { Auth } from 'aws-amplify'
+import { fetchUserAttributes } from 'aws-amplify/auth'
 import dashboardLoader from './Dashboard.loader'
 
-test('returns username from current user info', async () => {
-  ;(Auth.currentUserInfo as jest.Mock).mockResolvedValue({
-    username: 'test-user',
+jest.mock('aws-amplify/auth', () => ({
+  fetchUserAttributes: jest.fn(),
+}))
+
+test('returns preferred username from current user attributes', async () => {
+  ;(fetchUserAttributes as jest.Mock).mockResolvedValue({
+    email: 'test@example.com',
+    preferred_username: 'test-user',
   })
   const data = await dashboardLoader()
-  expect(Auth.currentUserInfo).toHaveBeenCalled()
+  expect(fetchUserAttributes).toHaveBeenCalled()
   expect(data).toEqual({ username: 'test-user' })
+})
+
+test('falls back to email when preferred username is unavailable', async () => {
+  ;(fetchUserAttributes as jest.Mock).mockResolvedValue({
+    email: 'test@example.com',
+  })
+  const data = await dashboardLoader()
+  expect(data).toEqual({ username: 'test@example.com' })
 })
