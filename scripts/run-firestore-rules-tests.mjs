@@ -52,7 +52,10 @@ const run = async () => {
         `firebase emulators:exec --config ${shellEscape(configPath)} --only firestore ${shellEscape(testCommand)}`,
         [],
         {
-          env: process.env,
+          env: {
+            ...process.env,
+            FIRESTORE_RULES_NODE_BINARY: process.execPath,
+          },
           shell: true,
           stdio: 'inherit',
         }
