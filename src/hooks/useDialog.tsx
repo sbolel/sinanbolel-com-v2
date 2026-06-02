@@ -87,10 +87,8 @@ const DialogProvider: React.FC<React.PropsWithChildren> = ({
         {...dialogProps}
         onClose={closeDialog}
         open={open}
-        aria-labelledby={dialogProps?.['aria-labelledby'] || 'dialog-title'}
-        aria-describedby={
-          dialogProps?.['aria-describedby'] || 'dialog-description'
-        }
+        aria-labelledby={dialogProps?.['aria-labelledby']}
+        aria-describedby={dialogProps?.['aria-describedby']}
         keepMounted={false}
       >
         {Children.map(dialogChildren, (child) => {

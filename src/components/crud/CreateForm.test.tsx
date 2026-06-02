@@ -4,6 +4,7 @@ import {
   fireEvent,
   render,
   renderHook,
+  screen,
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -56,6 +57,13 @@ test('renders the form when open is true', async () => {
   const addressField = getByLabelText(/Address/)
   expect(nameField).toBeInTheDocument()
   expect(addressField).toBeInTheDocument()
+  expect(
+    screen.getByText('Complete the required fields and submit the form.')
+  ).toHaveAttribute('id', 'create-form-description')
+  expect(screen.getByRole('dialog')).toHaveAttribute(
+    'aria-describedby',
+    'create-form-description'
+  )
 })
 
 test('calls onSubmit with form data when form is submitted', async () => {
