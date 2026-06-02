@@ -45,7 +45,9 @@ test('calls onFileSelect when a file is dropped', () => {
 
   act(() => {
     fireEvent.drop(
-      screen.getByLabelText('Drag and Drop File Selection'),
+      screen.getByLabelText(
+        'File upload area. Press Enter or Space to browse files.'
+      ),
       dataTransfer
     )
 
@@ -127,7 +129,9 @@ test('displays an error message when a file exceeds the maxSize', () => {
 
   act(() => {
     fireEvent.drop(
-      screen.getByLabelText('Drag and Drop File Selection'),
+      screen.getByLabelText(
+        'File upload area. Press Enter or Space to browse files.'
+      ),
       dataTransfer
     )
 

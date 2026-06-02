@@ -10,6 +10,9 @@ type ImageProps = {
   alt?: HTMLImageElement['alt']
   loading?: HTMLImageElement['loading']
   sx?: React.CSSProperties
+  onClick?: () => void
+  tabIndex?: number
+  role?: string
 }
 
 /**
@@ -22,6 +25,9 @@ type ImageProps = {
  * @param {React.CSSProperties} [props.sx] The image style.
  * @param {number} props.sx.height The image height in pixels.
  * @param {number} props.sx.width The image width in pixels.
+ * @param {() => void} [props.onClick] Optional click handler.
+ * @param {number} [props.tabIndex] Optional tab index for keyboard navigation.
+ * @param {string} [props.role] Optional ARIA role.
  * @returns {React.JSX.Element} The Image component.
  */
 const Image: React.FC<ImageProps> = ({
@@ -31,17 +37,39 @@ const Image: React.FC<ImageProps> = ({
   srcSet,
   sx = {},
   sx: { height, width } = {},
-}): React.JSX.Element => (
-  <Box sx={sx}>
-    <img
-      alt={alt}
-      loading={loading}
-      src={src}
-      srcSet={srcSet || `${src} 2x`}
-      height={height}
-      width={width}
-    />
-  </Box>
-)
+  onClick,
+  tabIndex,
+  role,
+}): React.JSX.Element => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (onClick && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault()
+      onClick()
+    }
+  }
+
+  const isInteractive = !!onClick
+  const imageProps = {
+    alt,
+    loading,
+    src,
+    srcSet: srcSet || `${src} 2x`,
+    height,
+    width,
+    ...(isInteractive && {
+      tabIndex: tabIndex ?? 0,
+      role: role || 'button',
+      onKeyDown: handleKeyDown,
+      onClick,
+      style: { cursor: 'pointer' },
+    }),
+  }
+
+  return (
+    <Box sx={sx}>
+      <img {...imageProps} />
+    </Box>
+  )
+}
 
 export default Image

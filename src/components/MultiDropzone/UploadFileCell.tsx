@@ -87,6 +87,16 @@ const UploadFileCell: React.FC<UploadFileCellProps> = ({
     [id, onRemoveFile]
   )
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if ((event.key === 'Enter' || event.key === ' ') && !uploading) {
+        event.preventDefault()
+        onRemoveFile(id)
+      }
+    },
+    [id, onRemoveFile, uploading]
+  )
+
   return (
     <Box sx={{ my: 1, display: 'flex', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, w: 100 }}>
@@ -130,10 +140,17 @@ const UploadFileCell: React.FC<UploadFileCellProps> = ({
             {isUploading && fileIcon}
             {!isUploading && (
               <IconButton
-                aria-label={`Remove file ${name}`}
+                role="button"
+                aria-label={
+                  hasError
+                    ? `Remove failed file ${name}`
+                    : `Remove file ${name}`
+                }
                 disabled={uploading}
                 onClick={handleRemoveFile}
+                onKeyDown={handleKeyDown}
                 color={hasError ? 'error' : 'primary'}
+                tabIndex={0}
               >
                 {hasError ? (
                   <ErrorIcon color="error" />
