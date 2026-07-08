@@ -1,23 +1,33 @@
+import { useContext } from 'react'
 import { screen, render, act, waitFor } from '@testing-library/react'
-import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth'
-import { AuthActions } from '@/actions/actionTypes'
 import AuthProvider from '@/store/auth/AuthProvider'
-import AuthDispatchContext from '@/store/auth/AuthDispatchContext'
 import AuthStateContext from '@/store/auth/AuthStateContext'
-import { Routes } from '@/router/constants'
+
+const AuthStateProbe = () => {
+  const authState = useContext(AuthStateContext)
+
+  return (
+    <>
+      <div data-testid="jwt-token">{authState.jwtToken ?? ''}</div>
+      <div data-testid="auth-error">{authState.error?.message ?? ''}</div>
+    </>
+  )
+}
 
 const Content = () => (
   <AuthProvider>
     <div>Child component</div>
+    <AuthStateProbe />
   </AuthProvider>
 )
 
-jest.mock('react-router-dom', () => ({
-  useLocation: jest.fn(),
-  useMatch: jest.fn(),
-  useNavigate: jest.fn(),
-}))
+const flushEffects = async () => {
+  await act(async () => {
+    await Promise.resolve()
+  })
+}
+
 jest.mock('aws-amplify/auth', () => ({
   fetchAuthSession: jest.fn(),
   getCurrentUser: jest.fn(),
@@ -39,22 +49,8 @@ const mockSession = (jwtToken: string) => ({
 })
 
 describe('AuthProvider', () => {
-  let mockDispatch: jest.Mock
-  let mockNavigate: jest.Mock
-  let mockUseLocation: jest.Mock
-  let mockUseMatch: jest.Mock
-  let mockUseNavigate: jest.Mock
-
   beforeEach(() => {
     jest.clearAllMocks()
-    mockDispatch = jest.fn()
-    mockNavigate = jest.fn()
-    mockUseLocation = useLocation as jest.Mock
-    mockUseMatch = useMatch as jest.Mock
-    mockUseNavigate = useNavigate as jest.Mock
-    mockUseNavigate.mockReturnValue(mockNavigate)
-    mockUseLocation.mockReturnValue({ pathname: Routes.AUTH_LOGIN })
-    mockUseMatch.mockReturnValue(null)
     mockGetCurrentUser.mockResolvedValue({
       username: 'test',
       userId: 'test',
@@ -63,167 +59,57 @@ describe('AuthProvider', () => {
   })
 
   test('renders the children', async () => {
-    await act(async () => {
-      render(<Content />)
-    })
+    render(<Content />)
+    await flushEffects()
     expect(screen.getByText('Child component')).toBeInTheDocument()
-    expect(mockUseLocation).toHaveBeenCalled()
-    expect(mockUseMatch).toHaveBeenCalled()
-    expect(mockUseNavigate).toHaveBeenCalled()
   })
 
   test('initializes the AuthContext on mount', async () => {
-    const mockLocation = { pathname: Routes.AUTH_LOGIN }
-    const mockMatch = { path: Routes.DASHBOARD }
-    const mockState = { jwtToken: 'mockJwtToken' }
+    render(<Content />)
+    await flushEffects()
 
-    mockUseLocation.mockReturnValue(mockLocation)
-    mockUseMatch.mockReturnValue(mockMatch)
-
-    await act(async () => {
-      render(
-        <AuthStateContext.Provider value={mockState}>
-          <AuthDispatchContext.Provider value={mockDispatch}>
-            <Content />
-          </AuthDispatchContext.Provider>
-        </AuthStateContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledTimes(1)
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: AuthActions.LOGIN_SUCCESS,
-        payload: structuredClone(mockState),
+    await waitFor(() => {
+      expect(mockGetCurrentUser).toHaveBeenCalledTimes(1)
+      expect(mockFetchAuthSession).toHaveBeenCalledTimes(2)
+      expect(mockFetchAuthSession).toHaveBeenNthCalledWith(2, {
+        forceRefresh: true,
       })
-      expect(mockNavigate).not.toHaveBeenCalled()
     })
   })
 
   test('handles initialization error', async () => {
-    const mockLocation = { pathname: Routes.DASHBOARD }
-    const mockMatch = { path: Routes.DASHBOARD }
-    const mockState = { jwtToken: 'test' }
     const mockError = new Error('Initialization error')
+    mockGetCurrentUser.mockRejectedValue(mockError)
 
-    mockUseLocation.mockReturnValue(mockLocation)
-    mockUseMatch.mockReturnValue(mockMatch)
+    render(<Content />)
+    await flushEffects()
 
-    await act(async () => {
-      render(
-        <AuthStateContext.Provider value={mockState}>
-          <AuthDispatchContext.Provider value={mockDispatch}>
-            <Content />
-          </AuthDispatchContext.Provider>
-        </AuthStateContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockUseLocation).toHaveBeenCalled()
-      expect(mockUseMatch).toHaveBeenCalled()
-      expect(mockUseNavigate).toHaveBeenCalled()
-      expect(mockGetCurrentUser).toHaveBeenCalled()
-      expect(mockFetchAuthSession).toHaveBeenCalled()
-      expect(mockDispatch).toHaveBeenCalledTimes(1)
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: AuthActions.LOGIN_FAILURE,
-        error: mockError,
-      })
-      expect(mockNavigate).toHaveBeenCalledWith(Routes.AUTH_LOGIN)
-    })
+    expect(mockGetCurrentUser).toHaveBeenCalled()
+    expect(mockFetchAuthSession).toHaveBeenCalledTimes(1)
+    expect(screen.getByTestId('auth-error')).toHaveTextContent(
+      'Initialization error'
+    )
   })
 
-  test(`redirects to ${Routes.DASHBOARD} when user is authenticated and on ${Routes.AUTH_LOGIN}`, async () => {
-    const mockLocation = { pathname: Routes.AUTH_LOGIN }
-    const mockMatch = null
-    const mockState = { jwtToken: 'test' }
+  test('dispatches login success with the refreshed jwt token when one is returned', async () => {
+    const accessToken = { toString: () => 'staleJwtToken' }
+    const refreshedAccessToken = { toString: () => 'freshJwtToken' }
+    mockFetchAuthSession
+      .mockResolvedValueOnce({
+        tokens: {
+          accessToken,
+        },
+      } as never)
+      .mockResolvedValueOnce({
+        tokens: {
+          accessToken: refreshedAccessToken,
+        },
+      } as never)
+    render(<Content />)
+    await flushEffects()
 
-    mockUseLocation.mockReturnValue(mockLocation)
-    mockUseMatch.mockReturnValue(mockMatch)
-
-    mockGetCurrentUser.mockResolvedValue({
-      username: 'test',
-      userId: 'test',
-    })
-    mockFetchAuthSession.mockResolvedValue(mockSession('123456'))
-
-    await act(async () => {
-      render(
-        <AuthStateContext.Provider value={mockState}>
-          <AuthDispatchContext.Provider value={mockDispatch}>
-            <Content />
-          </AuthDispatchContext.Provider>
-        </AuthStateContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(Routes.DASHBOARD)
-    })
-  })
-
-  test(`redirects to ${Routes.AUTH_LOGIN} when user is not authenticated and on protected route`, async () => {
-    const mockLocation = { pathname: Routes.DASHBOARD }
-    const mockMatch = { path: Routes.DASHBOARD }
-
-    mockUseLocation.mockReturnValue(mockLocation)
-    mockUseMatch.mockReturnValue(mockMatch)
-
-    mockGetCurrentUser.mockRejectedValue(new Error('No user or session'))
-
-    act(() => {
-      render(
-        <AuthDispatchContext.Provider value={mockDispatch}>
-          <Content />
-        </AuthDispatchContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(Routes.AUTH_LOGIN)
-    })
-  })
-
-  test(`redirects to ${Routes.AUTH_LOGIN} if the current session does not get a valid jwtToken`, async () => {
-    mockFetchAuthSession.mockResolvedValue(mockSession(''))
-
-    mockUseLocation.mockReturnValue({ pathname: Routes.DASHBOARD })
-    mockUseMatch.mockReturnValue({ path: Routes.DASHBOARD })
-
-    await act(async () => {
-      render(
-        <AuthDispatchContext.Provider value={mockDispatch}>
-          <Content />
-        </AuthDispatchContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledTimes(1)
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: AuthActions.LOGIN_FAILURE,
-        error: new Error('Initialization error'),
-      })
-      expect(mockNavigate).toHaveBeenCalledWith(Routes.AUTH_LOGIN)
-    })
-  })
-
-  test(`does not redirect when user is not authenticated and on ${Routes.AUTH_LOGIN}`, async () => {
-    mockUseLocation.mockReturnValue({ pathname: Routes.AUTH_LOGIN })
-    mockUseMatch.mockReturnValue(null)
-
-    await act(async () => {
-      render(
-        <AuthDispatchContext.Provider value={mockDispatch}>
-          <Content />
-        </AuthDispatchContext.Provider>
-      )
-    })
-
-    waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledTimes(2)
-      expect(mockNavigate).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(screen.getByTestId('jwt-token')).toHaveTextContent('freshJwtToken')
     })
   })
 })

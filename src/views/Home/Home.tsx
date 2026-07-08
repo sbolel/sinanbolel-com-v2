@@ -5,7 +5,6 @@ import Dialog from '@mui/material/Dialog'
 import Fab from '@mui/material/Fab'
 import Typography from '@mui/material/Typography'
 import ChatIcon from '@mui/icons-material/Chat'
-import { ChatProvider } from '@/contexts/ChatContext'
 import Chat from '@/components/Chat/Chat'
 import Image from '@/components/Image'
 import styles from '@/views/Home/Home.module.scss'
@@ -122,51 +121,49 @@ const Home: React.FC = () => {
           </a>
         </Box>
       </Box>
-      <ChatProvider>
-        <Fab
-          ref={chatButtonRef}
-          id="chat-button"
-          aria-label={chatOpen ? 'close chat' : 'open chat'}
-          aria-expanded={chatOpen}
-          aria-controls="chat-dialog"
-          color="info"
-          onClick={toggleChat}
-          size="large"
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-          }}
-        >
-          <ChatIcon />
-        </Fab>
-        <Dialog
-          open={chatOpen}
-          onClose={toggleChat}
-          aria-labelledby="chat-dialog-title"
-          aria-describedby="chat-dialog-description"
-          id="chat-dialog"
-          slotProps={{
-            paper: {
-              sx: {
-                position: 'fixed',
-                bottom: 80,
-                right: 16,
-                m: 0,
-                width: {
-                  xs: 'calc(100% - 32px)',
-                  sm: 350,
-                  md: 400,
-                  lg: 450,
-                },
-                maxHeight: 'calc(100% - 96px)',
+      <Fab
+        ref={chatButtonRef}
+        id="chat-button"
+        aria-label={chatOpen ? 'close chat' : 'open chat'}
+        aria-expanded={chatOpen}
+        aria-controls="chat-dialog"
+        color="info"
+        onClick={toggleChat}
+        size="large"
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+      >
+        <ChatIcon />
+      </Fab>
+      <Dialog
+        open={chatOpen}
+        onClose={toggleChat}
+        aria-labelledby="chat-dialog-title"
+        aria-describedby="chat-dialog-description"
+        id="chat-dialog"
+        slotProps={{
+          paper: {
+            sx: {
+              position: 'fixed',
+              bottom: 80,
+              right: 16,
+              m: 0,
+              width: {
+                xs: 'calc(100% - 32px)',
+                sm: 350,
+                md: 400,
+                lg: 450,
               },
+              maxHeight: 'calc(100% - 96px)',
             },
-          }}
-        >
-          <Chat onClose={toggleChat} />
-        </Dialog>
-      </ChatProvider>
+          },
+        }}
+      >
+        <Chat onClose={toggleChat} />
+      </Dialog>
     </Container>
   )
 }
