@@ -3,10 +3,26 @@
  * @module router/authLoader
  * @see {@link dashboard/Routes}
  */
+import { redirect } from 'react-router-dom'
 import getJWT from '@/utils/getJWT'
+import { Routes } from '@/router/constants'
 
-const authLoader = async (): Promise<unknown> => ({
-  jwtToken: getJWT(),
-})
+export interface AuthLoaderData {
+  jwtToken: string
+}
+
+const authLoader = async (): Promise<AuthLoaderData> => {
+  try {
+    const jwtToken = await getJWT()
+
+    return { jwtToken }
+  } catch (error) {
+    if (error instanceof Response && [401, 403].includes(error.status)) {
+      throw redirect(Routes.AUTH_LOGIN)
+    }
+
+    throw error
+  }
+}
 
 export default authLoader

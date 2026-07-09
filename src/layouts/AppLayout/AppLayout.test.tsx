@@ -9,12 +9,16 @@ jest.mock('react-router-dom', () => ({
 }))
 
 beforeEach(() => {
-  ;(useLoaderData as jest.Mock).mockReturnValue('jwt-token')
+  ;(useLoaderData as jest.Mock).mockReturnValue({ jwtToken: 'jwt-token' })
 })
 
 test('renders the main application layout', () => {
   render(<AppLayout />, { wrapper: (props) => <BrowserRouter {...props} /> })
 
+  expect(screen.getByTestId('app')).toHaveAttribute(
+    'data-jwt-token',
+    'jwt-token'
+  )
   expect(screen.getByTestId('appbar-title')).toHaveTextContent(DASHBOARD_TITLE)
   expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
 })

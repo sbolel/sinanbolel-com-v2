@@ -4,6 +4,7 @@
  */
 import { Outlet } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
+import { ChatProvider } from '@/contexts/ChatContext'
 import { AlertProvider } from '@/hooks/useAlert'
 import DialogProvider from '@/hooks/useDialog'
 import AuthProvider from '@/store/auth/AuthProvider'
@@ -12,11 +13,13 @@ import theme from '@/theme/theme'
 const Root: React.FC = () => (
   <ThemeProvider theme={theme}>
     <AuthProvider>
-      <AlertProvider>
-        <DialogProvider>
-          <Outlet />
-        </DialogProvider>
-      </AlertProvider>
+      <ChatProvider>
+        <AlertProvider>
+          <DialogProvider>
+            <Outlet />
+          </DialogProvider>
+        </AlertProvider>
+      </ChatProvider>
     </AuthProvider>
   </ThemeProvider>
 )
