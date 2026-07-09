@@ -2,4 +2,4 @@
 
 const { loadReactRouter } = require('./loadReactRouter.cjs')
 
-module.exports = loadReactRouter('dom-export.js')
+module.exports = loadReactRouter('lib/dom/lib.js')

@@ -3,7 +3,7 @@
  * @module router/router
  * @see {@link dashboard/main} for usage.
  */
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter } from 'react-router/dom'
 import { Suspense, lazy } from 'react'
 import RootProvider from '@/Root'
 import ErrorBoundary from '@/components/ErrorBoundary'

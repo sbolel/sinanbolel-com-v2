@@ -1,4 +1,5 @@
-import { BrowserRouter, useLoaderData } from 'react-router'
+import { useLoaderData } from 'react-router'
+import { BrowserRouter } from 'react-router/dom'
 import { render, screen, fireEvent } from '@testing-library/react'
 import AppLayout from '@/layouts/AppLayout/AppLayout'
 import { DASHBOARD_TITLE } from '@/locales/en'

@@ -4,7 +4,7 @@
  * @module components/HeaderAuthButton
  * @exports HeaderAuthButton
  */
-import { Link as RouterLink } from 'react-router'
+import { Link as RouterLink } from 'react-router/dom'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'

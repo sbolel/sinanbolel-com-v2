@@ -1,4 +1,5 @@
-import { BrowserRouter, useLoaderData } from 'react-router'
+import { useLoaderData } from 'react-router'
+import { BrowserRouter } from 'react-router/dom'
 import { render, screen } from '@testing-library/react'
 import Dashboard from './Dashboard'
 
