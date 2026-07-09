@@ -86,7 +86,7 @@ const AppLayout: React.FC = (): React.JSX.Element => {
       <CssBaseline />
       <Box
         data-testid="app"
-        data-jwt-token={jwtToken}
+        data-authenticated={Boolean(jwtToken)}
         sx={{
           display: 'flex',
           flexGrow: 1,
