@@ -4,14 +4,12 @@
 import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth'
 import type { AuthSession } from 'aws-amplify/auth'
 import { useCallback, useEffect, useReducer } from 'react'
-import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { AuthActions } from '@/actions/actionTypes'
 import AuthReducer from '@/store/auth/AuthReducer'
 import { AuthProviderProps } from '@/store/auth/types'
 import { INITIAL_STATE } from '@/store/auth/constants'
 import AuthDispatchContext from '@/store/auth/AuthDispatchContext'
 import AuthStateContext from '@/store/auth/AuthStateContext'
-import { Routes } from '@/router/constants'
 
 /**
  * The AuthContextProvider is used to provide user data to components.
@@ -22,9 +20,6 @@ import { Routes } from '@/router/constants'
 const AuthProvider: React.FC<AuthProviderProps> = ({
   children,
 }): React.JSX.Element => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const matchProtectedRoute = useMatch('/app/*')
   const [user, dispatch] = useReducer(AuthReducer, { ...INITIAL_STATE })
 
   /**
@@ -61,24 +56,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({
           jwtToken: refreshedJwtToken ?? jwtToken,
         },
       })
-
-      // if the unauthenticated user is trying to navigate to a
-      // protected app routue, redirect them to the login page.
-      if (!matchProtectedRoute && location.pathname !== Routes.AUTH_LOGOUT) {
-        // navigate(Routes.DASHBOARD)
-      }
     } catch (error) {
       dispatch({
         type: AuthActions.LOGIN_FAILURE,
         error: error as Error,
       })
-      // if the unauthenticated user is trying to navigate to a
-      // protected app routue, redirect them to the login page.
-      if (matchProtectedRoute) {
-        // navigate(Routes.AUTH_LOGIN)
-      }
     }
-  }, [location?.pathname, matchProtectedRoute, navigate, dispatch])
+  }, [dispatch])
 
   /**
    * Effect that initializes the AuthContext by checking for a user session

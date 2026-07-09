@@ -1,6 +1,5 @@
 import React, { createContext, useReducer } from 'react'
 import { Message } from '@/types/chat'
-import { AuthProviderProps } from '@/store/auth/types'
 
 export interface ChatState {
   messages: Message[]
@@ -48,7 +47,9 @@ export const ChatContext = createContext<ChatContextProps>({
   dispatch: () => null,
 })
 
-export const ChatProvider: React.FC<AuthProviderProps> = ({ children }) => {
+type ChatProviderProps = React.PropsWithChildren
+
+export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, initialState)
 
   return (
