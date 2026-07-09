@@ -112,10 +112,10 @@ const CreateForm: React.FC<CreateFormProps> = ({
           id={descriptionId}
           sx={{
             position: 'absolute',
-            width: 1,
-            height: 1,
+            width: '1px',
+            height: '1px',
             p: 0,
-            m: -1,
+            m: '-1px',
             overflow: 'hidden',
             clip: 'rect(0, 0, 0, 0)',
             whiteSpace: 'nowrap',
