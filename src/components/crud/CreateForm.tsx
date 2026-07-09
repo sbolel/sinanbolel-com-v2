@@ -54,6 +54,7 @@ const CreateForm: React.FC<CreateFormProps> = ({
   DialogProps,
   FormProps,
 }): React.JSX.Element => {
+  const descriptionText = 'Complete the required fields and submit the form.'
   const {
     control,
     register,
@@ -107,6 +108,22 @@ const CreateForm: React.FC<CreateFormProps> = ({
         {title || 'Create New'}
       </DialogTitle>
       <DialogContent>
+        <Box
+          id={descriptionId}
+          sx={{
+            position: 'absolute',
+            width: '1px',
+            height: '1px',
+            p: 0,
+            m: '-1px',
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
+        >
+          {descriptionText}
+        </Box>
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}

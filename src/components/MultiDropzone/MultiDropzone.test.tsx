@@ -75,6 +75,22 @@ test('calls onRemoveFile when a file is removed', () => {
   expect(handleRemoveFile).toHaveBeenCalledWith('1')
 })
 
+test('keeps the browse button keyboard reachable', () => {
+  render(
+    <MultiDropzone
+      onFileSelect={() => ({})}
+      onRemoveFile={() => ({})}
+      uploadedFiles={[]}
+      uploading={false}
+    />
+  )
+
+  const browseButton = screen.getByRole('button', { name: /browse for files/i })
+
+  expect(browseButton).not.toHaveAttribute('tabindex', '-1')
+  expect(browseButton.tabIndex).toBe(0)
+})
+
 test('displays uploaded files', () => {
   render(
     <MultiDropzone
