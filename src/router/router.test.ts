@@ -1,4 +1,3 @@
-import { redirect } from 'react-router-dom'
 import router from './router'
 import authLoader from './authLoader'
 import { RouteIds, Routes } from './constants'
@@ -47,6 +46,12 @@ describe('router configuration', () => {
 
     mockGetJWT.mockRejectedValue(unauthorized)
 
-    await expect(authLoader()).rejects.toEqual(redirect(Routes.AUTH_LOGIN))
+    const redirectResponse = await authLoader().catch(
+      (error) => error as Response
+    )
+
+    expect(redirectResponse).toBeInstanceOf(Response)
+    expect(redirectResponse.status).toBe(302)
+    expect(redirectResponse.headers.get('Location')).toBe(Routes.AUTH_LOGIN)
   })
 })

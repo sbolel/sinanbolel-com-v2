@@ -84,11 +84,13 @@ describe('AuthProvider', () => {
     render(<Content />)
     await flushEffects()
 
-    expect(mockGetCurrentUser).toHaveBeenCalled()
-    expect(mockFetchAuthSession).toHaveBeenCalledTimes(1)
-    expect(screen.getByTestId('auth-error')).toHaveTextContent(
-      'Initialization error'
-    )
+    await waitFor(() => {
+      expect(mockGetCurrentUser).toHaveBeenCalled()
+      expect(mockFetchAuthSession).toHaveBeenCalledTimes(1)
+      expect(screen.getByTestId('auth-error')).toHaveTextContent(
+        'Initialization error'
+      )
+    })
   })
 
   test('dispatches login success with the refreshed jwt token when one is returned', async () => {

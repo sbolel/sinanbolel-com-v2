@@ -16,8 +16,8 @@ test('renders the main application layout', () => {
   render(<AppLayout />, { wrapper: (props) => <BrowserRouter {...props} /> })
 
   expect(screen.getByTestId('app')).toHaveAttribute(
-    'data-jwt-token',
-    'jwt-token'
+    'data-authenticated',
+    'true'
   )
   expect(screen.getByTestId('appbar-title')).toHaveTextContent(DASHBOARD_TITLE)
   expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument()
