@@ -1,7 +1,7 @@
 /**
  * @module components/AppDrawerButton
  */
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 import Link from '@mui/material/Link'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'

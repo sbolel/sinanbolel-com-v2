@@ -3,7 +3,7 @@
  * @module router/authLoader
  * @see {@link dashboard/Routes}
  */
-import { redirect } from 'react-router-dom'
+import { redirect } from 'react-router'
 import getJWT from '@/utils/getJWT'
 import { Routes } from '@/router/constants'
 

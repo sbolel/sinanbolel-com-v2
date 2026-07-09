@@ -3,7 +3,7 @@
  */
 import { signInWithRedirect } from 'aws-amplify/auth'
 import { BaseSyntheticEvent, useCallback, useReducer, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useForm, UseFormHandleSubmit } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'

@@ -1,5 +1,5 @@
 import { signInWithRedirect } from 'aws-amplify/auth'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import loginUser from '@/actions/loginUser'
 import useAlert from '@/hooks/useAlert'
@@ -11,7 +11,7 @@ jest.mock('@/actions/loginUser')
 jest.mock('aws-amplify/auth', () => ({
   signInWithRedirect: jest.fn(),
 }))
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   useNavigate: jest.fn(),
 }))
 jest.mock('@/hooks/useAlert')

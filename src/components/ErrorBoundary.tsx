@@ -2,8 +2,7 @@
  * Generic React error boundary component.
  * @module components/ErrorBoundary
  */
-import { useNavigate, useRouteError } from 'react-router-dom'
-import { ErrorResponse } from 'react-router-dom'
+import { useNavigate, useRouteError, ErrorResponse } from 'react-router'
 import Container from '@mui/material/Container'
 import { Routes } from '@/router/constants'
 import {

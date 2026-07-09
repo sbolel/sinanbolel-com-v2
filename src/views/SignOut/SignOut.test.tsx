@@ -1,11 +1,11 @@
 import { render, waitFor } from '@testing-library/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import useAuthDispatch from '@/store/auth/useAuthDispatch'
 import logoutUser from '@/actions/logoutUser'
 import { Routes } from '@/router/constants'
 import SignOut from './SignOut'
 
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   useNavigate: jest.fn(),
 }))
 jest.mock('@/store/auth/useAuthDispatch')

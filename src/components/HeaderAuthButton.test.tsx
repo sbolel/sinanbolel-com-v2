@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import useAuthState from '@/store/auth/useAuthState'
 import HeaderAuthButton from '@/components/HeaderAuthButton'
 

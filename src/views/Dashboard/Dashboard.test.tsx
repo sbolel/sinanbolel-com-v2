@@ -1,9 +1,9 @@
-import { BrowserRouter, useLoaderData } from 'react-router-dom'
+import { BrowserRouter, useLoaderData } from 'react-router'
 import { render, screen } from '@testing-library/react'
 import Dashboard from './Dashboard'
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useLoaderData: jest.fn(),
 }))
 

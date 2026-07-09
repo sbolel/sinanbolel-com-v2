@@ -26,6 +26,8 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^aws-amplify$': '<rootDir>/config/__mocks__/aws-amplify.ts',
+    '^react-router$': '<rootDir>/config/jest/reactRouter.cjs',
+    '^react-router/dom$': '<rootDir>/config/jest/reactRouterDom.cjs',
     '^react-native$': 'react-native-web',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },

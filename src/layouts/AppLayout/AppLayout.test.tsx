@@ -1,10 +1,10 @@
-import { BrowserRouter, useLoaderData } from 'react-router-dom'
+import { BrowserRouter, useLoaderData } from 'react-router'
 import { render, screen, fireEvent } from '@testing-library/react'
 import AppLayout from '@/layouts/AppLayout/AppLayout'
 import { DASHBOARD_TITLE } from '@/locales/en'
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useLoaderData: jest.fn(),
 }))
 

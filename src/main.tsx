@@ -4,7 +4,7 @@
  */
 import * as React from 'react'
 import * as ReactDOMClient from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router/dom'
 import CONFIG from '@/utils/config'
 import router from '@/router/router'
 import configureCognito from '@/utils/configureCognito'

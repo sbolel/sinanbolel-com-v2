@@ -4,7 +4,7 @@
  * @module views/SignOut/SignOut
  */
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import useAuthDispatch from '@/store/auth/useAuthDispatch'
 import logoutUser from '@/actions/logoutUser'
 import { Routes } from '@/router/constants'

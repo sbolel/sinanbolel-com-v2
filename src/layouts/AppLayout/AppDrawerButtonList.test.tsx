@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { render, screen } from '@testing-library/react'
 import { RouteNames, Routes } from '@/router/constants'
 import AppDrawerButtonList from '@/layouts/AppLayout/AppDrawerButtonList'
