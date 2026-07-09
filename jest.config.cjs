@@ -19,14 +19,13 @@ module.exports = {
       '<rootDir>/config/jest/fileTransform.cjs',
   },
   transformIgnorePatterns: [
-    '[/\\\\]node_modules[/\\\\](?!uuid[/\\\\])',
+    '[/\\\\]node_modules[/\\\\]',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
   modulePaths: ['<rootDir>/src'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^aws-amplify$': '<rootDir>/config/__mocks__/aws-amplify.ts',
-    '^uuid$': '<rootDir>/config/__mocks__/uuid.ts',
     '^react-native$': 'react-native-web',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },

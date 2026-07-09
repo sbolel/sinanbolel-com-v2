@@ -51,10 +51,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fortawesome/fontawesome-free": "^7.2.0",
     "@hookform/resolvers": "5.4.0",
     "@mui/icons-material": "9.2.0",
-    "@mui/lab": "^9.0.0-beta.3",
     "@mui/material": "9.2.0",
     "@mui/x-data-grid": "^8.28.6",
     "@popperjs/core": "^2.11.8",
@@ -72,10 +70,8 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "7.81.0",
     "react-popper": "^2.3.0",
-    "react-router": "^7.15.0",
     "react-router-dom": "7.18.1",
     "uswds": "^2.14.0",
-    "uuid": "^14.0.0",
     "yup": "^1.7.1"
   },
   "devDependencies": {
@@ -109,7 +105,6 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-helmet": "^6.1.11",
     "@types/testing-library__jest-dom": "^6.0.0",
-    "@types/uuid": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "8.60.0",
     "@typescript-eslint/parser": "8.60.0",
     "@vitejs/plugin-react-swc": "^4.3.1",
