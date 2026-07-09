@@ -54,7 +54,7 @@
     "@hookform/resolvers": "5.4.0",
     "@mui/icons-material": "9.2.0",
     "@mui/material": "9.2.0",
-    "@mui/x-data-grid": "^8.28.6",
+    "@mui/x-data-grid": "9.8.0",
     "@popperjs/core": "^2.11.8",
     "aws-amplify": "6.18.0",
     "classnames": "^2.5.1",
