@@ -2,7 +2,7 @@
  * Layout for authentication pages with white background.
  * @module layouts/AuthLayout
  */
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 import Box from '@mui/material/Box'
 
 const AuthLayout: React.FC = (): React.JSX.Element => (

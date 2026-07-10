@@ -6,7 +6,7 @@
  * @see {@link dashboard/Routes} for usage.
  * @see {@link https://reactrouter.com/web/api/Navigate} for documentation.
  */
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router'
 import { Routes } from '@/router/constants'
 
 /**

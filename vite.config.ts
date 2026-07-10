@@ -1,4 +1,4 @@
-import { defineConfig, transformWithEsbuild, type PluginOption } from 'vite'
+import { defineConfig, type PluginOption } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -60,18 +60,6 @@ export default defineConfig({
     react(),
     EnvironmentPlugin(envDefaults),
     visualizer() as PluginOption,
-    {
-      name: 'load+transform-js-files-as-jsx',
-      async transform(code, id) {
-        if (!id.match(/src\/.*\.js$/)) {
-          return null
-        }
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-        })
-      },
-    },
   ],
   server: {
     watch: {
@@ -79,11 +67,4 @@ export default defineConfig({
     },
   },
   appType: 'spa',
-  optimizeDeps: {
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
-    },
-  },
 })

@@ -5,7 +5,7 @@
  * @module views/Dashboard/Dashboard
  */
 import * as React from 'react'
-import { useLoaderData, Await } from 'react-router-dom'
+import { useLoaderData, Await } from 'react-router'
 import Typography from '@mui/material/Typography'
 import Fallback from '@/components/SimpleLoadingFallback'
 

@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react'
 import Root from '@/Root'
 import { ChatContext } from './ChatContext'
 
-jest.mock('react-router-dom', () => {
-  const actual = jest.requireActual('react-router-dom')
+jest.mock('react-router', () => {
+  const actual = jest.requireActual('react-router')
 
   return {
     ...actual,

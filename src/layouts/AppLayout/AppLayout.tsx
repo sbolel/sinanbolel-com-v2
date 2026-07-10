@@ -3,7 +3,7 @@
  * @module layouts/AppLayout/AppLayout
  */
 import { useCallback, useState, Suspense, useRef, useEffect } from 'react'
-import { Outlet, useLoaderData } from 'react-router-dom'
+import { Outlet, useLoaderData } from 'react-router'
 import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
