@@ -2,6 +2,11 @@
 # to the main branch, also creates a version and create a release on GitHub.
 name: CI/CD
 
+# cancel any in-progress runs for the same branch/PR when a new run starts
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
