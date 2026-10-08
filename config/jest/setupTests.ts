@@ -8,6 +8,7 @@ jest.mock('@/firebase', () => ({
   auth: {
     currentUser: null,
     onAuthStateChanged: jest.fn(),
+    authStateReady: jest.fn(),
   },
   db: {},
   FIREBASE_INDEX_ERROR_NAME: 'FirebaseError',
@@ -21,6 +22,16 @@ import { enableFetchMocks } from 'jest-fetch-mock'
 enableFetchMocks()
 
 import '@testing-library/jest-dom'
+import { auth } from '@/firebase'
+
+// Tests mounting the app shell must not sign in to a real Firebase project.
+// Auth-specific tests override these defaults with their own resolved states.
+beforeEach(() => {
+  ;(auth.authStateReady as jest.Mock | undefined)?.mockImplementation(
+    () => new Promise<void>(() => {})
+  )
+  ;(auth.onAuthStateChanged as jest.Mock)?.mockReturnValue(() => {})
+})
 
 if (process.env.NODE_ENV === 'test') {
   // mock environment variables for the global app config during tests

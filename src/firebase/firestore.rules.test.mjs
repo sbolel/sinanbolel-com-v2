@@ -5,9 +5,18 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing'
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore'
 
-const projectId = `firestore-rules-${Date.now()}`
+const projectId = 'demo-sinan-chat-tests'
 const rules = readFileSync('firestore.rules', 'utf8')
 
 let testEnv
@@ -35,6 +44,87 @@ after(async () => {
 })
 
 describe('Firestore security rules', () => {
+  test('anonymous owner can create a chat and send the exact client payload with server timestamps', async () => {
+    const db = testEnv
+      .authenticatedContext('visitor', {
+        firebase: { sign_in_provider: 'anonymous' },
+      })
+      .firestore()
+    const chat = await assertSucceeds(
+      addDoc(collection(db, 'chats'), {
+        userId: 'visitor',
+        createdAt: serverTimestamp(),
+      })
+    )
+    const message = await assertSucceeds(
+      addDoc(collection(chat, 'messages'), {
+        body: 'Hello',
+        from: 'visitor',
+        createdAt: serverTimestamp(),
+      })
+    )
+    const snapshot = await assertSucceeds(getDoc(message))
+    if (snapshot.data().body !== 'Hello' || !snapshot.data().createdAt) {
+      throw new Error('Message contract was not persisted')
+    }
+  })
+
+  test('unauthenticated visitors cannot create chats or messages', async () => {
+    await seed('chats/alice-chat', { userId: 'alice' })
+    const db = testEnv.unauthenticatedContext().firestore()
+    await assertFails(
+      addDoc(collection(db, 'chats'), {
+        userId: 'alice',
+        createdAt: serverTimestamp(),
+      })
+    )
+    await assertFails(
+      addDoc(collection(db, 'chats/alice-chat/messages'), {
+        body: 'Hello',
+        from: 'alice',
+        createdAt: serverTimestamp(),
+      })
+    )
+  })
+
+  const invalidMessages = [
+    ['legacy fields', { text: 'Hello', from: 'alice', sentAt: new Date() }],
+    [
+      'extra field',
+      { body: 'Hello', from: 'alice', createdAt: new Date(), extra: true },
+    ],
+    ['missing body', { from: 'alice', createdAt: new Date() }],
+    ['missing sender', { body: 'Hello', createdAt: new Date() }],
+    ['missing timestamp', { body: 'Hello', from: 'alice' }],
+    ['non-string body', { body: 42, from: 'alice', createdAt: new Date() }],
+    ['empty body', { body: '', from: 'alice', createdAt: new Date() }],
+    [
+      'non-timestamp date',
+      { body: 'Hello', from: 'alice', createdAt: 'yesterday' },
+    ],
+  ]
+  for (const [name, payload] of invalidMessages) {
+    test(`rejects ${name}`, async () => {
+      await seed('chats/alice-chat', { userId: 'alice' })
+      await assertFails(
+        addDoc(
+          collection(authedDb('alice'), 'chats/alice-chat/messages'),
+          payload
+        )
+      )
+    })
+  }
+
+  test('cannot write messages without an owned parent chat', async () => {
+    await assertFails(
+      addDoc(collection(authedDb('alice'), 'chats/missing/messages'), {
+        body: 'Hello',
+        from: 'alice',
+        createdAt: serverTimestamp(),
+      })
+    )
+  })
+
   test('owner can read and write their own session', async () => {
     const db = authedDb('alice')
     const sessionRef = doc(db, 'sessions/alice')

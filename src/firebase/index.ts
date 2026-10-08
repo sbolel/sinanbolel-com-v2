@@ -12,4 +12,4 @@ export const FIREBASE_INDEX_ERROR_CONTENT = 'The query requires an index'
 // Firebase initialization
 const app = initializeApp(FIREBASE_CONFIG)
 export const auth = getAuth(app)
-export const db = getFirestore(FIRESTORE_DB)
+export const db = getFirestore(app, FIRESTORE_DB)

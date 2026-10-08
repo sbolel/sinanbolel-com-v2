@@ -10,33 +10,11 @@ import router from '@/router/router'
 import configureCognito from '@/utils/configureCognito'
 import onPerfEntry from '@/utils/onPerfEntry'
 import { SIGN_IN_GREETING } from '@/locales/en'
-import { auth } from '@/firebase'
-import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'
-import { createSession } from '@/firebase/firestore'
 import '@/sass/style.scss'
 
 // IIFE that initializes the root node and renders the application.
 ;(async function () {
   configureCognito()
-  // Check if user is already signed in
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      try {
-        await signInAnonymously(auth)
-        console.log('Signed in anonymously')
-        await createSession()
-        console.log('Session created')
-      } catch (error) {
-        console.error(
-          'Error signing in anonymously or creating session:',
-          error
-        )
-      }
-    } else {
-      console.log('User already signed in')
-    }
-  })
-
   // create the root element in the DOM
   const rootElement = document.getElementById('root') as HTMLElement
 
