@@ -17,7 +17,12 @@ service cloud.firestore {
       match /messages/{messageId} {
         allow create: if request.auth != null
           && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid
-          && request.resource.data.from == request.auth.uid;
+          && request.resource.data.from == request.auth.uid
+          && request.resource.data.keys().hasAll(['body', 'from', 'createdAt'])
+          && request.resource.data.keys().hasOnly(['body', 'from', 'createdAt'])
+          && request.resource.data.body is string
+          && request.resource.data.body.size() > 0
+          && request.resource.data.createdAt is timestamp;
         allow read: if request.auth != null && get(/databases/$(database)/documents/chats/$(chatId)).data.userId == request.auth.uid;
         // Keep messages immutable for the audit trail.
         allow update, delete: if false;

@@ -5,6 +5,7 @@ import React, {
   useReducer,
   useMemo,
   useEffect,
+  useState,
 } from 'react'
 import { createChat, addMessageToChat } from '@/firebase/firestore'
 import DOMPurify from 'dompurify'
@@ -15,14 +16,13 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
 import SendIcon from '@mui/icons-material/Send'
 import CloseIcon from '@mui/icons-material/Close'
 import { ChatContext } from '@/contexts/ChatContext'
 import MessageBubble from '@/components/Chat/MessageBubble'
-import useFirebaseAuth from '@/hooks/useFirebaseAuth'
-import useUserChats from '@/hooks/useUserChats'
-import useChatMessages from '@/hooks/useChatMessages'
 import useAutoScroll from '@/hooks/useAutoScroll'
+import { logFirebaseError } from '@/firebase/errors'
 
 interface ChatProps {
   onClose?: () => void
@@ -101,7 +101,16 @@ const chatReducer = (
 }
 
 const Chat: React.FC<ChatProps> = ({ onClose }) => {
-  const { state, dispatch } = useContext(ChatContext)
+  const { state, dispatch, auth, history, messageStatus } =
+    useContext(ChatContext)
+  const currentUser = auth.user
+  const [isSending, setIsSending] = useState(false)
+  const submission = useRef<number | null>(null)
+  const generation = useRef(0)
+  const mounted = useRef(false)
+  const captionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const activeUid = useRef(currentUser?.uid)
+  activeUid.current = currentUser?.uid
 
   // Replace multiple useState calls with useReducer
   const [chatState, chatDispatch] = useReducer(chatReducer, {
@@ -113,19 +122,36 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
     null
   ) as React.RefObject<HTMLDivElement>
   const textFieldRef = useRef<HTMLInputElement>(null)
-  const currentUser = useFirebaseAuth()
-
-  useUserChats(dispatch)
-  useChatMessages(state.chatId, dispatch)
   useAutoScroll(state.messages, messagesEndRef)
+
+  const canSend =
+    auth.status === 'ready' &&
+    !!currentUser &&
+    history.status === 'ready' &&
+    (messageStatus.status === 'ready' || messageStatus.status === 'idle')
+
+  useEffect(() => {
+    ++generation.current
+    submission.current = null
+    setIsSending(false)
+    chatDispatch({ type: 'CLEAR_ERROR' })
+    if (captionTimer.current) clearTimeout(captionTimer.current)
+  }, [currentUser?.uid])
+
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+      ++generation.current
+      if (captionTimer.current) clearTimeout(captionTimer.current)
+      dispatch({ type: 'SHOW_CAPTION', payload: false })
+    }
+  }, [dispatch])
 
   // Focus management - focus text field when chat opens
   useEffect(() => {
-    if (textFieldRef.current) {
-      setTimeout(() => {
-        textFieldRef.current?.focus()
-      }, 100)
-    }
+    const timer = setTimeout(() => textFieldRef.current?.focus(), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   const isCurrentUser = useCallback(
@@ -155,52 +181,69 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
+      if (submission.current !== null || !canSend || !currentUser) return
       const trimmedMessage = chatState.newMessage.trim()
       if (trimmedMessage === '') return
-
-      if (!currentUser) {
-        chatDispatch({ type: 'SET_ERROR', error: 'User is not authenticated' })
+      const sanitizedMessage = DOMPurify.sanitize(trimmedMessage).trim()
+      if (!sanitizedMessage) {
+        chatDispatch({
+          type: 'SET_ERROR',
+          error: 'Please enter a message before sending.',
+        })
         return
       }
 
+      const request = ++generation.current
+      const uid = currentUser.uid
+      submission.current = request
+      setIsSending(true)
+      chatDispatch({ type: 'CLEAR_ERROR' })
+      dispatch({ type: 'SHOW_CAPTION', payload: false })
+      if (captionTimer.current) clearTimeout(captionTimer.current)
+      const isActive = () =>
+        mounted.current &&
+        generation.current === request &&
+        activeUid.current === uid
       try {
-        const sanitizedMessage = DOMPurify.sanitize(trimmedMessage)
-
         const messageData = {
           body: sanitizedMessage,
-          from: currentUser.uid,
+          from: uid,
         }
 
-        // Single batch of state updates for context state management
-        if (!state.chatId) {
-          const newChatId = await createChat()
-          if (newChatId) {
-            // Group dispatch operations to minimize renders
-            dispatch({ type: 'SET_CHAT_ID', payload: newChatId })
-            await addMessageToChat(newChatId, messageData)
-          }
-        } else {
-          await addMessageToChat(state.chatId, messageData)
+        let chatId = state.chatId
+        if (!chatId) {
+          chatId = await createChat(uid)
+          if (!chatId)
+            throw Object.assign(
+              new Error('Chat creation did not return an ID'),
+              { code: 'chat/missing-id' }
+            )
+          dispatch({ type: 'SET_CHAT_ID', payload: chatId })
         }
+        await addMessageToChat(chatId, messageData)
+        if (!isActive()) return
 
-        // Clear message in local state
         chatDispatch({ type: 'CLEAR_MESSAGE' })
-
-        // Show/hide caption with animation
         dispatch({ type: 'SHOW_CAPTION', payload: true })
-        setTimeout(
+        captionTimer.current = setTimeout(
           () => dispatch({ type: 'SHOW_CAPTION', payload: false }),
           3000
         )
       } catch (error) {
-        console.error('Error sending message:', error)
+        if (!isActive()) return
+        logFirebaseError('send-chat-message', error)
         chatDispatch({
           type: 'SET_ERROR',
           error: 'Failed to send message. Please try again.',
         })
+      } finally {
+        if (isActive()) {
+          submission.current = null
+          setIsSending(false)
+        }
       }
     },
-    [chatState.newMessage, currentUser, state.chatId, dispatch]
+    [chatState.newMessage, currentUser, state.chatId, dispatch, canSend]
   )
 
   return (
@@ -262,6 +305,57 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           [state.messages, state.showCaption, isCurrentUser]
         )}
       </Box>
+      {auth.status === 'initializing' && (
+        <Typography role="status" sx={{ px: 2 }}>
+          Connecting to chat...
+        </Typography>
+      )}
+      {auth.status === 'ready' && history.status === 'loading' && (
+        <Typography role="status" sx={{ px: 2 }}>
+          Loading your conversation...
+        </Typography>
+      )}
+      {messageStatus.status === 'loading' && (
+        <Typography role="status" sx={{ px: 2 }}>
+          Loading messages...
+        </Typography>
+      )}
+      {auth.status === 'error' && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" onClick={auth.retry}>
+              Retry
+            </Button>
+          }
+        >
+          Could not connect to chat. Please try again.
+        </Alert>
+      )}
+      {history.status === 'error' && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" onClick={history.retry}>
+              Retry
+            </Button>
+          }
+        >
+          Could not load your conversation. Please try again.
+        </Alert>
+      )}
+      {messageStatus.status === 'error' && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" onClick={messageStatus.retry}>
+              Retry
+            </Button>
+          }
+        >
+          Could not load messages. Please try again.
+        </Alert>
+      )}
       {chatState.error && (
         <Alert severity="error" onClose={handleClearError}>
           {chatState.error}
@@ -269,6 +363,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
       )}
       <form
         onSubmit={handleSubmit}
+        aria-busy={isSending}
         style={{ display: 'flex', padding: '16px' }}
       >
         <TextField
@@ -277,6 +372,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
           minRows={1}
           maxRows={5}
           value={chatState.newMessage}
+          disabled={isSending}
           onChange={handleMessageChange}
           placeholder="Type a message"
           variant="outlined"
@@ -304,7 +400,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
                     color="primary"
                     aria-label="send message"
                     edge="end"
-                    disabled={textInputIsEmpty}
+                    disabled={textInputIsEmpty || !canSend || isSending}
                     sx={{
                       transform: 'rotate(-90deg)',
                     }}

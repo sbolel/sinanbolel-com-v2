@@ -1,22 +1,71 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import type { User } from 'firebase/auth'
 import { auth } from '@/firebase'
-import { User } from 'firebase/auth'
+import { ensureFirebaseUser } from '@/firebase/auth'
+import { firebaseErrorCode, logFirebaseError } from '@/firebase/errors'
 
-const useFirebaseAuth = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(auth.currentUser)
+export interface FirebaseAuthState {
+  user: User | null
+  status: 'initializing' | 'ready' | 'error'
+  error: string | null
+}
+
+export interface FirebaseAuthResult extends FirebaseAuthState {
+  retry: () => void
+}
+
+const useFirebaseAuth = (): FirebaseAuthResult => {
+  const [state, setState] = useState<FirebaseAuthState>({
+    user: null,
+    status: 'initializing',
+    error: null,
+  })
+  const [attempt, setAttempt] = useState(0)
+  const retry = useCallback(() => setAttempt((value) => value + 1), [])
 
   useEffect(() => {
-    // Intentionally omitting dependency array items since we only want to
-    // subscribe to auth state changes once on component mount
-    // and clean up on unmount
+    let active = true
+    let request = 0
+    const initialize = async () => {
+      const generation = ++request
+      setState({ user: null, status: 'initializing', error: null })
+      try {
+        const user = await ensureFirebaseUser()
+        if (
+          active &&
+          generation === request &&
+          auth.currentUser?.uid === user.uid
+        ) {
+          setState({ user, status: 'ready', error: null })
+        }
+      } catch (error) {
+        if (!active || generation !== request) return
+        logFirebaseError('connect-chat', error)
+        setState({
+          user: null,
+          status: 'error',
+          error: firebaseErrorCode(error),
+        })
+      }
+    }
+
+    void initialize()
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user)
+      if (!active) return
+      if (user) {
+        ++request
+        setState({ user, status: 'ready', error: null })
+      } else {
+        void initialize()
+      }
     })
+    return () => {
+      active = false
+      unsubscribe()
+    }
+  }, [attempt])
 
-    return () => unsubscribe()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return currentUser
+  return { ...state, retry }
 }
 
 export default useFirebaseAuth

@@ -1,4 +1,3 @@
-import { type FirebaseError } from 'firebase/app'
 import {
   addDoc,
   collection,
@@ -12,13 +11,15 @@ import {
   where,
 } from 'firebase/firestore'
 import type { Chat } from '@/types/chat'
-import {
-  db,
-  auth,
-  FIREBASE_INDEX_CREATE_REQUIRED,
-  FIREBASE_INDEX_ERROR_CONTENT,
-  FIREBASE_INDEX_ERROR_NAME,
-} from '@/firebase'
+import { db, auth } from '@/firebase'
+
+const requireChatUser = (expectedUid: string): void => {
+  if (!expectedUid || auth.currentUser?.uid !== expectedUid) {
+    throw Object.assign(new Error('Chat authentication changed'), {
+      code: 'chat/auth-changed',
+    })
+  }
+}
 
 export const createSession = async (): Promise<void> => {
   if (!auth?.currentUser) {
@@ -35,12 +36,10 @@ export const createSession = async (): Promise<void> => {
   )
 }
 
-export const createChat = async (): Promise<string | undefined> => {
-  if (!auth?.currentUser) {
-    return
-  }
+export const createChat = async (expectedUid: string): Promise<string> => {
+  requireChatUser(expectedUid)
   const chatRef = await addDoc(collection(db, 'chats'), {
-    userId: auth.currentUser.uid,
+    userId: expectedUid,
     createdAt: serverTimestamp(),
   })
   return chatRef.id
@@ -50,6 +49,7 @@ export const addMessageToChat = async (
   chatId: string,
   messageData: { body: string; from: string }
 ): Promise<void> => {
+  requireChatUser(messageData.from)
   const messagesRef = collection(db, 'chats', chatId, 'messages')
   await addDoc(messagesRef, {
     body: messageData.body,
@@ -59,28 +59,15 @@ export const addMessageToChat = async (
 }
 
 export const getUserChats = async (userId: string): Promise<Chat[]> => {
-  try {
-    const chatsQuery = query(
-      collection(db, 'chats'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(1)
-    )
-    const querySnapshot = await getDocs(chatsQuery)
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as Omit<Chat, 'id'>),
-    }))
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.name === FIREBASE_INDEX_ERROR_NAME &&
-      error.message.includes(FIREBASE_INDEX_ERROR_CONTENT)
-    ) {
-      console.error(
-        `[${(error as FirebaseError).code}] ${FIREBASE_INDEX_CREATE_REQUIRED}`
-      )
-    }
-    throw error
-  }
+  const chatsQuery = query(
+    collection(db, 'chats'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc'),
+    limit(1)
+  )
+  const querySnapshot = await getDocs(chatsQuery)
+  return querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as Omit<Chat, 'id'>),
+  }))
 }

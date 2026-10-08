@@ -34,6 +34,7 @@ export const FIREBASE_CONFIG = {
   measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID || '',
 } satisfies FirebaseConfig
 
-export const FIRESTORE_DB = process.env.VITE_FIREBASE_FIRESTORE_CHAT || ''
+export const FIRESTORE_DB =
+  process.env.VITE_FIREBASE_FIRESTORE_CHAT || '(default)'
 
 export default CONFIG
