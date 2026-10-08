@@ -6,6 +6,10 @@
     "cleanUrls": false,
     "trailingSlash": false,
     "ignore": [
+      "firebase.json",
+      ".DS_Store",
+      ".*",
+      "**/.*",
       "**/.*/**",
       "**/config/**",
       "**/coverage/**",
@@ -13,7 +17,9 @@
       "**/node_modules/**",
       "**/scripts/**",
       "**/src/**",
-      ".aider*",
+      "**/*.log",
+      "**/*.map",
+      "**/*.md",
       ".commitlintrc",
       ".env*",
       ".eslintrc*",
@@ -23,15 +29,14 @@
       ".prettierignore",
       ".swcrc*",
       ".yarn*",
-      ".*",
-      "**/*.log",
       "jest.config.cjs",
       "package.json",
       "*.md",
       "stats.html",
       "tsconfig.*",
       "vite*",
-      "yarn.lock"
+      "yarn.lock",
+      "CNAME"
     ],
     "headers": [
       {
