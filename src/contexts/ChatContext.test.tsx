@@ -55,8 +55,7 @@ describe('chatReducer', () => {
 describe('ChatProvider', () => {
   test('provides initial state and dispatch', () => {
     let contextValue:
-      | { state: ChatState; dispatch: React.Dispatch<any> }
-      | undefined
+      { state: ChatState; dispatch: React.Dispatch<any> } | undefined
     const Consumer = () => {
       contextValue = useContext(ChatContext)
       return <div>child</div>

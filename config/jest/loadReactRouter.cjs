@@ -12,8 +12,18 @@ function isReactRouterFile(filename) {
   )
 }
 
+function isRemixEsmFile(filename) {
+  return filename.includes(
+    `${path.sep}node_modules${path.sep}@remix-run${path.sep}`
+  )
+}
+
 function isTransformableModule(filename) {
-  return isReactRouterFile(filename) || filename.endsWith('.mjs')
+  return (
+    isReactRouterFile(filename) ||
+    isRemixEsmFile(filename) ||
+    filename.endsWith('.mjs')
+  )
 }
 
 function transformReactRouterSource(source, filename) {
