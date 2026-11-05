@@ -948,66 +948,6 @@ theme = createTheme(theme, {
         },
       },
     },
-    MuiDataGrid: {
-      styleOverrides: {
-        root: {},
-        columnHeaders: {
-          backgroundColor: theme.palette.primary.light,
-          color: theme.palette.common.white,
-          fontWeight: theme.typography.fontWeightMedium,
-        },
-        columnHeader: {
-          padding: `${theme.spacing(1.5)} ${theme.spacing(3.5)}`,
-          textTransform: 'capitalize',
-
-          '&:focus': {
-            outline: 'none',
-          },
-
-          '& .MuiDataGrid-iconButtonContainer, & .MuiDataGrid-menuIcon': {
-            '& .MuiSvgIcon-root': {
-              color: theme.palette.common.white,
-              fill: theme.palette.common.white,
-            },
-          },
-        },
-        cell: {
-          color: theme.palette.text.primary,
-          padding: `${theme.spacing(0.5)} calc(${theme.spacing(3.5)} + 2px)`,
-
-          '&:focus': {
-            outline: 'none',
-          },
-
-          '&:first-of-type': {
-            paddingLeft: theme.spacing(3.5),
-          },
-
-          '&:nth-last-of-type(2)': {
-            paddingRight: theme.spacing(2),
-          },
-
-          '&[data-field="action"]': {
-            '&:focus': {
-              outline: 'none',
-            },
-          },
-        },
-        row: {
-          backgroundColor: theme.palette.background.paper,
-
-          '&.Mui-selected': {
-            backgroundColor: theme.palette.background.paper,
-          },
-        },
-        footer: {
-          backgroundColor: theme.palette.background.paper,
-        },
-        overlayWrapper: {
-          minHeight: theme.spacing(7),
-        },
-      },
-    },
     MuiDialog: {
       styleOverrides: {
         paper: {
