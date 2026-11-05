@@ -70,11 +70,6 @@ export type FormField = {
 }
 
 export type ThemeColor =
-  | 'primary'
-  | 'secondary'
-  | 'error'
-  | 'warning'
-  | 'info'
-  | 'success'
+  'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'
 
 export type ThemeSkin = 'filled' | 'light' | 'light-static'
