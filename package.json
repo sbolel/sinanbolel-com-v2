@@ -111,7 +111,6 @@
     "@typescript-eslint/parser": "^8.72.1",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "babel-plugin-transform-import-meta": "^3.1.0",
-    "camelcase": "^9.0.0",
     "conventional-changelog-conventionalcommits": "^10.4.1",
     "dotenv": "^18.0.9",
     "eslint": "^10.14.0",

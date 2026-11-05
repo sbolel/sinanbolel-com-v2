@@ -1496,14 +1496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@conventional-changelog/template@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@conventional-changelog/template@npm:1.2.1"
-  checksum: 10/be65738f81cb232a794fc0ab2bbe9af2e32896e0c731fe8bdf8a2ab8dabdcc2645937d1025d6f7ad8878c6a51be1da9cab71e287ac476b8e07fb0b8cb7811425
-  languageName: node
-  linkType: hard
-
-"@conventional-changelog/template@npm:^1.4.0":
+"@conventional-changelog/template@npm:^1.2.1, @conventional-changelog/template@npm:^1.4.0":
   version: 1.4.1
   resolution: "@conventional-changelog/template@npm:1.4.1"
   checksum: 10/330db857f8652aed2882fd8b53913d83ae6aa5942168fa17a0908e1a5667d6f80499032c0dec81e3caa0640353fadde3a15c15c701578a57cd2a229a8cf461d7
@@ -5445,7 +5438,6 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^4.3.3"
     aws-amplify: "npm:^6.22.2"
     babel-plugin-transform-import-meta: "npm:^3.1.0"
-    camelcase: "npm:^9.0.0"
     classnames: "npm:^2.5.1"
     clipboard-copy: "npm:^4.0.1"
     conventional-changelog-conventionalcommits: "npm:^10.4.1"
@@ -6258,21 +6250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:*, @testing-library/jest-dom@npm:6.9.1":
-  version: 6.9.1
-  resolution: "@testing-library/jest-dom@npm:6.9.1"
-  dependencies:
-    "@adobe/css-tools": "npm:^4.4.0"
-    aria-query: "npm:^5.0.0"
-    css.escape: "npm:^1.5.1"
-    dom-accessibility-api: "npm:^0.6.3"
-    picocolors: "npm:^1.1.1"
-    redent: "npm:^3.0.0"
-  checksum: 10/409b4f519e4c68f4d31e3b0317338cc19098b9029513fca61aa2af8270086ae3956a1eaedd19bbce2d2c9e2cf9ff27a616c06556be7a26e101c0d529a0062233
-  languageName: node
-  linkType: hard
-
-"@testing-library/jest-dom@npm:^7.0.1":
+"@testing-library/jest-dom@npm:*, @testing-library/jest-dom@npm:^7.0.1":
   version: 7.0.1
   resolution: "@testing-library/jest-dom@npm:7.0.1"
   dependencies:
@@ -6289,6 +6267,20 @@ __metadata:
     vitest:
       optional: true
   checksum: 10/0770454b47da9370e59cda691f797c0442e53caefcd412c504b33c7a9bee099c8a9e7d1f07f7eae8d380ea52c34a5d70139e875480a57f729588068edc78f57b
+  languageName: node
+  linkType: hard
+
+"@testing-library/jest-dom@npm:6.9.1":
+  version: 6.9.1
+  resolution: "@testing-library/jest-dom@npm:6.9.1"
+  dependencies:
+    "@adobe/css-tools": "npm:^4.4.0"
+    aria-query: "npm:^5.0.0"
+    css.escape: "npm:^1.5.1"
+    dom-accessibility-api: "npm:^0.6.3"
+    picocolors: "npm:^1.1.1"
+    redent: "npm:^3.0.0"
+  checksum: 10/409b4f519e4c68f4d31e3b0317338cc19098b9029513fca61aa2af8270086ae3956a1eaedd19bbce2d2c9e2cf9ff27a616c06556be7a26e101c0d529a0062233
   languageName: node
   linkType: hard
 
@@ -8155,13 +8147,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "camelcase@npm:9.0.0"
-  checksum: 10/3353142290814db68eaf2880bff094f25ee0d2ded4b99b20373e32758aa533abffe5da6aecba8627b3101ec1919c990c4ba41a981d8652d766273006360995fe
-  languageName: node
-  linkType: hard
-
 "caniuse-lite@npm:^1.0.30001726":
   version: 1.0.30001727
   resolution: "caniuse-lite@npm:1.0.30001727"
@@ -8706,16 +8691,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:^10.0.0":
-  version: 10.2.1
-  resolution: "conventional-changelog-conventionalcommits@npm:10.2.1"
-  dependencies:
-    "@conventional-changelog/template": "npm:^1.2.1"
-  checksum: 10/670efe9ba741a1b8daae4cb456961e00e1325b54c5d1af7bed7b2b7f0ab2c034668a0f18b5c8a309773f062795d813d14d64b91fa025790557c9b27d8531e5a0
-  languageName: node
-  linkType: hard
-
-"conventional-changelog-conventionalcommits@npm:^10.4.1":
+"conventional-changelog-conventionalcommits@npm:^10.0.0, conventional-changelog-conventionalcommits@npm:^10.4.1":
   version: 10.4.1
   resolution: "conventional-changelog-conventionalcommits@npm:10.4.1"
   dependencies:
@@ -9474,14 +9450,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"empathic@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "empathic@npm:2.0.1"
-  checksum: 10/c5a37b78926e722c38779e5026342350098771fa1cacb52cb808e5329896ab39abb88cd2f1374671d6e5c98aa24cba2534f00da2938d04f11de1a2d012ee75c3
-  languageName: node
-  linkType: hard
-
-"empathic@npm:^2.0.1":
+"empathic@npm:^2.0.0, empathic@npm:^2.0.1":
   version: 2.1.0
   resolution: "empathic@npm:2.1.0"
   checksum: 10/8f90322f559a0097c4da7abd177131a2589334a9056e5af9b71c79861b76f4f5b7c8043f93ad6a88f1016b21ee683c0fe3be564b87c8db4bfa9ed360be962aac
@@ -11942,14 +11911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-meta-resolve@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "import-meta-resolve@npm:4.1.0"
-  checksum: 10/40162f67eb406c8d5d49266206ef12ff07b54f5fad8cfd806db9efe3a055958e9969be51d6efaf82e34b8bea6758113dcc17bb79ff148292a4badcabc3472f22
-  languageName: node
-  linkType: hard
-
-"import-meta-resolve@npm:^4.2.0":
+"import-meta-resolve@npm:^4.0.0, import-meta-resolve@npm:^4.2.0":
   version: 4.2.0
   resolution: "import-meta-resolve@npm:4.2.0"
   checksum: 10/3499ee8b7eddb79be77067b368bcdf39e6f144306dea4686d08071ae7e65a2e3bdca3f98f2a0f4babdcd4ba9d9e7d379ae7e27c4b9bf8b08c1e812a28c674bf3
